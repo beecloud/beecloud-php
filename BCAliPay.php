@@ -8,8 +8,6 @@
 $BeeCloudSdkPath = dirname(__FILE__);
 set_include_path(get_include_path().PATH_SEPARATOR.$BeeCloudSdkPath);
 
-require_once("dependency/alipay/lib/alipay_submit.class.php");
-require_once("dependency/alipay/lib/alipay_core.function.php");
 include_once("config/BCPayConfig.php");
 
 class BCAliHttp {

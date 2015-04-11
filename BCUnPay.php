@@ -5,10 +5,7 @@
  * Date: 4/11/15
  * Time: 14:59
  */
-include_once 'dependency/upacp_sdk_php/gbk/func/common.php';
-include_once 'dependency/upacp_sdk_php/gbk/func/SDKConfig.php';
-include_once 'dependency/upacp_sdk_php/gbk/func/secureUtil.php';
-include_once 'dependency/upacp_sdk_php/gbk/func/log.class.php';
+
 include_once 'config/BCPayConfig.php';
 $BeeCloudSdkPath = dirname(__FILE__);
 set_include_path(get_include_path().PATH_SEPARATOR.$BeeCloudSdkPath);
