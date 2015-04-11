@@ -2,16 +2,16 @@
 /**
  * Created by PhpStorm.
  * User: dengze
- * Date: 4/3/15
- * Time: 11:09
+ * Date: 4/11/15
+ * Time: 14:59
  */
+
+include_once 'config/BCPayConfig.php';
 $BeeCloudSdkPath = dirname(__FILE__);
 set_include_path(get_include_path().PATH_SEPARATOR.$BeeCloudSdkPath);
 
-include_once("config/BCPayConfig.php");
 
-class BCAliHttp {
-
+class BCUnHttp {
     static final public function request($url, $method, array $data, $timeout) {
         try {
             $timeout = (isset($timeout) && is_int($timeout)) ? $timeout : 20;
@@ -66,40 +66,29 @@ class BCAliHttp {
         }
     }
 }
-class BCAliPayUtil {
-    static public function getQrCodeFromServer(array $config) {
-        //=========步骤2：使用统一支付接口，获取prepay_id============
-        //使用统一支付接口
-        $raw = BCAliHttp::request(BCSetting::$serverURL . "/pay/ali/qrsign", "get", $config, 30);
-        $result = json_decode($raw);
-        if ($result == null || $result->resultCode != 0) {
-            return false;
-        }
 
-        $params = array("qrcode" => $result->qrcode,
-                        "qrurl" => $result->qr_img_url);
-        return $params;
-    }
-    static public function getImmediateHtmlFromRemote(array $config) {
-        $raw = BCAliHttp::request(BCSetting::$serverURL . "/pay/ali/websign", "get", $config, 30);
+
+class BCUnPayUtil {
+    static public function getWebpayFromServer(array $config) {
+        $raw = BCUnHttp::request(BCSetting::$serverURL . "/pay/un/websign", "get", $config, 30);
         $result = json_decode($raw);
 
         if ($result == null || $result->resultCode != 0) {
             return false;
         }
 
-
-        return $result->sbHtml;
+        return $result->html;
     }
+
 }
 
-class BCAliQrCode {
+class BCUnPay {
     private $config = array();
     public function __construct() {
 
     }
 
-    final public function configProduct(array $config) {
+    public function configProduct(array $config) {
         $this->config = array();
         foreach($config as $k => $v) {
             $this->config[$k] = $v;
@@ -109,28 +98,9 @@ class BCAliQrCode {
         return true;
     }
 
-    final public function getQrCode() {
-        return BCAliPayUtil::getQrCodeFromServer($this->config);
-    }
-}
-
-class BCAliImmediate {
-    private $config = array();
-    public function __construct() {
-
+    public function getWebpay() {
+        return BCUnPayUtil::getWebpayFromServer($this->config);
     }
 
-    final public function configProduct(array $config) {
-        $this->config = array();
-        foreach($config as $k => $v) {
-            $this->config[$k] = $v;
-        };
-        $this->config["appId"] = BCPayConf::$appId;
-        $this->config["appSign"] = md5(BCPayConf::$appId.BCPayConf::$appSecret);
-        return true;
-    }
 
-    final public function getImmediateHtml() {
-        return BCAliPayUtil::getImmediateHtmlFromRemote($this->config);
-    }
 }
