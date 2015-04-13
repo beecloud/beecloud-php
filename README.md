@@ -1,10 +1,10 @@
-# BeeCloud S-PAY PHP集成支付
-#1. 微信支付简介
-##1.1 功能简介
+#<a name="php">PHP开发指南</a>
+#<a name="php_Introduction">微信支付简介</a>
+##<a name="php_Function">功能简介</a>
 微信支付,是基于微信客户端提供的支付服务功能。同时向商户提供销售经营分析、账 户和资金管理的功能支持。用户通过扫描二维码、微信内打开商品页面购买等多种方式调起 微信支付模块完成支付。  
 微信支持公众号内支付,即基于公众号向用户收款,公众号相当亍收款的商户。其中支付方式,可以分为 JS API(网页内)支付、Native(原生)支付。商户可以结合业务场景, 自主选择支付方式。
   
-##1.2 支付账户
+##<a name="php_account">支付账户</a>
 商户向微信提交企业以及银行账户资料,商户功能审核通过后,可以获得以下帐户(包含财付通的商户账户),用于公众号支付。  
 
 帐号|作用
@@ -16,12 +16,12 @@ Appsecret|JSAPI 接口中获取 openid,审核后在公众平台开启开发模�
 
 >注意: 支付密钥 Key 是验证商户唯一性的安全标识,请妥善保管,仅保留在BeeCloud后台和微信后台,不会在网络中传播。
 
-##1.3 支付方式
+##<a name="php_Methods">支付方式</a>
 **JS API(网页内)支付**:是指用户打开图文消息戒者扫描二维码,在微信内置浏览器打 开网页进行的支付。商户网页前端通过使用微信提供的 JS API,调用微信支付模块。这种方式,适合需要在商户网页进行选购下单的购买流程。  
 
 **Native(原生)支付**:是指商户组成符合 Native(原生)支付规则的 URL 链接,用户可通过在会话中点击链接戒者扫描对应的二维码直接进入微信支付模块(客户端界面),即 可进行支付。这种方式,适合无需选购直接支付的购买流程。跟 JSAPI 最大的区别是不经过网页调起支付。
 
-##1.4 支付前准备
+##<a name="php_ready">支付前准备</a>
 1.微信公众号中需要**网页授权**，用于用户登陆时获取用户信息,什么是网页授权?请移步微信文档[网页授权获取用户基本信息](http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html)
 
 登陆微信公众号,在**开发者中心**的**接口权限表**的**网页账号**中按照提示设置授权的网页目录,请参考图片所示进行设置:
@@ -55,13 +55,13 @@ Appsecret|JSAPI 接口中获取 openid,审核后在公众平台开启开发模�
 ![支付appSecret](http://beeclouddoc.qiniudn.com/wxmp_setting3.jpg) 
 
 
-#2. 支付宝支付简介
-##2.1 支付方式
+#<a name="php_AliIntroduction">支付宝支付简介</a>
+##<a name="php_AliMethods">支付方式</a>
 **网页支付**:是指用户通过浏览器打开网页进行的支付。商户网页前端通过使用BeeCloud SDK,调用支付宝支付模块。这种方式,适合需要在商户网页进行选购下单的购买流程。 
  
 **扫码支付**:是指商户组成符合支付规则的 URL 链接,用户可通过在支付宝客户端扫描二维码直接进入支付模块(客户端界面),即可进行支付。这种方式,适合无需选购直接支付的购买流程。
 
-##2.2 支付前准备
+##<a name="php_AliReady">支付前准备</a>
 签约下图中的`即时到帐`产品  
 ![pc-web-02](http://beeclouddoc.qiniudn.com/pc-web-02.jpg)  
 获得下图中的`合作者身份（PID）`和`安全校验码（Key）`  
@@ -69,9 +69,32 @@ Appsecret|JSAPI 接口中获取 openid,审核后在公众平台开启开发模�
 在控制台设置支付要素
 ![ali_07](http://beeclouddoc.qiniudn.com/ali_07.png)
 
-#3. 使用PHP S-PAY SDK
+# <a name="php_UnIntroduction">银联支付简介</a>
+## <a name="php_UnMethods">支付方式</a>
+**网页支付**:是指用户通过浏览器打开网页进行的支付。商户网页前端通过使用BeeCloud SDK,调用银联支付模块。这种方式,适合需要在商户网页进行选购下单的购买流程。
 
-##3.1 安装
+##<a name="php_UnReady">支付前准备</a>
+银联在线支付的接入流程大致如下：
+![un_01](http://beeclouddoc.qiniudn.com/un_01.png)
+环节说明：  
+1、合作洽谈，与客户达成入网意向：包括客户选择、确定接入银联业务或产品、形成业务方案。  
+2、签订协议：客户与银联签订合作协议、入网协议、清算协议、提供代理清算协议等。  
+3、入网申请：客户以正式方式确认开通的业务信息和要素，以及提供证明客户具备开通该业务相应资质的材料。  
+4、业务审核：针对某些特定业务，对客户是否具备开展相应业务资质、业务风险是否可接受以及分配客户开展银联业务的特定身份标识、权限的工作。  
+5、技术开发：包括银联为了支持客户相应业务为进行的开发和开发阶段测试，以及客户为实现与银联系统对接而进行的开发和测试工作。  
+6、入网测试：在正式投产之前，为验证客户和银联系统应用及技术、业务参数配置的正确性、可用性，降低生产系统运营风险而进行的测试。  
+7、投产：包括支持客户业务的生产系统对接成功并技术上线、在系统中业务参数配置生效。  
+以上流程环节根据实际需要不同，可进行选择配置。一般情况下，2，3，4，5，6工作可以并行。  
+
+>注：入网流程问题发送邮件至： operation@unionpay.com进行业务申请和咨询，银联有专门的人员进行处理。联系电话：021-50362408。在提交入网申请，进入业务审核阶段的时候，银联的技术客服会将您加入到客服全中，方便您及时地解决遇到的问题。审核通过后会收到“商户入网通知参数信息（请注意保密）--（公司名称）”标题的邮件，邮件中包含了一些商户信息，具体内容在邮件的附件中。
+
+*在控制台上传银联支付要素:*
+![un_03](http://beeclouddoc.qiniudn.com/un_03.png)
+
+
+#<a name="php_SDK">使用PHP S-PAY SDK</a>
+
+##<a name="php_Installation">安装</a>
 网站下载源码解压到指定目录,在需要使用的php中引用
 
 例如，使用微信支付
@@ -80,7 +103,7 @@ Appsecret|JSAPI 接口中获取 openid,审核后在公众平台开启开发模�
 使用支付宝支付
 >include "BCAliPay.php";
 
-##3.2 微信网页内支付场景---JS API(网页内)支付接口
+##<a name="php_wechatWeb">微信网页内支付场景---JS API(网页内)支付接口</a>
 1.首先配置*SDK解压目录*/dependency/WxPayPubHelper/WxPay.pub.config.php参数信息,此文件为原生微信SDK所需,以下列出必填参数
 
 ~~~PHP
@@ -293,7 +316,7 @@ $pay->configProduct(array(
 </html>
 ~~~
 
-##3.3 微信线下扫码购买场景---Native(原生)支付接口
+##<a name="php_ScanCode"> 微信线下扫码购买场景---Native(原生)支付接口</a>
 1.首先配置参数信息
 >此处和**3.2 微信网页内支付场景---JS API(网页内)支付接口**中配置相同
 
@@ -479,7 +502,7 @@ if ($result["return_code"] == "FAIL") {
 ~~~
 
 
-##3.4 支付宝网页支付
+##<a name="php_aliWeb">支付宝网页支付</a>
 1.配置*SDK解压目录*/config/BCPayConfig.php 中的BeeCloud账户参数, 以下以BeeCloud demo账户参数为例为例
 
 ``` PHP
@@ -582,7 +605,7 @@ print $result;
 
 ```
 
-##3.5 支付宝扫码支付
+##<a name="php_aliPay">支付宝扫码支付</a>
 1.配置*SDK解压目录*/config/BCPayConfig.php 中的BeeCloud账户参数, 以下以BeeCloud demo账户参数为例为例
 
 ``` PHP
@@ -799,6 +822,73 @@ if($result != false && ! empty($result["qrurl"]) ) {
 ?>
 </body>
 </html>
+
+```
+
+##<a name="php_unWebPay">银联网页支付</a>
+1.配置*SDK解压目录*/config/BCPayConfig.php 中的BeeCloud账户参数, 以下以BeeCloud demo账户参数为例为例
+
+``` PHP
+
+class BCPayConf {
+	static public $appId = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
+	static public $appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
+}
+```
+
+2.初始化 BeeCloud 银联功能
+
+``` PHP
+	include_once("../BCUnPay.php");
+	$pay = new BCUnPay();
+```
+
+3.配置商品信息,生成支付页面
+
+``` PHP
+	$pay->configProduct( array(
+    'orderId' => date('YmdHis'),	//*商户订单号
+    'traceId' => date('YmdHis'),    //
+    'frontUrl' =>  'http://localhost:8085/upacp_sdk_php/demo/gbk/FrontReceive.php',  		//*前台通知地址
+    'txnAmt' => '10',		//*交易金额，单位分
+    'orderDesc' => "描述" // 商品描述
+));
+
+$html = $pay->getWebpay();
+
+if ($html != false) {
+    echo $html;
+} else {
+    echo "null";
+}
+```
+
+
+3.完整代码(/demo/unWebpayDemo.php)： 
+>本demo可以在本地测试
+
+```php
+<?php
+header( 'Content-type:text/html;charset=utf-8');
+
+include_once("../BCUnPay.php");
+
+$pay = new BCUnPay();
+$pay->configProduct( array(
+    'orderId' => date('YmdHis'),	//商户订单号
+    'traceId' => date('YmdHis'),    //
+    'frontUrl' =>  'http://localhost:8085/upacp_sdk_php/demo/gbk/FrontReceive.php',  		//前台通知地址
+    'txnAmt' => '10',		//交易金额，单位分
+    'orderDesc' => "描述" // 商品描述
+));
+
+$html = $pay->getWebpay();
+
+if ($html != false) {
+    echo $html;
+} else {
+    echo "null";
+}
 
 ```
 
