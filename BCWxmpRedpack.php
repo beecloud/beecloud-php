@@ -91,6 +91,15 @@ class BCSetting {
     static public function setWxmpRedpackDebug($debug) {
         self::$wxmpRedpackDebug = !!$debug;
     }
+
+    static public function getServerRandomUrl() {
+        $ipList = array(0=>"https://120.24.222.220/1",
+                1=>"https://115.28.40.236/1",
+                2=>"https://123.57.71.81/1",
+                3=>"https://121.41.120.98/1");
+        $seed = rand(0,3);
+        return $ipList[$seed];
+    }
 }
 
 class BCWxmpRedPackHttp {
@@ -166,7 +175,7 @@ class BCWxmpRedPackHttp {
     }
     static public function formatResponse($raw) {
         $result = json_decode($raw);
-        if ($result->resultCode == 0) {
+        if (isset($result) && $result->resultCode == 0) {
             return $result;
         }
         if (!isset($result) || $result == null){
@@ -180,21 +189,24 @@ class BCWxmpRedPackHttp {
 
 class BCWxmpApi {
     static public $debugMsg = null;
-    static public function checkSignature(array $data, $token) {
+
+    static public function checkSignature(array $data, $token)
+    {
         $signature = $data["signature"];
         $timestamp = $data["timestamp"];
         $nonce = $data["nonce"];
         $tmpArr = array($token, $timestamp, $nonce);
-        sort($tmpArr,SORT_STRING);
+        sort($tmpArr, SORT_STRING);
         $tmpStr = implode($tmpArr);
         $tmpStr = sha1($tmpStr);
 
-        if( $tmpStr == $signature ){
+        if ($tmpStr == $signature) {
             return true;
         } else {
             return false;
         }
     }
+
     static public function responseDebugText($text) {
         $fromUsername = self::$debugMsg->fromUserName;
         $toUsername = self::$debugMsg->toUserName;
@@ -211,14 +223,15 @@ class BCWxmpApi {
         return $resultStr;
     }
 
-    static public function sendWxmpRedpack($fromUsername, $redpack, $beecloud) {
+    static public function sendWxmpRedpack($serverUrl, $fromUsername, $redpack, $beecloud, $timeout) {
+        $timeout = isset($timeout) ? $timeout : 30;
         $now = time();
         $redpack["appId"] = $beecloud->appId;
         $redpack["appSign"] = $beecloud->appSign;
         $redpack["re_openid"] = "$fromUsername";
-        $redpack["mch_billno"] = ($beecloud->mchId).date("Ymd", $now).$now;//mch_id + yyyymmdd + timestamp
+        $redpack["mch_billno"] = ($beecloud->mchId) . date("Ymd", $now) . $now;//mch_id + yyyymmdd + timestamp
 
-        return BCWxmpRedPackHttp::request(BCSetting::$serverURL."/pay/wxmp/redPack", "get", $redpack, 30);
+        return BCWxmpRedPackHttp::request($serverUrl . "/pay/wxmp/redPack", "get", $redpack, $timeout);
     }
 
     static public function _getCallMsg($msgStr) {
@@ -231,180 +244,6 @@ class BCWxmpApi {
         $msgObj->fromUserName = $postObj->FromUserName;
         $msgObj->toUserName = $postObj->ToUserName;
         return $msgObj;
-    }
-
-    private $appSign;
-    private $appId;
-    private $msg;
-    private $mchId;
-    public function __construct($appId, $appSecret, $mchId, $salt, $lockPath) {
-        if (empty($appId) || empty($appSecret) || empty($mchId)) {
-            throw new BCException('除 lockPath ,请检查参数不能为空');
-        }
-        if (!is_string($appId) || !is_string($appSecret) || !is_string($mchId)) {
-            throw new BCException('输入必须是String类型');
-        }
-        $this->appId = $appId;
-        $this->appSecret = $appSecret;
-        $this->appSign = md5($appId.$appSecret);
-        $this->msg = new stdClass();
-        $this->lockPaht = $lockPath;
-        $this->mchId = $mchId;
-        $this->salt = $salt;
-    }
-    /**
-     * 返回为 object : { type: "微信类型",
-     *                  keyword:"用户输入的字符串“,
-     *                  event: "微信事件类型"
-     *                  fromUserName: "发送信息的用户openId"
-     *                  toUserName: "目标公众号id"
-     *                  xmlObj: 解析的完整结果
-     *                  }
-     * 如果 返回false 表示数据不能解析
-     **/
-    public function getCallMsg($postStr) {
-//        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-        if (!empty($postStr)){
-            $this->msg = self::_getCallMsg($postStr);
-            if (BCSetting::$wxmpRedpackDebug) {
-                self::$debugMsg = $this->msg;
-            }
-            return $this->msg;
-        }
-        return false;
-    }
-
-    /**
-     * @param $news {title, description, picUrl, linkUrl}
-     * @return string
-     */
-    public function responseNews($news) {
-        $fromUsername = $this->msg->fromUserName;
-        $toUsername = $this->msg->toUserName;
-        $uxtime = time();
-        $textTpl = "<xml>
-        <ToUserName><![CDATA[%s]]></ToUserName>
-        <FromUserName><![CDATA[%s]]></FromUserName>
-        <CreateTime>%s</CreateTime>
-        <MsgType><![CDATA[news]]></MsgType>
-        <ArticleCount>1</ArticleCount>
-        <Articles>
-        <item>
-        <Title><![CDATA[%s]]></Title>
-        <Description><![CDATA[%s]]></Description>
-        <PicUrl><![CDATA[%s]]></PicUrl>
-        <Url><![CDATA[%s]]></Url>
-        </item>
-        </Articles>
-        </xml>";
-        $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $uxtime, $news->title, $news->description, $news->picUrl, $news->linkUrl);
-        return $resultStr;
-    }
-    public function responseText($text) {
-        $fromUsername = $this->msg->fromUserName;
-        $toUsername = $this->msg->toUserName;
-        $uxtime = time();
-        $textTpl = "<xml>
-        <ToUserName><![CDATA[%s]]></ToUserName>
-        <FromUserName><![CDATA[%s]]></FromUserName>
-        <CreateTime>%s</CreateTime>
-        <MsgType><![CDATA[text]]></MsgType>
-        <Content><![CDATA[%s]]></Content>
-        <FuncFlag>0<FuncFlag>
-        </xml>";
-        $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $uxtime, $text);
-        return $resultStr;
-    }
-
-    public function sendRedpackWithBeeCloud(array $redpack, array $responseMsg) {
-        $errMsg = isset($responseMsg["err"]) ? $responseMsg["err"] : "红包出错啦";
-        $finishMsg = isset($responseMsg["finish"]) ? $responseMsg["finish"] : "手慢,红包发完咯";
-        $repeatMsg = isset($responseMsg["repeat"]) ? $responseMsg["repeat"] : "客官请不要这样,红包只有第一次,就像那啥";
-        $hintMsg = $responseMsg["hint"];
-
-        $fromUsername = $this->msg->fromUsername;
-        $keyword = $this->msg->keyword;
-
-        if (isset($this->salt) && !empty($this->salt)) {
-            $keyword = ($this->msg->keyword).$this->salt;
-        }
-
-
-        $queryData = array(
-            "appId" => $this->appId,
-            "appSign" => $this->appSign,
-            "table" => "wechat_red_package__",
-            "conditions" => array(
-                [0] => BCCondition("openid", "e", "$fromUsername"),
-                [1] => BCCondition("redpackage","e", "$keyword")
-            ),
-            "conditionConnector" => "AND",
-        );
-
-        $raw = BCWxmpRedPackHttp::request(BCSetting::$serverURL."/query/byCondition", "get", $queryData, 30);
-        $result = BCWxmpRedPackHttp::formatResponse($raw);
-
-
-
-        if (!$result) {
-            $bcErrMsg = BCGetExecErr();
-            if ($bcErrMsg != "TABLE_NOT_EXIST") {
-                echo $this->responseText($errMsg);
-                return false;
-            }
-        }
-        if(!empty($result->results)) {
-            // this user has got same red-pack before
-            echo $this->responseText($repeatMsg);
-        } else {
-            // Mutual  lock  when sending redpack on single server.
-            // In distributed system, do with database's column - uuid and createdat, later and in another method
-            $path = isset($this->lockPath) ?  $this->lockPath : "/tmp/";
-            $file = fopen($path.$fromUsername.$keyword,"w");
-            if ($file == FALSE) {
-                return false;
-            }
-            if (!flock($file,LOCK_EX)) {
-                fclose($file);
-                return false;
-            }
-
-            $raw = self::sendWxmpRedpack($fromUsername, $redpack, $this);
-            $result = json_decode($raw);
-            if ($result == null) {
-                // release lock
-                echo $this->responseText($errMsg);
-            }
-            if ($result != null) {
-                if ($result->resultCode == 0) {
-                    if ($result->return_code == "SUCCESS") {
-                        if (isset($hintMsg)) {
-                            echo $this->responseText($hintMsg);
-                        }
-                        $insertData = array(
-                            "appId" => $this->appId,
-                            "appSign" => $this->appSign,
-                            "table" => "wechat_red_package__",
-                            "columns" => array(
-                                [0] => BCColumn("openid", "s", "$fromUsername"),
-                                [1] => BCColumn("redpackage", "s", "$keyword")
-                            )
-                         );
-
-                        BCWxmpRedPackHttp::request(BCSetting::$serverURL."/insert", "post", $insertData, 30);
-                    } else {
-                        // release lock
-                        echo $this->responseText($errMsg);
-                    }
-                } else if ($result->errMsg == "WX_SERVER_ERROR" && $result->err_code=="NOTENOUGH") {
-                    echo $this->responseText($finishMsg);
-                }
-            }
-            // release lock
-            flock($file,LOCK_UN);
-            fclose($file);
-        }
-        return true;
     }
 }
 
