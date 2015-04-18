@@ -85,7 +85,7 @@ function BCColumn($name, $type, $value, $op) {
     return $that;
 }
 
-class BCSetting {
+class BCWxmpRedPackSetting {
     static public $serverURL = "https://api.beecloud.cn/1";
     static public $wxmpRedpackDebug = false;
     static public function setWxmpRedpackDebug($debug) {

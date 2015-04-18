@@ -5,7 +5,7 @@
 
 class BCPayConf {
 	static public $appId = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
-	static public $appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
+	static public $appSecret = "";
 }
 
 

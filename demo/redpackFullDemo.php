@@ -1,6 +1,6 @@
 <?php
 set_time_limit(120);
-include_once("BCWxmpRedpack.php");
+include_once("../BCWxmpRedpack.php");
 
 //微信验证 的 处理, 可以去除
 if (isset($_GET["signature"]) && isset($_GET["timestamp"])
@@ -14,10 +14,9 @@ if (isset($_GET["signature"]) && isset($_GET["timestamp"])
 $appId = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719"; //BeeCloud appId
 $appSecret = ""; //BeeCloud appSecret 为了保密不给你看
 $mchId = "1234275402";  //微信商户号
-$lockPath = "/tmp/"; // file lock path, 每用户互斥锁地址, linux 上默认为/tmp/
 $salt = null;
 try {
-    $api = new BCWxmpApiDemo($appId, $appSecret, $mchId, $salt, $lockPath);
+    $api = new BCWxmpApiDemo($appId, $appSecret, $mchId, $salt);
 
     $postStr = $GLOBALS["HTTP_RAW_POST_DATA"]; //post 原始数据
     $msg = $api->getCallMsg($postStr);//解析xml
@@ -93,7 +92,7 @@ class BCWxmpApiDemo {
     public $appId;
     public $msg;
     public $mchId;
-    public function __construct($appId, $appSecret, $mchId, $salt, $lockPath) {
+    public function __construct($appId, $appSecret, $mchId, $salt) {
         if (empty($appId) || empty($appSecret) || empty($mchId)) {
             throw new BCException('除 lockPath ,请检查参数不能为空');
         }
@@ -104,7 +103,6 @@ class BCWxmpApiDemo {
         $this->appSecret = $appSecret;
         $this->appSign = md5($appId.$appSecret);
         $this->msg = new stdClass();
-        $this->lockPaht = $lockPath;
         $this->mchId = $mchId;
         $this->salt = $salt;
     }
@@ -122,7 +120,7 @@ class BCWxmpApiDemo {
 //        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         if (!empty($postStr)){
             $this->msg = BCWxmpApi::_getCallMsg($postStr);
-            if (BCSetting::$wxmpRedpackDebug) {
+            if (BCWxmpRedPackSetting::$wxmpRedpackDebug) {
                 BCWxmpApi::$debugMsg = $this->msg;
             }
             return $this->msg;
@@ -195,7 +193,7 @@ class BCWxmpApiDemo {
             "conditionConnector" => "AND",
         );
 
-        $raw = BCWxmpRedPackHttp::request(BCSetting::$serverURL."/query/byCondition", "get", $queryData, 30);
+        $raw = BCWxmpRedPackHttp::request(BCWxmpRedPackSetting::$serverURL."/query/byCondition", "get", $queryData, 30);
         $result = BCWxmpRedPackHttp::formatResponse($raw);
 
         if (!$result) {
@@ -221,7 +219,7 @@ class BCWxmpApiDemo {
                 return false;
             }
 
-            $raw = BCWxmpApi::sendWxmpRedpack(BCSetting::$serverURL, $fromUserName, $redpack, $this, 30);
+            $raw = BCWxmpApi::sendWxmpRedpack(BCWxmpRedPackSetting::$serverURL, $fromUserName, $redpack, $this, 30);
             $result = json_decode($raw);
             if ($result == null) {
                 // release lock
@@ -241,7 +239,7 @@ class BCWxmpApiDemo {
                             )
                         );
 
-                        BCWxmpRedPackHttp::request(BCSetting::$serverURL."/insert", "post", $insertData, 30);
+                        BCWxmpRedPackHttp::request(BCWxmpRedPackSetting::$serverURL."/insert", "post", $insertData, 30);
                     } else {
                         // release lock
                         echo $this->responseText($errMsg);
@@ -286,7 +284,7 @@ class BCWxmpApiDemo {
             ),
             "conditionConnector" => "AND",
         );
-        $serverUrl = BCSetting::getServerRandomUrl();
+        $serverUrl = BCWxmpRedPackSetting::getServerRandomUrl();
         $raw = BCWxmpRedPackHttp::request($serverUrl."/query/byCondition", "get", $queryData, 5);
         $result = BCWxmpRedPackHttp::formatResponse($raw);
 

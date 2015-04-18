@@ -27,5 +27,5 @@ $beecloud->appId = $appId;
 $beecloud->appSign = $appSign;
 $beecloud->mchId = $mchId;
 
-echo BCWxmpApi::sendWxmpRedpack(BCSetting::$serverURL, $usrOpenId, $redpack, $beecloud, 30);
+echo BCWxmpApi::sendWxmpRedpack(BCWxmpRedPackSetting::$serverURL, $usrOpenId, $redpack, $beecloud, 30);
 
