@@ -16,7 +16,7 @@ class WxPayConf_pub {
 
 	//=======【JSAPI路径设置】===================================
 	//获取access_token过程中的跳转uri，通过跳转将code传入jsapi支付页面
-	const JS_API_CALL_URL = 'http://beecloud.cn/wechat_test2/demo.php';
+	const JS_API_CALL_URL = 'http://beecloud.cn/wechat/demo/wxPayDemo.php';
 
 	//=======【证书路径设置】=====================================
 	//证书路径,注意应该填写绝对路径
