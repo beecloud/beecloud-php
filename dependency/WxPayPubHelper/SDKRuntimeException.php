@@ -5,7 +5,6 @@ class  SDKRuntimeException extends Exception {
 	{
 		return $this->getMessage();
 	}
-
 }
 
 ?>
