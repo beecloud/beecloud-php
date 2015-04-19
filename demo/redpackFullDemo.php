@@ -18,7 +18,7 @@ $salt = null;
 try {
     $api = new BCWxmpApiDemo($appId, $appSecret, $mchId, $salt);
     $postStr = $GLOBALS["HTTP_RAW_POST_DATA"]; //post 原始数据
-//    $postStr = "<xml><ToUserName><![CDATA[test]]></ToUserName><FromUserName><![CDATA[test]]></FromUserName><CreateTime>1429852898</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[12377test]]></Content><MsgId>6139023951558013395</MsgId></xml>";
+//    $postStr = "<xml><ToUserName><![CDATA[test]]></ToUserName><FromUserName><![CDATA[test-3B7B0hW-4]]></FromUserName><CreateTime>1429852898</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[12377test]]></Content><MsgId>6139023951558013395</MsgId></xml>";
     $msg = $api->getCallMsg($postStr);//解析xml
 
     /**
@@ -75,11 +75,12 @@ try {
 //                $result = BCWxmpRedPackHttp::formatResponse($raw);
 //                if (false == $result) {
 //                    //发送失败
+//                        echo $api->responseText($raw);
 //                } else {
 //                    if ($result->sendStatus) {
 //                        //发送成功
 //                    } else {
-//
+//                        echo $api->responseText($raw);
 //                    }
 //                }
                 break;
