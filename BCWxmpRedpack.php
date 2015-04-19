@@ -190,8 +190,7 @@ class BCWxmpRedPackHttp {
 class BCWxmpApi {
     static public $debugMsg = null;
 
-    static public function checkSignature(array $data, $token)
-    {
+    static public function checkSignature(array $data, $token){
         $signature = $data["signature"];
         $timestamp = $data["timestamp"];
         $nonce = $data["nonce"];
@@ -230,9 +229,10 @@ class BCWxmpApi {
         $redpack["appSign"] = $beecloud->appSign;
         $redpack["re_openid"] = "$fromUsername";
         $redpack["mch_billno"] = ($beecloud->mchId) . date("Ymd", $now) . $now;//mch_id + yyyymmdd + timestamp
-
-        return BCWxmpRedPackHttp::request($serverUrl . "/pay/wxmp/redPack", "get", $redpack, $timeout);
+        
+        return BCWxmpRedPackHttp::request($serverUrl . "/pay/wxmp/redPackExtra", "get", $redpack, $timeout);
     }
+
 
     static public function _getCallMsg($msgStr) {
         $msgObj = new stdClass();
@@ -243,6 +243,7 @@ class BCWxmpApi {
         $msgObj->xmlObj = $postObj;
         $msgObj->fromUserName = $postObj->FromUserName;
         $msgObj->toUserName = $postObj->ToUserName;
+        //xmlObj->BCDebug for debug use
         return $msgObj;
     }
 }
