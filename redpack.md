@@ -151,7 +151,11 @@ $redpack = array(
     "total_amount" => 100,
     "wishing" => "接入BeeCloud微信红包SDK，就可以实现发放微信红包功能，策划各种脑洞大开的粉丝活动啦！",
     "act_name" => "BeeCloud红包雨",
-    "remark" => "BeeCloud"); //mch_id + yyyymmdd + timestamp
+    "remark" => "BeeCloud",
+    "count_per_user" => 1 //beecloud 中限制每个用户获得的红包数目
+//    "period" => 300000, 
+//    "probability" => 0.3
+);
     
 ```
 
@@ -164,8 +168,8 @@ $beecloud->appId = $appId;
 $beecloud->appSign = $appSign;
 $beecloud->mchId = $mchId;
 
-//以下echo只为了本地调试时打印，在微信中打印请参考response.php中得流程
-echo BCWxmpApi::sendWxmpRedpack($usrOpenId, $redpack, $beecloud);
+//以下echo只为了本地调试时打印，在微信中打印请参考redpackFullDemo.php中得流程
+echo BCWxmpApi::sendWxmpRedpack(BCWxmpRedPackSetting::getServerRandomUrl(), $usrOpenId, $redpack, $beecloud, 30);
 ~~~
 
 
