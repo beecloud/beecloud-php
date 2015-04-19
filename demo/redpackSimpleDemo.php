@@ -35,7 +35,6 @@ $beecloud->appId = $appId;
 $beecloud->appSign = $appSign;
 $beecloud->mchId = $mchId;
 
-echo "hello:";
 echo BCWxmpApi::sendWxmpRedpack(BCWxmpRedPackSetting::getServerRandomUrl(), $usrOpenId, $redpack, $beecloud, 30);
 
 ?></body>
