@@ -18,7 +18,7 @@ $salt = null;
 try {
     $api = new BCWxmpApiDemo($appId, $appSecret, $mchId, $salt);
     $postStr = $GLOBALS["HTTP_RAW_POST_DATA"]; //post 原始数据
-//    $postStr = "<xml><ToUserName><![CDATA[test]]></ToUserName><FromUserName><![CDATA[test-3B7B0hW-4]]></FromUserName><CreateTime>1429852898</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[12377test]]></Content><MsgId>6139023951558013395</MsgId></xml>";
+//    $postStr = "<xml><ToUserName><![CDATA[test]]></ToUserName><FromUserName><![CDATA[test]]></FromUserName><CreateTime>1429852898</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[12377test]]></Content><MsgId>6139023951558013395</MsgId></xml>";
     $msg = $api->getCallMsg($postStr);//解析xml
 
     /**
@@ -71,8 +71,17 @@ try {
                     //    "period" => 300000,
                     //    "probability" => 0.3
                 );
-                $result = $api->sendRedpack($redpack);// true means redpack has been sent, each one can get only one
-                echo $result;
+                $raw = $api->sendRedpack($redpack);// true means redpack has been sent, each one can get only one
+//                $result = BCWxmpRedPackHttp::formatResponse($raw);
+//                if (false == $result) {
+//                    //发送失败
+//                } else {
+//                    if ($result->sendStatus) {
+//                        //发送成功
+//                    } else {
+//
+//                    }
+//                }
                 break;
             default:
 
