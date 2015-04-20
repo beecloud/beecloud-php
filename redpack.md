@@ -31,111 +31,35 @@ JAVA：[https://github.com/beecloud/pc-web-pay-demo](https://github.com/beecloud
 Python: [https://github.com/beecloud/beecloud-python](https://github.com/beecloud/beecloud-python)   
 PHP:  [https://github.com/beecloud/beecloud-php](https://github.com/beecloud/beecloud-php)  
 
-
-#JAVA
-调用
-
-```java
-//启动BeeCloud
-BeeCloud.registerApp(“your BeeCloud app id”, bcAppSecret);
-```
-
-```java
-//billno string 格式： mch_id（微信商户id，10位）+日期（yyyyMMdd）+ 10位数字（每天唯一）共计28位，如1234567890201504180000000001
-//openid string 红包接受者的微信openid
-//total_fee int 以分为单位，必须是100的整数倍，最多20000分
-BCPay.sendRedPack(billno, openid,
-                total_fee, "这里填昵称", "这里填发送方名称", "这里是祝福语", "这里填活动名称", "这里填备注");
-```
-
-demo: 
- 
-```java
-import cn.beecloud.BCPay;
-import cn.beecloud.BeeCloud;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
-
-public class Test {
-    public static void main(String[] args) {
-        String bcAppId = ""; // beecloud appid, beecloud 后台提供
-        String bcAppSecret = ""; // beecloud appsecret, beecloud 后台提供
-        String mch_id = "";   // 微信商户号， mp.weixin.qq.com可查到
-
-        BeeCloud.registerApp(bcAppId, bcAppSecret); // 初始化beecloud
-
-        String billSuf = billSuf();
-        String billno = mch_id + billSuf;
-        System.out.println(billSuf.length());
-        Map<String, Object> ret = BCPay.sendRedPack(billno, "o3kKrjlUsMnv__cK5DYZMl0JoAkY",
-                100, "这里填昵称", "这里填发送方名称", "这里是祝福语", "这里填活动名称", "这里填备注");
-        System.out.println(ret);
-        System.exit(0);
-    }
-
-    private static String billSuf() {
-        SimpleDateFormat ff = new SimpleDateFormat();
-        ff.applyPattern("yyyyMMdd");
-        String date = ff.format(new Date());
-        long ts = System.currentTimeMillis();
-        String timeStr = ("" + ts).substring(6);
-        Random random = new Random();
-        int a = random.nextInt(100) + 100;
-        return date + timeStr + a;
-    }
-}
-```
-
-#Python
-调用：
-
-```python
-//启动BeeCloud
-BCApi.bc_app_id = 'your app id'
-BCApi.bc_app_secret = 'your app secret'
-api = BCApi()
-
-//发起红包
-//billno string 格式： mch_id（微信商户id，10位）+日期（yyyyMMdd）+ 10位数字（每天唯一）共计28位，如1234567890201504180000000001
-//openid string 红包接受者的微信openid
-//total_fee int 以分为单位，必须是100的整数倍，最多20000分
-api.bc_red_pack(billno, openid, total_fee, "这里填昵称", "这里填发送方名称", "这里是祝福语", "这里填活动名称", "这里填备注")
-```
-
-demo:
-
-```python
-BCApi.bc_app_id = 'c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'
-BCApi.bc_app_secret = '39a7a518-9ac8-4a9e-87bc-7885f33cf18c'
-api = BCApi()
-
-mch_id = '1234275402'
-now = datetime.datetime.now()
-date = now.strftime("%Y%m%d")
-data = api.bc_red_pack(mch_id + date + no, 'o3kKrjsL1LAGguIrCKsTtFGxo-zg', 100, 'nick', 'nick', '中文', 'act', 'remark')
-```
-
 #PHP
 
 调用
 
 详细见PHP redpackSimpleDemo.php,注意此demo没有处理用户多次触发的情况,仅仅是发送红包
 
-配置相关参数
+配置相关参数，初始化api
 
 ```php
 
 set_time_limit(120);
 include_once("BCWxmpRedpack.php");
-
-$usrOpenId = "o3kKrjsL1LAGguIrCKsTtFGxo-zg";//用户openId
+$usrOpenId = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";//用户openId
 $appId = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719"; //BeeCloud appId
 $appSecret = ""; //BeeCloud appSecret 为了保密
-$appSign = md5($appId.$appSecret); 
+$appSign = md5($appId.$appSecret);
 $mchId = "1234275402";  //微信商户号
 
+//初始化
+$api = new BCWxmpApi($appId, $appSecret, $mchId);
+
+```
+
+接收微信xml报文
+```php
+$postStr = "<xml><ToUserName><![CDATA[gh_71e32cfe546c]]></ToUserName><FromUserName><![CDATA[o3kKrjlUsMnv__cK5DYZMl0JoAkY]]></FromUserName><CreateTime>1429494041</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[抢红包]]></Content><MsgId>6139023951558013395</MsgId></xml>";
+//在处理微信请求的服务器上请用如下方式获取真实xml
+//$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+$msg = $api->getCallMsg($postStr);//解析xml,获取msg内的参数
 ```
 
 
@@ -148,29 +72,21 @@ $mchId = "1234275402";  //微信商户号
 $redpack = array(
     "nick_name" => "BeeCloud",
     "send_name" => "BeeCloud",
-    "total_amount" => 100,
+    "total_amount" => 100, //（分）红包金额
     "wishing" => "接入BeeCloud微信红包SDK，就可以实现发放微信红包功能，策划各种脑洞大开的粉丝活动啦！",
     "act_name" => "BeeCloud红包雨",
     "remark" => "BeeCloud",
-    "count_per_user" => 1 //beecloud 中限制每个用户获得的红包数目
-//    "period" => 300000, 
-//    "probability" => 0.3
-);
-    
+    "count_per_user" => 100, //在当前时间t到 t - period时间内每个用户能得到红包个数上限(选填，默认为1)
+//    "period" => 300000, //（ms）用户领取红包的判重时间长度,默认为一天的毫秒数
+    "probability" => 0.3 //（float）获得红包概率 范围0-1, 默认为1
+);    
 ```
 
 发送红包:
 
 ~~~php
-
-$beecloud = new stdClass();
-$beecloud->appId = $appId;
-$beecloud->appSign = $appSign;
-$beecloud->mchId = $mchId;
-
-//以下echo只为了本地调试时打印，在微信中打印请参考redpackFullDemo.php中得流程
-echo BCWxmpApi::sendWxmpRedpack(BCWxmpRedPackSetting::getServerRandomUrl(), $usrOpenId, $redpack, $beecloud, 30);
+echo $api->sendRedpack($redpack);
 ~~~
 
 
-更详细demo请参考redpackFullDemo.php中流程
+更详细的处理微信信息过程请参考redpackFullDemo.php中流程, redpackFullDemo.php为实战过的一个样例
