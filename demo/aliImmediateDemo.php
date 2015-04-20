@@ -34,7 +34,12 @@ $pay->configProduct($data);
 
 //获取ali 返回的html-<form>
 $result = $pay->getImmediateHtml();
-print $result;
+if ($result != false) {
+    // 如果生成支付页面失败,返回false
+    print $result;
+} else {
+    echo $result;
+}
     ?>
 </body>
 </html>
