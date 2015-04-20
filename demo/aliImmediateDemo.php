@@ -22,7 +22,7 @@ $pay = new BCAliImmediate();//初始化BC ali 立即到账 功能
 
 //配置商品参数
 $data = array(
-    "out_trade_no" => "10001",//商户网站订单系统中唯一订单号，必填
+    "out_trade_no" => "200000",//商户网站订单系统中唯一订单号，必填，不可重复
     "subject" => "薯片",//订单名称,必填
     "total_fee" => "0.01",//付款金额,必填
     "return_url" => "testurl",//页面跳转同步通知页面路径,必填,即完成支付后跳转页面
