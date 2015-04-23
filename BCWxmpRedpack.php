@@ -188,10 +188,10 @@ class BCWxmpApi {
     public $mchId;
     public function __construct($appId, $appSecret, $mchId) {
         if (empty($appId) || empty($appSecret) || empty($mchId)) {
-            throw new BCException('除 lockPath ,请检查参数不能为空');
+            throw new Exception('除 lockPath ,请检查参数不能为空');
         }
         if (!is_string($appId) || !is_string($appSecret) || !is_string($mchId)) {
-            throw new BCException('输入必须是String类型');
+            throw new Exception('输入必须是String类型');
         }
         $this->appId = $appId;
         $this->appSecret = $appSecret;

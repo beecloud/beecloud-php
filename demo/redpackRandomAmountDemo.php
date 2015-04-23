@@ -9,13 +9,13 @@
  * User: dengze
  * Date: 4/17/15
  * Time: 15:17
- * 最简单的发送红包demo,发送固定金额红包
+ * 发送金额随机红包emo
  */
 set_time_limit(120);
 include_once("../BCWxmpRedpack.php");
 $usrOpenId = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";//用户openId
 $appId = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719"; //BeeCloud appId
-$appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c"; //BeeCloud appSecret
+$appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c"; //BeeCloud appSecret 为了保密,不要告诉任何人
 $appSign = md5($appId.$appSecret);
 $mchId = "1234275402";  //微信商户号
 
@@ -29,7 +29,8 @@ $msg = $api->getCallMsg($postStr);//解析xml,获取msg内的参数
 $redpack = array(
     "nick_name" => "BeeCloud",
     "send_name" => "BeeCloud",
-    "total_amount" => 100, //（分）红包固定金额
+    "min" => 100, //（分）最小红包金额 >= 100
+    "max" => 105, // (分) 最大红包金额 >= min
     "wishing" => "接入BeeCloud微信红包SDK，就可以实现发放微信红包功能，策划各种脑洞大开的粉丝活动啦！",
     "act_name" => "BeeCloud红包雨",
     "remark" => "BeeCloud",

@@ -35,7 +35,8 @@ PHP:  [https://github.com/beecloud/beecloud-php](https://github.com/beecloud/bee
 
 调用
 
-详细见PHP redpackSimpleDemo.php,注意此demo没有处理用户多次触发的情况,仅仅是发送红包
+详细见PHP redpackSimpleDemo.php,注意此demo没有处理用户多次触发的情况,仅仅是发送“固定金额”的红包。
+随机金额的红包可以通过随机设置total_amount实现,也可以参考 redpackRandomAmountDemo.php使用相关参数实现
 
 配置相关参数，初始化api
 
@@ -72,14 +73,17 @@ $msg = $api->getCallMsg($postStr);//解析xml,获取msg内的参数
 $redpack = array(
     "nick_name" => "BeeCloud",
     "send_name" => "BeeCloud",
-    "total_amount" => 100, //（分）红包金额
+    "total_amount" => 100, //（分）红包固定金额
     "wishing" => "接入BeeCloud微信红包SDK，就可以实现发放微信红包功能，策划各种脑洞大开的粉丝活动啦！",
     "act_name" => "BeeCloud红包雨",
     "remark" => "BeeCloud",
+    /**
+     * 此处特别注意count_per_user根据你的需求的设置
+     */
     "count_per_user" => 100, //在当前时间t到 t - period时间内每个用户能得到红包个数上限(选填，默认为1)
-//    "period" => 300000, //（ms）用户领取红包的判重时间长度,默认为一天的毫秒数
-    "probability" => 0.3 //（float）获得红包概率 范围0-1, 默认为1
-);    
+//    "period" => 300000, //（ms）用户领取红包的判重时间长度,默认为所有时间内
+    "probability" => 0.3 //（float）单次获得红包概率 范围0-1, 默认为1
+); 
 ```
 
 发送红包:
