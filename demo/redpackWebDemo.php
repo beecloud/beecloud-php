@@ -5,11 +5,8 @@
 <body>
 <?php
 /**
- * Created by PhpStorm.
- * User: dengze
- * Date: 4/17/15
- * Time: 15:17
- * 最简单的发送红包demo,发送固定金额红包
+ * 本demo适用于通过“微信授权后获取到用户openId”的情况下,直接发送红包给用户
+ * 例如：授权的网页内
  */
 set_time_limit(120);
 include_once("../BCWxmpRedpack.php");
@@ -17,14 +14,9 @@ $usrOpenId = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";//用户openId
 $appId = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719"; //BeeCloud appId !!!此处请用你的BeeCloud appId
 $appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c"; //BeeCloud appSecret  !!!此处请用你的BeeCloud appSecret
 $appSign = md5($appId.$appSecret);
-$mchId = "1234275402";  //微信商户号!!!请使用你的商户号
+$mchId = "1234275402";  //微信商户号,请填写你的商户号
 
 $api = new BCWxmpApi($appId, $appSecret, $mchId);
-
-$postStr = "<xml><ToUserName><![CDATA[gh_71e32cfe546c]]></ToUserName><FromUserName><![CDATA[o3kKrjlUsMnv__cK5DYZMl0JoAkY]]></FromUserName><CreateTime>1429494041</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[抢红包]]></Content><MsgId>6139023951558013395</MsgId></xml>";
-//在处理微信请求的服务器上请用如下方式获取真实xml
-//$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-$msg = $api->getCallMsg($postStr);//解析xml,获取msg内的参数
 
 $redpack = array(
     "nick_name" => "BeeCloud",
@@ -41,13 +33,12 @@ $redpack = array(
     "probability" => 0.3 //（float）单次获得红包概率 范围0-1, 默认为1
 );
 
-$api->sendRedpack($redpack, 30);
+$raw = $api->sendRedpackTo($usrOpenId, $redpack, 30);
+echo $raw;
 /**
  * 处理过程请参考以下
  */
 //
-//
-//$raw =  $api->sendRedpack($redpack);
 //$result = json_decode($raw);
 //if (null == $result) {
 //    //发送失败
@@ -57,16 +48,16 @@ $api->sendRedpack($redpack, 30);
 //    if ($result->resultCode == 0) {
 //        if ($result->sendStatus) {
 //            //发送成功
-//            echo $api->responseText($redpackSuccessMsg);
+//
 //        } else {
 //            if (preg_match("/^该用户已达到发送红包上限/", $result->sendMsg)) {
-//                echo $api->responseText($redpackRepeatMsg);
+//
 //            } else if (preg_match("/^该用户随机未成功/", $result->sendMsg)) {
-//                echo $api->responseText($redpackMissMsg);
+//
 //            }
 //        }
 //    } else if ($result->errMsg == "WX_SERVER_ERROR" && $result->err_code=="NOTENOUGH") {
-//        echo $api->responseText($redpackNotenoughMsg);
+//        //商户余额不足
 //    }
 //}
 

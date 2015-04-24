@@ -93,4 +93,6 @@ echo $api->sendRedpack($redpack);
 ~~~
 
 
-更详细的处理微信信息过程请参考redpackFullDemo.php中流程, redpackFullDemo.php为实战过的一个样例
+更详细的处理微信信息过程请参考redpackFullDemo.php中流程, redpackFullDemo.php为实战过的一个样例。
+
+在微信授权的网页内实现发送红包功能请参考redpackWebDemo.php。

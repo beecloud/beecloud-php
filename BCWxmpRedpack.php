@@ -264,13 +264,41 @@ class BCWxmpApi {
     }
 
     /**
-     * 发送红包,啥都不管;云端处理所有红包的检查
+     * 微信内给 “发送消息的用户” 发送红包;该接口云端处理红包的相关检查检查
      * @param array $redpack
+     * @param $time curl request 超时时间
+     * @return mixed|string
+     *
+     * $redpack 说明：
+     *
+     *
+     * $redpack = array(
+     * "nick_name" => "BeeCloud",
+     * "send_name" => "BeeCloud",
+     * "total_amount" => 100, //（分）红包固定金额
+     * "wishing" => "接入BeeCloud微信红包SDK，就可以实现发放微信红包功能，策划各种脑洞大开的粉丝活动啦！",
+     * "act_name" => "BeeCloud红包雨",
+     * "remark" => "BeeCloud",
+     * "count_per_user" => 100, //在当前时间t到 t - period时间内每个用户能得到红包个数上限(选填，默认为1)，此处特别注意count_per_user, period根据你的需求的设置
+     * "period" => 300000, //（ms）用户领取红包的判重时间长度,默认为‘所有时间内’
+     * "probability" => 0.3 //（float）单次获得红包概率 范围0-1, 默认为1
+     * );
+     */
+    public function sendRedpack(array $redpack, $time) {
+        $fromUserName = $this->msg->fromUserName;
+        return $this->sendRedpackTo($fromUserName, $redpack, $time);
+    }
+
+    /**
+     * 向指定openID用户发送红包
+     * @param to $userOpenID
+     * @param array $redpack
+     * @param $time curl request 超时时间
      * @return mixed|string
      */
-    public function sendRedpack(array $redpack) {
-        $fromUserName = $this->msg->fromUserName;
-        return BCWxmpApiUtil::sendWxmpRedpack(BCWxmpRedPackSetting::getServerRandomUrl(), $fromUserName, $redpack, $this, 30);
+    public function sendRedpackTo($userOpenID, array $redpack, $time) {
+        $time = isset($time) ? $time : 30;
+        return BCWxmpApiUtil::sendWxmpRedpack(BCWxmpRedPackSetting::getServerRandomUrl(), $userOpenID, $redpack, $this, $time);
     }
 }
 

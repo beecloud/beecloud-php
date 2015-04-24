@@ -14,10 +14,10 @@
 set_time_limit(120);
 include_once("../BCWxmpRedpack.php");
 $usrOpenId = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";//用户openId
-$appId = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719"; //BeeCloud appId
-$appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c"; //BeeCloud appSecret 为了保密,不要告诉任何人
+$appId = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719"; //BeeCloud appId !!!此处请用你的BeeCloud appId
+$appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c"; //BeeCloud appSecret  !!!此处请用你的BeeCloud appSecret
 $appSign = md5($appId.$appSecret);
-$mchId = "1234275402";  //微信商户号
+$mchId = "1234275402";  //微信商户号 !!!此处请用你的微信商户号
 
 $api = new BCWxmpApi($appId, $appSecret, $mchId);
 
@@ -42,7 +42,7 @@ $redpack = array(
     "probability" => 0.3 //（float）单次获得红包概率 范围0-1, 默认为1
 );
 
-echo $api->sendRedpack($redpack);
+echo $api->sendRedpack($redpack, 30);
 /**
  * 处理过程请参考以下
  */
