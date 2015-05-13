@@ -21,6 +21,21 @@ $pay->configProduct(array(
 //    "goods_tag" => "hehe",//商品标记
 //    "product_id" => "111"//商品ID
 ));
+
+$result = $pay->getJsParams(false);
+if ($result->result) {
+    $params = $result->params;
+} else {
+    if ($result->errMsg == "WXMP_NOT_SET")  {
+        //支付设置中，微信公众号设置中得参数没有设置
+        echo "BeeCloud 微信公众号参数未设置";
+        exit();
+    } else {
+        //请提供$result->errMsg 给BeeCloud
+        echo "Debug 请联系BeeCloud:".$result->errMsg;
+        exit();
+    }
+}
 ?>
 
 <html>
@@ -33,7 +48,7 @@ $pay->configProduct(array(
         function jsApiCall() {
             WeixinJSBridge.invoke(
                 'getBrandWCPayRequest',
-                <?php echo $temp = $pay->getJsParams(false);?>,
+                <?php echo $params;?>,
                 function(res){
                     WeixinJSBridge.log(res.err_msg);
                     //alert(res.err_code+res.err_desc+res.err_msg);

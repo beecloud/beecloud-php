@@ -92,16 +92,26 @@ class BCWXPayUtil {
         //使用统一支付接口
         $raw = BCWXHttp::request(BCSetting::$serverURL . "/pay/wxmp/prepare", "get", $config, 30);
         $result = json_decode($raw);
-        $prepayParams = array();
+        $prepayObject = new stdClass();
+        $params = array();
 
         if ($result != null && $result->resultCode == 0) {
+            $prepayObject->result = true;
             foreach($result as $k=>$v) {
                 if ( (0 != strcmp("resultCode", $k)) && (0 != strcmp("errMsg", $k)) ) {
-                    $prepayParams[$k] = $v;
+                    $params[$k] = $v;
                 }
             }
+            $prepayObject->params = json_encode($params);
+        } else {
+            $prepayObject->result = false;
+            if ($result == null) {
+                $prepayObject->errMsg = $raw;
+            } else {
+                $prepayObject->errMsg = $result->errMsg;
+            }
         }
-        return $prepayParams;
+        return $prepayObject;
     }
 
 }
@@ -136,7 +146,7 @@ class BCWXPay  {
     }
 
     final public function getJsParams() {
-        return json_encode(BCWXPayUtil::getPrepayParamFromServer($this->config));
+        return BCWXPayUtil::getPrepayParamFromServer($this->config);
     }
 
 }
