@@ -139,10 +139,15 @@ class BCWXPay  {
         $this->config["appId"] = BCPayConf::$appId;
         $this->config["appSign"] = md5(BCPayConf::$appId.BCPayConf::$appSecret);
         $this->config["openid"] = $this->openID;
-        $this->config["out_trade_no"] = "$out_trade_no";//商户订单号
+        if (array_key_exists("out_trade_no", $config)) {
+            $this->config["out_trade_no"] = $config["out_trade_no"];//商户订单号
+        } else {
+            $this->config["out_trade_no"] = "$out_trade_no";//商户订单号
+        }
+
         $this->config["notify_url"] = WxPayConf_pub::NOTIFY_URL;//
         $this->config["trade_type"] = "JSAPI";//交易类型
-        return $out_trade_no;
+        return $this->config["out_trade_no"];
     }
 
     final public function getJsParams() {
