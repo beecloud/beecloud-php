@@ -10,7 +10,7 @@ include_once("../BCWXPay.php");
 $pay = new BCWXPay($_GET);
 
 
-$pay->configProduct(array(
+$billID = $pay->configProduct(array(
     "body" => "web wxpay",
     "total_fee" => "1", //总金额单位为分以下非必填参数，商户可根据实际情况选填
 //  "sub_mch_id" => "123",//子商户号
