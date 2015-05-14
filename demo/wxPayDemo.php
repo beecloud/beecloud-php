@@ -13,6 +13,7 @@ $pay = new BCWXPay($_GET);
 $billID = $pay->configProduct(array(
     "body" => "web wxpay",
     "total_fee" => "1", //总金额单位为分以下非必填参数，商户可根据实际情况选填
+//    "out_trade_no" =>"" //订单号，默认自动生成billID,如果手动设置则使用手动设置的值
 //  "sub_mch_id" => "123",//子商户号
 //    "device_info" => "android",//设备号
 //    "attach" =>"wechao",//附加数据
