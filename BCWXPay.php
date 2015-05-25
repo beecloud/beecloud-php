@@ -145,7 +145,7 @@ class BCWXPay  {
             $this->config["out_trade_no"] = "$out_trade_no";//商户订单号
         }
 
-        $this->config["notify_url"] = WxPayConf_pub::NOTIFY_URL;//
+//        $this->config["notify_url"] = WxPayConf_pub::NOTIFY_URL;//
         $this->config["trade_type"] = "JSAPI";//交易类型
         return $this->config["out_trade_no"];
     }
