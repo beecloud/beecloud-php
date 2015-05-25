@@ -24,24 +24,35 @@ $pay->configProduct(array(
 
 
 $result = $pay->getOrderResult(false);
+if ($result->result) {
+    //商户根据实际情况设置相应的处理流程
+    if ($result->params["return_code"] == "FAIL") {
+        //商户自行增加处理流程
+        echo "通信出错：".$result->params['return_msg']."<br>";
+        exit();
+    } elseif($result->params["result_code"] == "FAIL") {
+        //商户自行增加处理流程
+        echo "错误代码：".$result->params['err_code']."<br>";
+        echo "错误代码描述：".$result->params['err_code_des']."<br>";
+        exit();
+    } elseif($result->params["code_url"] != NULL) {
+        //从统一支付接口获取到code_url
+        $code_url = $result->params["code_url"];
+        //商户自行增加处理流程
+        //......
+    }
 
-//商户根据实际情况设置相应的处理流程
-if ($result["return_code"] == "FAIL") {
-    //商户自行增加处理流程
-    echo "通信出错：".$result['return_msg']."<br>";
-    exit();
-} elseif($result["result_code"] == "FAIL") {
-    //商户自行增加处理流程
-    echo "错误代码：".$result['err_code']."<br>";
-    echo "错误代码描述：".$result['err_code_des']."<br>";
-    exit();
-} elseif($result["code_url"] != NULL) {
-    //从统一支付接口获取到code_url
-    $code_url = $result["code_url"];
-    //商户自行增加处理流程
-    //......
+} else {
+    if ($result->errMsg == "WXMP_NOT_SET")  {
+        //支付设置中，微信公众号设置中得参数没有设置
+        echo "BeeCloud 微信公众号参数未设置";
+        exit();
+    } else {
+        //请提供$result->errMsg 给BeeCloud
+        echo "Debug 请联系BeeCloud:".$result->errMsg;
+        exit();
+    }
 }
-
 ?>
 
 
@@ -61,7 +72,7 @@ if ($result["return_code"] == "FAIL") {
 </body>
 <script src="../dependency/qrcode.js"></script>
 <script>
-    if(<?php echo $result["code_url"] != NULL; ?>) {
+    if(<?php echo $result->params["code_url"] != NULL; ?>) {
         var url = "<?php echo $code_url;?>";
         //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
         var qr = qrcode(10, 'H');

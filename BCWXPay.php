@@ -174,7 +174,8 @@ class BCWXQrCode  {
         };
         $this->config["appId"] = BCPayConf::$appId;
         $this->config["appSign"] = md5(BCPayConf::$appId.BCPayConf::$appSecret);
-        $this->config["notify_url"] = WxPayConf_pub::NOTIFY_URL;//
+       // $this->config["notify_url"] = WxPayConf_pub::NOTIFY_URL;//
+
         $this->config["trade_type"] = "NATIVE";//交易类型
         return true;
     }
