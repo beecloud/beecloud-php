@@ -37,7 +37,8 @@ if ($result->result) {
         exit();
     } elseif($result->params["code_url"] != NULL) {
         //从统一支付接口获取到code_url
-        $code_url = $result->params["code_url"];
+        $params = json_decode($result->params);
+        $code_url = $params->code_url;
         //商户自行增加处理流程
         //......
     }
