@@ -10,12 +10,12 @@ class BCPayConf {
 
 
 class BCSetting {
-	static public $serverURL = "http://123.57.71.81:8080/1";
+	static public $serverURL = "https://123.57.71.81/1";
 	static public function setDebug($flag) {
 		if ($flag) {
-			self::$serverURL = "http://api.beecloud.cn:8080/1";
+			self::$serverURL = "http://123.57.71.81:8080/1";
 		} else {
-			self::$serverURL = "https://api.beecloud.cn/1";
+			self::$serverURL = "https://123.57.71.81/1";
 		}
 	}
 }

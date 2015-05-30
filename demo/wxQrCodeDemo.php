@@ -9,10 +9,13 @@
 include_once("../BCWXPay.php");
 $pay = new BCWXQrCode();
 $out_trade_no = WxPayConf_pub::APPID.time();
+$optional = new stdClass();
+$optional->hello = 1;
 $pay->configProduct(array(
     "body" => "web wxpay",
     "total_fee" => "1", //总金额单位为分以下非必填参数，商户可根据实际情况选填
-    "out_trade_no" => "$out_trade_no"//商户订单号
+    "out_trade_no" => "$out_trade_no",//商户订单号
+    "optional" => $optional
 //  "sub_mch_id" => "123",//子商户号
 //    "device_info" => "android",//设备号
 //    "attach" =>"wechao",//附加数据
