@@ -7,7 +7,16 @@
  */
 include_once("../BCWXPay.php");
 
+
+//通过微信授权自动获取用户openId
 $pay = new BCWXPay($_GET);
+
+/**
+ * 直接传递 openID,请使用以下参数
+ */
+
+//$pay = new BCWXPay("用户openID");
+
 
 
 $billID = $pay->configProduct(array(

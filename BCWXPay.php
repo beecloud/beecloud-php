@@ -120,9 +120,14 @@ class BCWXPay  {
     private $openID;
     private $prepayParams;
     private $config = array();
-    public function __construct(array $data) {
-        $this->openID = BCWXPayUtil::getOpenID($data);
-//        $this->openID = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";
+    public function __construct($data) {
+        if (is_array($data)) {
+            $this->openID = BCWXPayUtil::getOpenID($data);
+
+        } else {
+            $this->openID = $data;
+            //        $this->openID = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";
+        }
     }
 
     public function getOpenID() {
@@ -182,31 +187,6 @@ class BCWXQrCode  {
 
     final public function getOrderResult($debugFlag) {
         return BCWXPayUtil::getPrepayParamFromServer($this->config, $debugFlag);
-    }
-
-}
-
-class BCWXWAP  {
-    private $config = array();
-    public function __construct() {
-
-    }
-
-    final public function configProduct(array $config) {
-        $this->config = array();
-        foreach($config as $k => $v) {
-            $this->config[$k] = $v;
-        };
-        $this->config["appId"] = BCPayConf::$appId;
-        $this->config["appSign"] = md5(BCPayConf::$appId.BCPayConf::$appSecret);
-        // $this->config["notify_url"] = WxPayConf_pub::NOTIFY_URL;//
-
-        $this->config["trade_type"] = "WAP";//交易类型
-        return true;
-    }
-
-    final public function getOrderResult($debugFlag) {
-        return  BCWXPayUtil::getPrepayParamFromServer($this->config, $debugFlag);
     }
 
 }
