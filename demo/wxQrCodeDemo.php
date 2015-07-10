@@ -77,50 +77,13 @@ if ($result->result) {
 </div>
 <br>
 </body>
-<script src="../dependency/qrcode.js"></script>
+<script src="../dependency/util.js"></script>
 <script>
-    var options	= {
-        render		: "canvas",
-        width		: 250,
-        height		: 250,
-        typeNumber	: -1,
-        correctLevel	: QRErrorCorrectLevel.H,
-        background      : "#ffffff",
-        foreground      : "#000000"
-    };
 
-    var createCanvas	= function(options){
-        // create the qrcode itself
-        var qrcode	= new QRCode(options.typeNumber, options.correctLevel);
-        qrcode.addData(options.text);
-        qrcode.make();
-
-        // create canvas element
-        var canvas	= document.createElement('canvas');
-        canvas.width	= options.width;
-        canvas.height	= options.height;
-        var ctx		= canvas.getContext('2d');
-
-        // compute tileW/tileH based on options.width/options.height
-        var tileW	= options.width  / qrcode.getModuleCount();
-        var tileH	= options.height / qrcode.getModuleCount();
-
-        // draw in the canvas
-        for( var row = 0; row < qrcode.getModuleCount(); row++ ){
-            for( var col = 0; col < qrcode.getModuleCount(); col++ ){
-                ctx.fillStyle = qrcode.isDark(row, col) ? options.foreground : options.background;
-                var w = (Math.ceil((col+1)*tileW) - Math.floor(col*tileW));
-                var h = (Math.ceil((row+1)*tileW) - Math.floor(row*tileW));
-                ctx.fillRect(Math.round(col*tileW),Math.round(row*tileH), w, h);
-            }
-        }
-        // return just built canvas
-        return canvas;
-    }
     if(<?php echo $result->params["code_url"] != NULL; ?>) {
-        options.text = "<?php echo $code_url;?>";
+        var options = {text: "<?php echo $code_url;?>"};
         //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
-        var canvas = createCanvas(options);
+        var canvas = BCUtil.createQrCode(options);
         var wording=document.createElement('p');
         wording.innerHTML = "扫我，扫我";
 //        var code=document.createElement('DIV');
