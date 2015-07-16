@@ -38,7 +38,7 @@ try {
     </div>
     <br>
     </body>
-    <script src="../dependency/util.js"></script>
+    <script src="../dependency/qrcode.js"></script>
     <script>
 
         if(<?php echo $code_url != NULL; ?>) {
