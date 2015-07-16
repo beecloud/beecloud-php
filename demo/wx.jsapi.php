@@ -31,8 +31,8 @@ $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
 $data["title"] = "白开水";
 
-
 $data["openid"] = $openid;
+//$data["openid"] = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";
 
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
@@ -40,7 +40,7 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //$data["return_url"] = "http://payservice.beecloud.cn";
 
 try {
-//    $result = BCRESTApi::bill($data);
+    $result = BCRESTApi::bill($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();
