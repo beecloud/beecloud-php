@@ -1,14 +1,4 @@
 <?php
-/**
- * Native（原生）支付-模式二-demo
- * ====================================================
- * 商户生成订单，先调用统一支付接口获取到code_url，
- * 此URL直接生成二维码，用户扫码后调起支付。
- *
- */
-class test {
-    public $test = 1;
-}
 include_once("../BCWXPay.php");
 $pay = new BCWXQrCode();
 $out_trade_no = WxPayConf_pub::APPID.time();
@@ -41,7 +31,7 @@ if ($result->result) {
         echo "错误代码：".$result->params['err_code']."<br>";
         echo "错误代码描述：".$result->params['err_code_des']."<br>";
         exit();
-    } elseif($result->params["code_url"] != NULL) {
+    } elseif($result->params["wap_url"] != NULL) {
         //从统一支付接口获取到code_url
         $params = json_decode($result->params);
         $code_url = $params->code_url;
@@ -75,22 +65,7 @@ if ($result->result) {
 <div align="center">
     <p>订单号：<?php echo $out_trade_no; ?></p>
 </div>
+<a id="pay" href="<?php echo $result->params["wap_url"]?>">支付链接<a/>
 <br>
 </body>
-<script src="../dependency/util.js"></script>
-<script>
-
-    if(<?php echo $result->params["code_url"] != NULL; ?>) {
-        var options = {text: "<?php echo $code_url;?>"};
-        //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
-        var canvas = BCUtil.createQrCode(options);
-        var wording=document.createElement('p');
-        wording.innerHTML = "扫我，扫我";
-//        var code=document.createElement('DIV');
-//        code.innerHTML = qr.createImgTag();
-        var element=document.getElementById("qrcode");
-        element.appendChild(wording);
-        element.appendChild(canvas);
-    }
-</script>
 </html>

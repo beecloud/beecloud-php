@@ -120,9 +120,14 @@ class BCWXPay  {
     private $openID;
     private $prepayParams;
     private $config = array();
-    public function __construct(array $data) {
-        $this->openID = BCWXPayUtil::getOpenID($data);
-//        $this->openID = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";
+    public function __construct($data) {
+        if (is_array($data)) {
+            $this->openID = BCWXPayUtil::getOpenID($data);
+
+        } else {
+            $this->openID = $data;
+            //        $this->openID = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";
+        }
     }
 
     public function getOpenID() {

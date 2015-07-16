@@ -1235,3 +1235,74 @@ QRBitBuffer.prototype = {
         this.length++;
     }
 };
+;/**
+ * Created by dengze on 7/8/15.
+ */
+(function() {
+    'use strict';
+    var _util = window.BCUtil = window.BCUtil || {};
+    function bcExtend(dest, source, deep) {
+        for (var name in source) {
+            if (source.hasOwnProperty(name)) {
+                //检测该属性是否存在
+                if (dest.hasOwnProperty(name)) {
+                    //不覆盖
+                    continue;
+                } else {
+                    //当前属性是否为对象,如果为对象，则进行深度复制
+                    if (true == deep && (source[name] instanceof Object)) {
+                        dest[name] = {};
+                        bcExtend(dest[name], source[name], true);
+                    } else {
+                        dest[name] = source[name];
+                    }
+                }
+            }
+        }
+        return dest;
+    }
+    var _default_options = {
+        //text : "",
+        render		: "canvas",
+        width		: 250,
+        height		: 250,
+        typeNumber	: -1,
+        correctLevel	: QRErrorCorrectLevel.H,
+        background      : "#ffffff",
+        foreground      : "#000000"
+    };
+
+    /**
+     * return DOM object
+     */
+    _util.createQrCode	= function(userOptions){
+        // create the qrcode itself
+        var options = bcExtend(userOptions, _default_options, true);
+        console.log(options);
+        var qrcode	= new QRCode(options.typeNumber, options.correctLevel);
+        qrcode.addData(options.text);
+        qrcode.make();
+
+        // create canvas element
+        var canvas	= document.createElement('canvas');
+        canvas.width	= options.width;
+        canvas.height	= options.height;
+        var ctx		= canvas.getContext('2d');
+
+        // compute tileW/tileH based on options.width/options.height
+        var tileW	= options.width  / qrcode.getModuleCount();
+        var tileH	= options.height / qrcode.getModuleCount();
+
+        // draw in the canvas
+        for( var row = 0; row < qrcode.getModuleCount(); row++ ){
+            for( var col = 0; col < qrcode.getModuleCount(); col++ ){
+                ctx.fillStyle = qrcode.isDark(row, col) ? options.foreground : options.background;
+                var w = (Math.ceil((col+1)*tileW) - Math.floor(col*tileW));
+                var h = (Math.ceil((row+1)*tileW) - Math.floor(row*tileW));
+                ctx.fillRect(Math.round(col*tileW),Math.round(row*tileH), w, h);
+            }
+        }
+        // return just built canvas
+        return canvas;
+    }
+}());
