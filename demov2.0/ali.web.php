@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>BeeCLoud支付宝及时到账示例</title>
 </head>
+<body>
 <?php
 require_once("../beecloud.php");
 
@@ -32,7 +33,7 @@ try {
 
     $htmlContent = $result->html;
     $url = $result->url;
-    echo $html;
+    echo $htmlContent;
 } catch (Exception $e) {
     echo $e->getMessage();
 }

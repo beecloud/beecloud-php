@@ -9,14 +9,15 @@ class BCRESTErrMsg {
 
 class BCRESTUtil {
     static final public function getApiUrl() {
-        $domainList = array("apibj.beecloud.cn", "apisz.beecloud.cn", "apiqd.beecloud.cn", "apihz.beecloud.cn");
-        //apibj.beecloud.cn	北京
-        //apisz.beecloud.cn	深圳
-        //apiqd.beecloud.cn	青岛
-        //apihz.beecloud.cn	杭州
-
-        $random = rand(0, 3);
-        return "https://" . $domainList[$random];
+//        $domainList = array("apibj.beecloud.cn", "apisz.beecloud.cn", "apiqd.beecloud.cn", "apihz.beecloud.cn");
+//        //apibj.beecloud.cn	北京
+//        //apisz.beecloud.cn	深圳
+//        //apiqd.beecloud.cn	青岛
+//        //apihz.beecloud.cn	杭州
+//
+//        $random = rand(0, 3);
+//        return "https://" . $domainList[$random];
+        return "http://58.211.191.123:8080";
     }
 
     static final public function request($url, $method, array $data, $timeout) {
