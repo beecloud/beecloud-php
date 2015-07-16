@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCLoud微信扫码示例</title>
+    <title>BeeCloud微信扫码示例</title>
 </head>
 <body>
 <?php
@@ -15,10 +15,8 @@ $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["channel"] = "WX_NATIVE";
 $data["total_fee"] = 1;
-$data["bill_no"] = "bc-demo" . $data["timestamp"];
+$data["bill_no"] = "bcdemo" . $data["timestamp"];
 $data["title"] = "白开水";
-$data["openid"] = "wx419f04c4a731303d";
-
 
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
