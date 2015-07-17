@@ -18,10 +18,10 @@ try {
     $result = BCRESTApi::refundStatus($data);
     if ($result->result_code != 0 || $result->result_msg != "OK") {
         echo json_encode($result->err_detail);
-        echo "<br/><a href='wx.refund.php'>返回</a>";
+        echo "<br/><a href='wx.refunds.php'>返回</a>";
         exit();
     }
-    echo "更新成功，<a href='wx.refund.php'>返回</a>";
+    echo "更新成功，<a href='wx.refunds.php'>返回</a>";
 
 } catch (Exception $e) {
     echo $e->getMessage();
