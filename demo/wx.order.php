@@ -17,9 +17,8 @@ $data["app_id"] = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 //选择渠道类型(WX、WX_APP、WX_NATIVE、WX_JSAPI、ALI、ALI_APP、ALI_WEB、ALI_QRCODE、UN、UN_APP、UN_WEB)
-$data["channel"] = "ALI";
+$data["channel"] = "WX";
 $data["limit"] = 10;
-
 
 try {
     $result = BCRESTApi::bills($data);
@@ -33,9 +32,9 @@ try {
         echo "<tr>";
         foreach($list as $k=>$v) {
             if($k=="spay_result" && $v) {
-                echo "<td><a href='ali.agree.refund.php?refund_no=".$refund_no."&bill_no=".$list->bill_no."&refund_fee=".$list->total_fee."'>同意退款</a></td>";
+                echo "<td><a href='wx.agree.refund.php?refund_no=".$refund_no."&bill_no=".$list->bill_no."&refund_fee=".$list->total_fee."'>同意退款</a></td>";
             } else if($k=="spay_result" && !$v){
-                echo "<td></td>";
+                echo "<td>　</td>";
             }
             echo "<td>".($k=="spay_result"?($v?"支付":"未支付"):($k=="created_time"?date('Y-m-d H:i:s',$v/1000):$v))."</td>";
         }
