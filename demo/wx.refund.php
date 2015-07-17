@@ -27,42 +27,12 @@
             exit();
         }
         $refunds = $result->refunds;
+        echo "<tr><td>更新状态</td><td>退款是否成功</td><td>退款创建时间</td><td>退款号</td><td>订单金额(分)</td><td>退款金额(分)</td><td>渠道类型</td><td>订单号</td><td>退款是否完成</td><td>订单标题</td></tr>";
         foreach($refunds as $list) {
             echo "<tr>";
+            echo "<td><a href='wx.refund.status.php?refund_no=".$list->refund_no."'>更新</a></td>";
             foreach($list as $k=>$v) {
-                switch ($k) {
-                    case "bill_no":
-                        echo "<td>订单号</td>";
-                        break;
-                    case "refund_no":
-                        echo "<td>退款号</td>";
-                        break;
-                    case "total_fee":
-                        echo "<td>订单金额(分)</td>";
-                        break;
-                    case "refund_fee":
-                        echo "<td>退款金额(分)</td>";
-                        break;
-                    case "channel":
-                        echo "<td>渠道类型</td>";
-                        break;
-                    case "title":
-                        echo "<td>订单标题</td>";
-                        break;
-                    case "result":
-                        echo "<td>退款是否成功</td>";
-                        break;
-                    case "finish":
-                        echo "<td>退款是否完成</td>";
-                        break;
-                    case "created_time":
-                        echo "<td>退款创建时间</td>";
-                        break;
-                }
                 echo "<td>".($k=="result"?($v?"成功":"失败"):($k=="created_time"?date('Y-m-d H:i:s',$v/1000):($k=="finish"?($v?"完成":"未完成"):$v)))."</td>";
-                if($k=="finish" && !$v) {
-                    echo "<td><a href='ali.agree.refund.php?refund_no=".$list->refund_no."&bill_no=".$list->bill_no."&refund_fee=".$list->refund_fee."'>同意退款</a></td>";
-                }
             }
             echo "</tr>";
         }
