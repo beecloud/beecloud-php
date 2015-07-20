@@ -18,7 +18,7 @@
 	require_once("<YourPath>/beecloud.php");
 ~~~
 
-### BeeCloud API （$data参数请参考BeeCloud RESTFull API,同时可以参考demo中各渠道的代码示例）
+### BeeCloud API （$data参数和返回参数请参考BeeCloud RESTFull API,同时可以参考demo中各渠道的代码示例）
 1. 发起支付订单 
 
 	~~~
