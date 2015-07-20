@@ -17,5 +17,9 @@
     <li><a href="demo/wx.bills.php">微信订单查询和退款</a></li>
     <li><a href="demo/wx.refunds.php">微信退款查询和退款状态更新</a></li>
 </ul>
+
+<div>
+    <h1>Supported By:<a href="https://github.com/beecloud/beecloud-rest-api">BeeCloud RESTfull API</a></h1>
+</div>
 </body>
 </html>
