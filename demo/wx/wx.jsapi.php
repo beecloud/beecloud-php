@@ -5,8 +5,8 @@
  * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
  * 微信获取openid php代码, 运行环境是微信内置浏览器访问时
  */
-include_once('../dependency/WxPayPubHelper/WxPayPubHelper.php');
-include_once('../beecloud.php');
+include_once('dependency/WxPayPubHelper/WxPayPubHelper.php');
+include_once('../../sdk/beecloud.php');
 $jsApi = new JsApi_pub();
 //网页授权获取用户openid============
 //通过code获得openid
@@ -62,7 +62,7 @@ try {
 <body>
 </br></br></br></br>
 <div align="center">
-    <button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >贡献一下</button>
+    <button style="height:50px; background-color:rgb(47,119,231); border-radius:3px; cursor: pointer;  color:white;  font-size:36px;" type="button" onclick="callpay()" >点击发起支付</button>
 </div>
 <script type="text/javascript">
     //调用微信JS api 支付

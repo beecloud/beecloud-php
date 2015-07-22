@@ -97,6 +97,7 @@ class BCRESTApi {
         switch ($data["channel"]) {
             case "ALI":
             case "ALI_WEB":
+            case "ALI_WAP":
             case "ALI_QRCODE":
             case "ALI_APP":
             case "UN":
@@ -151,6 +152,7 @@ class BCRESTApi {
             case "ALI_WEB":
             case "ALI_QRCODE":
             case "UN_WEB":
+            case "ALI_WAP":
                 if (!isset($data["return_url"])) {
                     throw new Exception(BCRESTErrMsg::NEED_RETURN_URL);
                 }

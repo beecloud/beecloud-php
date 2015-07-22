@@ -2,12 +2,12 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCloud支付宝退款查询示例</title>
+    <title>BeeCloud微信退款查询示例</title>
 </head>
 <body>
 <table border="1" align="center" cellspacing=0>
     <?php
-    require_once("../beecloud.php");
+    require_once("../../sdk/beecloud.php");
     date_default_timezone_set("Asia/Shanghai");
 
     $data = array();
@@ -16,7 +16,7 @@
     $data["timestamp"] = time() * 1000;
     $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
     //选择渠道类型(WX、WX_APP、WX_NATIVE、WX_JSAPI、ALI、ALI_APP、ALI_WEB、ALI_QRCODE、UN、UN_APP、UN_WEB)
-    $data["channel"] = "ALI";
+    $data["channel"] = "WX";
     $data["limit"] = 10;
 
 
@@ -27,9 +27,10 @@
             exit();
         }
         $refunds = $result->refunds;
-        echo "<tr><td>退款是否成功</td><td>退款创建时间</td><td>退款号</td><td>订单金额(分)</td><td>退款金额(分)</td><td>渠道类型</td><td>订单号</td><td>退款是否完成</td><td>订单标题</td></tr>";
+        echo "<tr><td>更新状态</td><td>退款是否成功</td><td>退款创建时间</td><td>退款号</td><td>订单金额(分)</td><td>退款金额(分)</td><td>渠道类型</td><td>订单号</td><td>退款是否完成</td><td>订单标题</td></tr>";
         foreach($refunds as $list) {
             echo "<tr>";
+            echo "<td><a href='wx.refund.status.php?refund_no=".$list->refund_no."'>更新</a></td>";
             foreach($list as $k=>$v) {
                 echo "<td>".($k=="result"?($v?"成功":"失败"):($k=="created_time"?date('Y-m-d H:i:s',$v/1000):($k=="finish"?($v?"完成":"未完成"):$v)))."</td>";
             }

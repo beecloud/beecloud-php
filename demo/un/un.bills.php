@@ -7,7 +7,7 @@
 <body>
 <table border="1" align="center" cellspacing=0>
 <?php
-require_once("../beecloud.php");
+require_once("../../sdk/beecloud.php");
 date_default_timezone_set("Asia/Shanghai");
 $now = date('Y-m-d',time());
 $refund_no = str_replace("-","",$now).time() * 1000;

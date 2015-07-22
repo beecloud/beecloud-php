@@ -2,30 +2,41 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCloud微信更新退款状态示例</title>
+    <title>BeeCloud支付宝退款示例</title>
 </head>
 <body>
+<table border="1" align="center" cellspacing=0>
 <?php
-require_once("../beecloud.php");
+require_once("../../sdk/beecloud.php");
 $data = array();
 $appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
 $data["app_id"] = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
-$data["channel"] = "WX";
+$data["bill_no"] = $_GET["bill_no"];
 $data["refund_no"] = $_GET["refund_no"];
+$data["refund_fee"] = $_GET["refund_fee"];
+//选择渠道类型(WX、WX_APP、WX_NATIVE、WX_JSAPI、ALI、ALI_APP、ALI_WEB、ALI_QRCODE、UN、UN_APP、UN_WEB)
+$data["channel"] = "ALI";
+//选填 optional
+$data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
+
+
 try {
-    $result = BCRESTApi::refundStatus($data);
+    $result = BCRESTApi::refund($data);
     if ($result->result_code != 0 || $result->result_msg != "OK") {
         echo json_encode($result->err_detail);
-        echo "<br/><a href='wx.refunds.php'>返回</a>";
         exit();
     }
-    echo "更新成功，<a href='wx.refunds.php'>返回</a>";
+    $url = $result->url;
+    echo "< script language='javascript' type='text/javascript'>";
+    echo "window.location.href=".$url;
+    echo "< /script>";
 
 } catch (Exception $e) {
     echo $e->getMessage();
 }
 ?>
+</table>
 </body>
 </html>
