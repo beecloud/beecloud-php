@@ -24,7 +24,7 @@ if($msg->transactionType == "PAY") {
     $result = $msg->tradeSuccess;
 
     //messageDetail 参考文档
-    switch ($sign->channelType) {
+    switch ($msg->channelType) {
         case "WX":
             /**
              * 处理业务
