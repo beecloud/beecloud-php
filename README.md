@@ -1,6 +1,6 @@
-##BeeCloud RESTFull API - PHP SDK
+##BeeCloud RESTfull API - PHP SDK
 
-本SDK 基于 [BeeCloud RESTFull API](https://github.com/beecloud/beecloud-rest-api)
+本SDK 基于 [BeeCloud RESTfull API](https://github.com/beecloud/beecloud-rest-api)
 
 依赖:PHP 5.3+, PHP-curl
 
@@ -18,7 +18,7 @@
 	require_once("<YourPath>/beecloud.php");
 ~~~
 
-### BeeCloud API （$data参数和返回参数请参考BeeCloud RESTFull API,同时可以参考demo中各渠道的代码示例）
+### BeeCloud API （$data参数和返回参数请参考BeeCloud RESTfull API,同时可以参考demo中各渠道的代码示例）
 1. 发起支付订单 
 
 	~~~
