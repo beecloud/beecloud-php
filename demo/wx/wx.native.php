@@ -16,6 +16,7 @@ $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["channel"] = "WX_NATIVE";
 $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
+//$data["bill_no"] = "bcdemo" . "static";
 $data["title"] = "白开水";
 
 //选填 optional
@@ -38,7 +39,7 @@ try {
     </div>
     <br>
     </body>
-    <script src="../dependency/qrcode.js"></script>
+    <script src="dependency/qrcode.js"></script>
     <script>
 
         if(<?php echo $code_url != NULL; ?>) {
