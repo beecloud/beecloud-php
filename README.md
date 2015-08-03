@@ -6,7 +6,7 @@
 依赖:PHP 5.3+, PHP-curl
 
 ### 使用前准备
-1. BeeCloud注册账号
+1. BeeCloud[注册](http://beecloud.cn/register/)账号
 2. BeeCloud中创建应用，填写支付渠道所需参数
 
 使用中遇到的问题欢迎来QQ群-321545822提问
