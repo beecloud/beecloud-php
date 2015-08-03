@@ -14,6 +14,7 @@ $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["channel"] = "ALI_OFFLINE_QRCODE";
 $data["bill_no"] = $billNo;
+$data["method"] = "UPDATE";
 
 
 try {

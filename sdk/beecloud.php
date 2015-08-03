@@ -252,25 +252,21 @@ class BCRESTApi {
         if (!isset($data["bill_no"])) {
             throw new Exception(BCRESTErrMsg::NEED_PARAM . "bill_no");
         }
-        //param validation
-        return self::get(self::URI_BILL_STATUS, $data, 30);
-    }
-
-    static final public function billCancel(array $data) {
-        //required param existence check
-        self::baseParamCheck($data);
-        switch ($data["channel"]) {
-            case "ALI_OFFLINE_QRCODE":
-                break;
-            default:
-                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel only ALI_OFFLINE_QRCODE");
-                break;
-        }
 
         if (!isset($data["method"])) {
             throw new Exception(BCRESTErrMsg::NEED_PARAM . "method");
         }
+        switch($data["method"]) {
+            case "UPDATE":
+            case "REVERT":
+                break;
+            default:
+            default:
+                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "method only UPDATE|REVERT");
+                break;
+        }
         //param validation
-        return self::post(self::URI_BILL_CANCEL, $data, 30);
+        return self::post(self::URI_BILL_STATUS, $data, 30);
     }
+
 }

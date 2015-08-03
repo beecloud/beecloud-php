@@ -14,10 +14,11 @@ $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["channel"] = "ALI_OFFLINE_QRCODE";
 $data["bill_no"] = $billNo;
+$data["method"] = "REVERT";
 
 
 try {
-    $result = BCRESTApi::billCancel($data);
+    $result = BCRESTApi::billStatus($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();
