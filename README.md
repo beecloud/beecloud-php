@@ -15,6 +15,7 @@
 ### 引入BeeCloud API
 
 拷贝beecloud.php 到你指定的目录<YourPath>下，你的代码中
+
 	~~~
 	require_once("<YourPath>/beecloud.php");
 	~~~
