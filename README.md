@@ -1,4 +1,5 @@
 ##BeeCloud RESTfull API - PHP SDK
+![license](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![version](https://img.shields.io/badge/version-v2.0.0-blue.svg)
 
 本SDK 基于 [BeeCloud RESTfull API](https://github.com/beecloud/beecloud-rest-api)
 
