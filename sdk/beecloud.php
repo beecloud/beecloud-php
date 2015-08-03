@@ -79,6 +79,8 @@ class BCRESTApi {
     const URI_BILLS = "/1/rest/bills";
     const URI_REFUNDS = "/1/rest/refunds";
     const URI_REFUND_STATUS = "/1/rest/refund/status";
+    const URI_BILL_STATUS = "/1/rest/bill/status";
+    const URI_BILL_CANCEL = "/1/rest/bill/cancel";
 
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
@@ -234,5 +236,41 @@ class BCRESTApi {
         }
         //param validation
         return self::get(self::URI_REFUND_STATUS, $data, 30);
+    }
+
+    static final public function billStatus(array $data) {
+        //required param existence check
+        self::baseParamCheck($data);
+        switch ($data["channel"]) {
+            case "ALI_OFFLINE_QRCODE":
+                break;
+            default:
+                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel only ALI_OFFLINE_QRCODE");
+                break;
+        }
+
+        if (!isset($data["bill_no"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "bill_no");
+        }
+        //param validation
+        return self::get(self::URI_BILL_STATUS, $data, 30);
+    }
+
+    static final public function billCancel(array $data) {
+        //required param existence check
+        self::baseParamCheck($data);
+        switch ($data["channel"]) {
+            case "ALI_OFFLINE_QRCODE":
+                break;
+            default:
+                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel only ALI_OFFLINE_QRCODE");
+                break;
+        }
+
+        if (!isset($data["method"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "method");
+        }
+        //param validation
+        return self::post(self::URI_BILL_CANCEL, $data, 30);
     }
 }
