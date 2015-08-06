@@ -2,7 +2,7 @@
 
 ![license](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![version](https://img.shields.io/badge/version-v2.0.0-blue.svg)
 
-本SDK 基于 [BeeCloud RESTfull API](https://github.com/beecloud/beecloud-rest-api)
+本SDK 基于 [BeeCloud RESTful API](https://github.com/beecloud/beecloud-rest-api)
 
 依赖:PHP 5.3+, PHP-curl
 
@@ -20,7 +20,9 @@
 		require_once("<YourPath>/beecloud.php");
 	~~~
 
-### BeeCloud API （$data参数和返回参数请参考BeeCloud RESTfull API,同时可以参考demo中各渠道的代码示例）
+### BeeCloud API 
+
+（$data参数和返回参数请参考BeeCloud RESTful API,同时可以参考[demo](https://github.com/beecloud/beecloud-php/demo)中各渠道的代码示例）
 1. 发起支付订单 
 
 	~~~
