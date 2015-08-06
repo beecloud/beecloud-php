@@ -16,13 +16,15 @@
 ### 引入BeeCloud API
 
 拷贝beecloud.php 到你指定的目录<YourPath>下，你的代码中
-	~~~
-		require_once("<YourPath>/beecloud.php");
-	~~~
+
+~~~	
+	require_once("<YourPath>/beecloud.php");
+~~~
 
 ### BeeCloud API 
 
 （$data参数和返回参数请参考BeeCloud RESTful API,同时可以参考[demo](https://github.com/beecloud/beecloud-php/tree/master/demo)中各渠道的代码示例）
+
 1. 发起支付订单 
 
 	~~~
