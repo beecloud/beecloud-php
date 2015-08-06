@@ -22,7 +22,7 @@
 
 ### BeeCloud API 
 
-（$data参数和返回参数请参考BeeCloud RESTful API,同时可以参考[demo](https://github.com/beecloud/beecloud-php/demo)中各渠道的代码示例）
+（$data参数和返回参数请参考BeeCloud RESTful API,同时可以参考[demo](https://github.com/beecloud/beecloud-php/tree/master/demo)中各渠道的代码示例）
 1. 发起支付订单 
 
 	~~~
