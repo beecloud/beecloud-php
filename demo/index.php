@@ -20,7 +20,7 @@
 </ul>
 
 <div>
-    <h1>Supported By:<a href="https://github.com/beecloud/beecloud-rest-api">BeeCloud RESTfull API</a></h1>
+    <h1>Supported By:<a href="https://github.com/beecloud/beecloud-rest-api">BeeCloud RESTfulq API</a></h1>
 </div>
 </body>
 </html>
