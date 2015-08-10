@@ -49,6 +49,9 @@
 	~~~
 	BCRESTApi::refundStatus(array $data);
 	~~~
+6. 批量打款
+
+	
 
 
 ### 其他
