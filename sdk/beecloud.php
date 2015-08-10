@@ -79,8 +79,8 @@ class BCRESTApi {
     const URI_BILLS = "/1/rest/bills";
     const URI_REFUNDS = "/1/rest/refunds";
     const URI_REFUND_STATUS = "/1/rest/refund/status";
-    const URI_BILL_STATUS = "/1/rest/bill/status";
-    const URI_BILL_CANCEL = "/1/rest/bill/cancel";
+    const URI_BILL_STATUS = "/1/rest/bill/";
+    const URI_TRANSFERS = "/1/rest/transfers";
 
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
@@ -101,6 +101,7 @@ class BCRESTApi {
             case "ALI_WAP":
             case "ALI_QRCODE":
             case "ALI_APP":
+            case "ALI_OFFLINE_QRCODE":
             case "UN":
             case "UN_WEB":
             case "UN_APP":
@@ -162,6 +163,7 @@ class BCRESTApi {
             case "ALI_APP":
             case "UN_APP":
             case "ALI_WAP":
+            case "ALI_OFFLINE_QRCODE":
                 break;
             default:
                 throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
@@ -192,16 +194,6 @@ class BCRESTApi {
         //param validation
         self::baseParamCheck($data);
 
-        switch ($data["channel"]) {
-            case "WX":
-            case "ALI":
-            case "UN":
-                break;
-            default:
-                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
-                break;
-        }
-
         if (!isset($data["refund_no"])) {
             throw new Exception(BCRESTErrMsg::NEED_PARAM . "refund_no");
         }
@@ -214,7 +206,6 @@ class BCRESTApi {
 
     static final public function bills(array $data) {
         //required param existence check
-
         self::baseParamCheck($data);
         //param validation
         return self::get(self::URI_BILLS, $data, 30);
@@ -236,6 +227,36 @@ class BCRESTApi {
         }
         //param validation
         return self::get(self::URI_REFUND_STATUS, $data, 30);
+    }
+
+    static final public function transfers(array $data) {
+        self::baseParamCheck($data);
+        switch ($data["channel"]) {
+            case "ALI":
+                break;
+            default:
+                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel only ALI");
+                break;
+        }
+
+
+        if (!isset($data["batch_no"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "batch_no");
+        }
+
+        if (!isset($data["account_name"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "account_name");
+        }
+
+        if (!isset($data["transfer_data"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "transfer_data");
+        }
+
+        if (!is_array($data["transfer_data"])) {
+            throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "transfer_data(array)");
+        }
+
+        return self::post(self::URI_TRANSFERS, $data, 30);
     }
 
     static final public function billStatus(array $data) {
@@ -261,12 +282,11 @@ class BCRESTApi {
             case "REVERT":
                 break;
             default:
-            default:
                 throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "method only UPDATE|REVERT");
                 break;
         }
         //param validation
-        return self::post(self::URI_BILL_STATUS, $data, 30);
+        return self::post(self::URI_BILL_STATUS . $data["bill_no"], $data, 30);
     }
 
 }
