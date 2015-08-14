@@ -424,3 +424,99 @@
 ### 代码许可
 The MIT License (MIT).
 
+### FAQ
+
++ BeeCloud企业认证后还需要做各个渠道的注册么？
+	
+	BeeCloud还未提供代理申请各渠道支付账户和资质服务，企业认证只确保用户信息真实，支付渠道还需要用户自己申请
+  
+
++ 页面不是预期结果如何捕获代码错误？
+	
+	代码请使用try catch处理异常情况，并对返回的数据结果错误做处理
+	
+	~~~
+try {
+    $result = BCRESTApi::transfers($data);
+    if ($result->result_code != 0) {
+    	 //返回结果提示错误，此处显示错误或者打印到log中
+        echo json_encode($result);
+        exit();
+    }
+
+    $htmlContent = $result->html;
+    $url = $result->url;
+    echo $url."<br>";
+    echo $htmlContent;
+} catch (Exception $e) {
+	 //处理异常情况
+    echo $e->getMessage();
+}
+?>
+	~~~
+	
+
++ 如何获取特定订单支付结果
+
+	1.使用bills接口，指定bill_no参数可以查询
+	
+	2.服务器上处理webhook消息，异步被动通知获取到结果
+	
+	3.return_url参数指定支付页面完成后的跳转的url，在url指定的页面中处理（强烈不建议，客户可能关闭页面导致不成功）
+
++ return_url, webhook区别， 支付宝参数中为啥没有notify_url
+    
+    1.return_url为商品支付完成后，在支付方浏览器自动跳转访问的地址
+    2.webhook集中处理各渠道异步通知结果，然后再转发支付结果到你指定的webhook的url中，使用方式请前往[webhook指南](https://github.com/beecloud/beecloud-webhook)
+
++ 如何处理webhook
+   
+   请参考demo文件夹下webhook.php的处理方式
+
++ 微信公众号支付无法调起(demo/wx.jsapi.php)
+
+   	1. 请检查获取到的jsApiParams是否正确,不正确可能BeeCloud的APP下微信公众号的支付参数填写错误
+	2. jsApiParams正确，请将js中alert打开Debug：
+	
+		~~~
+		....
+		WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            <?php echo json_encode($jsApiParam);?>,
+            function(res){
+                WeixinJSBridge.log(res.err_msg);
+                 //下面这行
+					//alert(res.err_code+res.err_desc+res.err_msg);
+            }
+        );
+        ....
+		~~~
+		
+		提示无支付权限请检查微信公众平台下”微信支付-＞支付授权目录“是否设置了文件所在目录，只有授权目录下的文件才能发起支付
+		
+		提示openid不正确，请检查”开发者中心->网页服务->网页授权获取用户基本信息"的域名是否设置正确，并检查你是否正确获取到了openid
+		
+	
++ 微信公众平台内扫码支付回调URL是否需要设置
+
+	BeeCloud使用的扫码模式二，扫码结果也会通过webhook传递；
+	
+	扫码支付回调URL是模式一中需要填写的，故如果你使用BeeCloud实现的扫码不需要再设置该url
+
+
++ 常见BeeCloud错误提示定位
+   
+   xxx字段必填：
+   	PHP接口中$data中必填参数未填写
+   	
+	字段不合法，需要xxx类型：
+	$data参数字段有类型要求，请对照文档中的说明确认类型
+	
+	微信提示"CHANNEL_ERROR:签名错误": 请确认BeeCloud微信公众号的参数和证书正确
+	
+	支付宝支付跳转后提示"ALI59": bill_no字段只能是字母和数字组合
+	
+	银联支付跳转后提示"HTTP Status 400 - Invalid request": 请确认BeeCloud的银联参数填写正确，根据[银联文档](http://7xavqo.com1.z0.glb.clouddn.com/证书下载、导出及上传流程.docx)确认证书正确
+	银联跳转后提示"Signature verification failed": 请确认使用的证书为生产证书而非测试证书，并且证书密码正确
+
+

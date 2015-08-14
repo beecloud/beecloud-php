@@ -9,21 +9,28 @@
 require_once("../../sdk/beecloud.php");
 
 $data = array();
-$appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
-$data["app_id"] = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
+$appSecret = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
+$data["app_id"] = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["channel"] = "ALI";
 $data["batch_no"] = "bcdemo" . $data["timestamp"];
-$data["account_name"] = "白开水";
+$data["account_name"] = "苏州比可网络科技有限公司";
 $data["transfer_data"] = array();
 $data["transfer_data"][] = json_decode(json_encode(array(
-        "transfer_id" => "8000",
-        "receiver_account" => "test",
-        "receiver_name" =>"tst",
-        "transfer_fee" => 1,
+        "transfer_id" => "bf693b3121864f3f969a3e1ebc5c376a",
+        "receiver_account" => "baoee753@163.com",
+        "receiver_name" =>"钱志浩",
+        "transfer_fee" => 100,
         "transfer_note" => ""
     )));
+$data["transfer_data"][] = json_decode(json_encode(array(
+    "transfer_id" => "bf693b3121864f3f969a3e1ebc5c376a",
+    "receiver_account" => "baoee753@163.com",
+    "receiver_name" =>"钱志浩",
+    "transfer_fee" => 100,
+    "transfer_note" => ""
+)));
 //
 //transfer_id	String	付款流水号，32位以内数字字母	1507290001
 //receiver_account	String	收款方支付宝账号	someone@126.com
@@ -39,7 +46,7 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //$data["show_url"] = "";
 
 try {
-    $result = BCRESTApi::bill($data);
+    $result = BCRESTApi::transfers($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();
@@ -47,6 +54,7 @@ try {
 
     $htmlContent = $result->html;
     $url = $result->url;
+    echo $url."<br>";
     echo $htmlContent;
 } catch (Exception $e) {
     echo $e->getMessage();
