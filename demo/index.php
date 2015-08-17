@@ -1,10 +1,11 @@
 <html>
 <head>
-    <meta content="text/html;charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
 <h1>BeeCloud Demo</h1>
 <ul>
+    <li><a href="ali/ali.transfers.php">支付宝批量打款</a></li>
     <li><a href="ali/ali.web.php">支付宝即时到账</a></li>
     <li><a href="ali/ali.wap.php">支付宝移动网页</a></li>
     <li><a href="ali/ali.qrcode.php">支付宝扫码</a></li>
@@ -20,7 +21,7 @@
 </ul>
 
 <div>
-    <h1>Supported By:<a href="https://github.com/beecloud/beecloud-rest-api">BeeCloud RESTfull API</a></h1>
+    <h1>Supported By:<a href="https://github.com/beecloud/beecloud-rest-api">BeeCloud RESTfulq API</a></h1>
 </div>
 </body>
 </html>
