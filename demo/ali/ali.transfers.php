@@ -22,28 +22,18 @@ $data["transfer_data"][] = json_decode(json_encode(array(
         "receiver_account" => "baoee753@163.com",
         "receiver_name" =>"钱志浩",
         "transfer_fee" => 100,
-        "transfer_note" => ""
+        "transfer_note" => "test"
     )));
 $data["transfer_data"][] = json_decode(json_encode(array(
-    "transfer_id" => "bf693b3121864f3f969a3e1ebc5c376a",
+    "transfer_id" => "bf693b3121864f3f969a3e1ebc5c3768",
     "receiver_account" => "baoee753@163.com",
     "receiver_name" =>"钱志浩",
     "transfer_fee" => 100,
-    "transfer_note" => ""
+    "transfer_note" => "test"
 )));
-//
-//transfer_id	String	付款流水号，32位以内数字字母	1507290001
-//receiver_account	String	收款方支付宝账号	someone@126.com
-//receiver_name	String	收款方支付宝账户名	某某人
-//transfer_fee	int	付款金额，单位为分	100
-//transfer_note	String	付款备注	打赏
-
-//$data["return_url"] = "http://payservice.beecloud.cn";
 
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
-//选填 show_url
-//$data["show_url"] = "";
 
 try {
     $result = BCRESTApi::transfers($data);
@@ -51,11 +41,10 @@ try {
         echo json_encode($result);
         exit();
     }
-
-    $htmlContent = $result->html;
     $url = $result->url;
-    echo $url."<br>";
-    echo $htmlContent;
+    ?>
+    <a href="<?php echo $url;?>">点击开始批量打款</a>
+    <?php
 } catch (Exception $e) {
     echo $e->getMessage();
 }
