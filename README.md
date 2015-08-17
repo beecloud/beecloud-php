@@ -505,6 +505,9 @@ try {
 
 
 + 常见BeeCloud错误提示定位
+
+   支付宝BeeCloud的Demo提示"ILLEGAL_PARTNER": 
+   由于支付宝不允许跨域调用支付功能，在非beecloud域名下发起支付会被加入黑名单，所以我们不再提供真实的参数，请替换为自己的参数后测试
    
    xxx字段必填：
    	PHP接口中$data中必填参数未填写
@@ -512,11 +515,14 @@ try {
 	字段不合法，需要xxx类型：
 	$data参数字段有类型要求，请对照文档中的说明确认类型
 	
-	微信提示"CHANNEL_ERROR:签名错误": 请确认BeeCloud微信公众号的参数和证书正确
+	微信提示"CHANNEL_ERROR:签名错误",微信提示"CHANNEL_ERROR:渠道方错误": 
+	请确认BeeCloud微信公众号的参数和证书正确，微信APPID和证书密码对应,证书和API密码应该是从微信商户平台下获取的
+
+	支付宝支付跳转后提示"ALI59": 
+	bill_no字段只能是字母和数字组合
 	
-	支付宝支付跳转后提示"ALI59": bill_no字段只能是字母和数字组合
-	
-	银联支付跳转后提示"HTTP Status 400 - Invalid request": 请确认BeeCloud的银联参数填写正确，根据[银联文档](http://7xavqo.com1.z0.glb.clouddn.com/证书下载、导出及上传流程.docx)确认证书正确
+	银联支付跳转后提示"HTTP Status 400 - Invalid request": 
+	请确认BeeCloud的银联参数填写正确，根据[银联文档](http://7xavqo.com1.z0.glb.clouddn.com/证书下载、导出及上传流程.docx)确认证书正确
 	银联跳转后提示"Signature verification failed": 请确认使用的证书为生产证书而非测试证书，并且证书密码正确
 
 
