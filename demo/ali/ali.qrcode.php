@@ -21,7 +21,7 @@ $data["return_url"] = "http://payservice.beecloud.cn";
 
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
-//选填 show_url
+//选填 qr_pay_mode 
 //$data["qr_pay_mode"] = 0;
 
 try {

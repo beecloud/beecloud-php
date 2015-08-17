@@ -1,7 +1,8 @@
-##BeeCloud RESTfull API - PHP SDK
+## BeeCloud PHP SDK (Open Source)
+
 ![license](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![version](https://img.shields.io/badge/version-v2.0.0-blue.svg)
 
-本SDK 基于 [BeeCloud RESTfull API](https://github.com/beecloud/beecloud-rest-api)
+本SDK 基于 [BeeCloud RESTful API](https://github.com/beecloud/beecloud-rest-api)
 
 依赖:PHP 5.3+, PHP-curl
 
