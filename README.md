@@ -523,6 +523,8 @@ try {
 	
 	银联支付跳转后提示"HTTP Status 400 - Invalid request": 
 	请确认BeeCloud的银联参数填写正确，根据[银联文档](http://7xavqo.com1.z0.glb.clouddn.com/证书下载、导出及上传流程.docx)确认证书正确
-	银联跳转后提示"Signature verification failed": 请确认使用的证书为生产证书而非测试证书，并且证书密码正确
+	
+	银联跳转后提示"Signature verification failed": 
+	请确认使用的证书为生产证书而非测试证书，并且证书密码正确
 
 
