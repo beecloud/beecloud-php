@@ -15,7 +15,7 @@ $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["bill_no"] = $_GET["bill_no"];
 $data["refund_no"] = $_GET["refund_no"];
-$data["refund_fee"] = $_GET["refund_fee"];
+$data["refund_fee"] = (int)$_GET["refund_fee"];
 //选择渠道类型(WX、WX_APP、WX_NATIVE、WX_JSAPI、ALI、ALI_APP、ALI_WEB、ALI_QRCODE、UN、UN_APP、UN_WEB)
 $data["channel"] = "ALI";
 //选填 optional
@@ -29,9 +29,9 @@ try {
         exit();
     }
     $url = $result->url;
-    echo "< script language='javascript' type='text/javascript'>";
-    echo "window.location.href=".$url;
-    echo "< /script>";
+    echo "<script language='javascript' type='text/javascript'>";
+    echo 'window.location.href="'.$url.'"';
+    echo "</script>";
 
 } catch (Exception $e) {
     echo $e->getMessage();
