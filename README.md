@@ -1,6 +1,6 @@
 ## BeeCloud PHP SDK (Open Source)
 
-![license](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![version](https://img.shields.io/badge/version-v2.1.0-blue.svg)
+![license](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![version](https://img.shields.io/badge/version-v2.1.1-blue.svg)
 
 本SDK 基于 [BeeCloud RESTful API](https://github.com/beecloud/beecloud-rest-api)
 
