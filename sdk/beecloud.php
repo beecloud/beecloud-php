@@ -94,26 +94,6 @@ class BCRESTApi {
         if (!isset($data["app_sign"])) {
             throw new Exception(BCRESTErrMsg::NEED_PARAM . "app_sign");
         }
-
-        switch ($data["channel"]) {
-            case "ALI":
-            case "ALI_WEB":
-            case "ALI_WAP":
-            case "ALI_QRCODE":
-            case "ALI_APP":
-            case "ALI_OFFLINE_QRCODE":
-            case "UN":
-            case "UN_WEB":
-            case "UN_APP":
-            case "WX":
-            case "WX_APP":
-            case "WX_JSAPI":
-            case "WX_NATIVE":
-                break;
-            default:
-                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
-                break;
-        }
     }
 
     static final protected function post($api, $data, $timeout) {
@@ -194,6 +174,19 @@ class BCRESTApi {
         //param validation
         self::baseParamCheck($data);
 
+        if (isset($data["channel"])) {
+            switch ($data["channel"]) {
+                case "ALI":
+                case "UN":
+                case "WX":
+                    break;
+                default:
+                    throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
+                    break;
+            }
+        }
+
+
         if (!isset($data["refund_no"])) {
             throw new Exception(BCRESTErrMsg::NEED_PARAM . "refund_no");
         }
@@ -207,6 +200,27 @@ class BCRESTApi {
     static final public function bills(array $data) {
         //required param existence check
         self::baseParamCheck($data);
+        if (isset($data["channel"])) {
+            switch ($data["channel"]) {
+                case "ALI":
+                case "ALI_WEB":
+                case "ALI_WAP":
+                case "ALI_QRCODE":
+                case "ALI_APP":
+                case "ALI_OFFLINE_QRCODE":
+                case "UN":
+                case "UN_WEB":
+                case "UN_APP":
+                case "WX":
+                case "WX_JSAPI":
+                case "WX_NATIVE":
+                    break;
+                default:
+                    throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
+                    break;
+            }
+        }
+
         //param validation
         return self::get(self::URI_BILLS, $data, 30);
     }
@@ -214,6 +228,26 @@ class BCRESTApi {
     static final public function refunds(array $data) {
         //required param existence check
         self::baseParamCheck($data);
+        if (isset($data["channel"])) {
+            switch ($data["channel"]) {
+                case "ALI":
+                case "ALI_WEB":
+                case "ALI_WAP":
+                case "ALI_QRCODE":
+                case "ALI_APP":
+                case "ALI_OFFLINE_QRCODE":
+                case "UN":
+                case "UN_WEB":
+                case "UN_APP":
+                case "WX":
+                case "WX_JSAPI":
+                case "WX_NATIVE":
+                    break;
+                default:
+                    throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
+                    break;
+            }
+        }
         //param validation
        return self::get(self::URI_REFUNDS, $data, 30);
     }
@@ -221,6 +255,14 @@ class BCRESTApi {
     static final public function refundStatus(array $data) {
         //required param existence check
         self::baseParamCheck($data);
+
+        switch ($data["channel"]) {
+            case "WX":
+                break;
+            default:
+                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
+                break;
+        }
 
         if (!isset($data["refund_no"])) {
             throw new Exception(BCRESTErrMsg::NEED_PARAM . "refund_no");
