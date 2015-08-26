@@ -38,6 +38,5 @@ try {
     echo $e->getMessage();
 }
 ?>
-</table>
 </body>
 </html>

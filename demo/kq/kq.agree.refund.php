@@ -5,7 +5,6 @@
     <title>BeeCloud京东退款示例</title>
 </head>
 <body>
-<table border="1" align="center" cellspacing=0>
 <?php
 require_once("../../sdk/beecloud.php");
 $data = array();
@@ -28,15 +27,10 @@ try {
         echo json_encode($result->err_detail);
         exit();
     }
-    $url = $result->url;
-    echo "< script language='javascript' type='text/javascript'>";
-    echo "window.location.href=".$url;
-    echo "< /script>";
-
+    echo $result->html;
 } catch (Exception $e) {
     echo $e->getMessage();
 }
 ?>
-</table>
 </body>
 </html>
