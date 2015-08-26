@@ -16,7 +16,8 @@ class BCRESTUtil {
         //apihz.beecloud.cn	杭州
 
         $random = rand(0, 3);
-        return "https://" . $domainList[$random];
+//        return "https://" . $domainList[$random];
+        return "http://58.211.191.123:8080";
     }
 
     static final public function request($url, $method, array $data, $timeout) {
@@ -144,6 +145,15 @@ class BCRESTApi {
             case "UN_APP":
             case "ALI_WAP":
             case "ALI_OFFLINE_QRCODE":
+            case "JD":
+            case "JD_WEB":
+            case "JD_WAP":
+            case "YEE":
+            case "YEE_WAP":
+            case "YEE_WEB":
+            case "KUAIQIAN":
+            case "KUAIQIAN_WAP":
+            case "KUAIQIAN_WEB":
                 break;
             default:
                 throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
@@ -179,6 +189,9 @@ class BCRESTApi {
                 case "ALI":
                 case "UN":
                 case "WX":
+                case "JD":
+                case "KUAIQIAN":
+                case "YEE":
                     break;
                 default:
                     throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
@@ -214,6 +227,15 @@ class BCRESTApi {
                 case "WX":
                 case "WX_JSAPI":
                 case "WX_NATIVE":
+                case "JD":
+                case "JD_WEB":
+                case "JD_WAP":
+                case "YEE":
+                case "YEE_WAP":
+                case "YEE_WEB":
+                case "KUAIQIAN":
+                case "KUAIQIAN_WAP":
+                case "KUAIQIAN_WEB":
                     break;
                 default:
                     throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
@@ -242,6 +264,15 @@ class BCRESTApi {
                 case "WX":
                 case "WX_JSAPI":
                 case "WX_NATIVE":
+                case "JD":
+                case "JD_WEB":
+                case "JD_WAP":
+                case "YEE":
+                case "YEE_WAP":
+                case "YEE_WEB":
+                case "KUAIQIAN":
+                case "KUAIQIAN_WAP":
+                case "KUAIQIAN_WEB":
                     break;
                 default:
                     throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
