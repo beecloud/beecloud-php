@@ -37,7 +37,7 @@
     app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
     timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
     app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE_QRCODE、ALI_WAP、UN\_APP、UN\_WEB(详见附注）| 是
+    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE_QRCODE、ALI_WAP、UN\_APP、UN\_WEB、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB(详见附注）| 是
     total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 | 是
     bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
     title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
@@ -55,6 +55,12 @@
     ALI\_WAP: 支付宝移动网页支付  
     UN\_APP: 银联手机原生APP支付  
     UN\_WEB: 银联PC网页支付
+    JD\_WAP: 京东移动网页支付   
+    JD\_WEB: 京东PC网页支付  
+    YEE\_WAP: 易宝移动网页支付  
+    YEE\_WEB: 易宝PC网页支付  
+    KUAIQIAN\_WAP: 快钱移动网页支付  
+    KUAIQIAN\_WEB: 快钱PC网页支付  
     
     - 以下是`微信公众号支付(WX_JSAPI)`的**<mark>必填</mark>**参数
     
@@ -191,11 +197,17 @@
     ---- | ---- | ----
     tn | String | 银联支付ticket number
     
-    - UN_WEB
+    - UN_WEB、JD_WAP、JD_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB
     
     参数名 | 类型 | 含义 
     ---- | ---- | ----
-    html | String | 银联form表单
+    html | String | 支付页自动提交form表单内容
+    
+    - YEE_WAP、YEE_WEB
+    
+    参数名 | 类型 | 含义 
+    ---- | ---- | ----
+    url | String | 支付页跳转地址
     
 2. 查询支付订单
 
@@ -210,7 +222,7 @@
     app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
     timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
     app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB(详见附注）| 否
+    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、JD、YEE、KUAIQIAN(详见附注）| 否
     bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 否
     start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 | 否
     end_time | Long | 结束时间 | 毫秒时间戳, 13位   | 1435890540000 | 否
@@ -259,7 +271,7 @@
     app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062\-5e41\-44e3\-8f52\-f89d8cf2b6eb | 是 
     timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
     app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-    channel| String | 渠道类型 | 根据不同渠道选不同的值 | WX ALI UN | 否
+    channel| String | 渠道类型 | 根据不同渠道选不同的值 | WX ALI UN KUAIQIAN YEE JD| 否
     refund_no | String | 商户退款单号 | 格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。流水号可以接受数字或英文字符，建议使用数字，但不可接受“000” | 201506101035040000001 | 是
     bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 是 
     refund_fee | Integer | 退款金额 | 必须为正整数，单位为分，必须小于或等于对应的已支付订单的total_fee | 1 | 是
@@ -305,7 +317,7 @@
     app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
     timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
     app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB(详见附注）| 否
+    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、JD、YEE、KUAIQIAN(详见附注）| 否
     bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 否
     refund_no | String | 商户退款单号 | 发起退款时填写的退款单号 | 201506101035040000001 | 否
     start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 | 否
