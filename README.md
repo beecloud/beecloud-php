@@ -54,7 +54,7 @@
     ALI\_OFFLINE_QRCODE: 支付宝线下二维码支付  
     ALI\_WAP: 支付宝移动网页支付  
     UN\_APP: 银联手机原生APP支付  
-    UN\_WEB: 银联PC网页支付  
+    UN\_WEB: 银联PC网页支付
     
     - 以下是`微信公众号支付(WX_JSAPI)`的**<mark>必填</mark>**参数
     
@@ -509,6 +509,9 @@ try {
 
    支付宝BeeCloud的Demo提示"ILLEGAL_PARTNER": 
    由于支付宝不允许跨域调用支付功能，在非beecloud域名下发起支付会被加入黑名单，所以我们不再提供真实的参数，请替换为自己的参数后测试
+   
+   支付宝即时到账提示"illegal_partner_exterface":
+   支付宝对应产品未开通,[参考问题](http://www.oschina.net/question/163899_23976)
    
    xxx字段必填：
    	PHP接口中$data中必填参数未填写
