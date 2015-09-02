@@ -2,25 +2,29 @@
 
 ![license](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![version](https://img.shields.io/badge/version-v2.1.1-blue.svg)
 
+## 简介
+
+本项目的官方GitHub地址是 [https://github.com/beecloud/beecloud-php](https://github.com/beecloud/beecloud-php)
+
 本SDK 基于 [BeeCloud RESTful API](https://github.com/beecloud/beecloud-rest-api)
 
 依赖:PHP 5.3+, PHP-curl
 
-### 使用前准备
+## 准备
+
 1. BeeCloud[注册](http://beecloud.cn/register/)账号
 2. BeeCloud中创建应用，[填写支付渠道所需参数](http://beecloud.cn/doc/payapply)
 
 使用中遇到的问题欢迎来QQ群-321545822提问
 
-
-### 引入BeeCloud API
+## 引入BeeCloud API
 
 拷贝beecloud.php 到你指定的目录<YourPath>下，你的代码中
 	
 	require_once("<YourPath>/beecloud.php");
 	
 
-### BeeCloud API 
+## BeeCloud API 
 >$data参数和返回参数请参考BeeCloud RESTfull API,同时可以参考demo中各渠道的代码示例）
 
 1. 发起支付订单 
@@ -412,18 +416,6 @@
     err\_detail  | String | 具体错误信息
     url | String | 需要跳转到支付宝输入密码确认批量打款
 
-### 联系我们
-•如果有什么问题，可以到 321545822 BeeCloud开发者大联盟QQ群提问
-
-•更详细的文档，见源代码的注释以及[官方文档](https://beecloud.cn/doc/)
-
-•如果发现了bug，欢迎提交[issue](https://github.com/beecloud/beecloud-php/issues)
-
-•如果有新的需求，欢x迎提交[issue](https://github.com/beecloud/beecloud-php/issues)
-
-### 代码许可
-The MIT License (MIT).
-
 ### FAQ
 
 + BeeCloud企业认证后还需要做各个渠道的注册么？
@@ -535,5 +527,3 @@ try {
 
 ## 代码许可
 The MIT License (MIT).	
-
-
