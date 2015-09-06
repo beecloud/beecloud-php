@@ -1,0 +1,16 @@
+{
+    "name": "beecloud.cn/rest",
+    "description": "BeeCloud RESTful api in php",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Danzeer",
+            "email": "kaevanka@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+    	"php" : ">=5.3.0"
+    }
+}
