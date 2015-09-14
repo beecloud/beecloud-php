@@ -5,12 +5,14 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Danzeer",
-            "email": "kaevanka@gmail.com"
+            "name": "beecloud",
+            "email": "support@beecloud.cn"
         }
     ],
     "minimum-stability": "stable",
     "require": {
-    	"php" : ">=5.3.0"
+    	"php" : ">=5.3.0",
+        "ext-curl" : "*",
+        "ext-json" : "*"
     }
 }
