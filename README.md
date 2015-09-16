@@ -31,7 +31,7 @@
 }
 ```
 
-其中composer支持需要version>=2.2.0  
+其中composer支持需要version>=v2.2.0  
 version ＝ dev-master为主干分支开发版本,请酌情使用
 
 然后命令行执行
