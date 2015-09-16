@@ -44,7 +44,6 @@ composer install
 
 ```
 require_once('vendor/autoload.php');
-use beecloud;
 ```
 
 ###手动使用
