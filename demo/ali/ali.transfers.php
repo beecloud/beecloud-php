@@ -6,7 +6,7 @@
 </head>
 <body>
 <?php
-require_once("../../sdk/beecloud.php");
+require_once("../../loader.php");
 
 $data = array();
 $appSecret = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
@@ -36,7 +36,7 @@ $data["transfer_data"][] = json_decode(json_encode(array(
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 
 try {
-    $result = BCRESTApi::transfers($data);
+    $result = \beecloud\rest\api::transfers($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();

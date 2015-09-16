@@ -6,7 +6,7 @@
  * 微信获取openid php代码, 运行环境是微信内置浏览器访问时
  */
 include_once('dependency/WxPayPubHelper/WxPayPubHelper.php');
-include_once('../../sdk/beecloud.php');
+require_once("../../loader.php");
 $jsApi = new JsApi_pub();
 //网页授权获取用户openid============
 //通过code获得openid
@@ -40,7 +40,7 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //$data["return_url"] = "http://payservice.beecloud.cn";
 
 try {
-    $result = BCRESTApi::bill($data);
+    $result = \beecloud\rest\api::bill($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();

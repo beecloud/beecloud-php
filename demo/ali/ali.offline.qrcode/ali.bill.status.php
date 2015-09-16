@@ -5,7 +5,7 @@
  * Date: 8/3/15
  * Time: 15:22
  */
-require_once("../../../sdk/beecloud.php");
+require_once("../../../loader.php");
 $billNo = $_GET["billNo"];
 $data = array();
 $appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
@@ -18,7 +18,7 @@ $data["method"] = "UPDATE";
 
 
 try {
-    $result = BCRESTApi::billStatus($data);
+    $result = \beecloud\rest\api::billStatus($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();

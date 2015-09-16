@@ -7,7 +7,7 @@
 <body>
 <table border="1" align="center" cellspacing=0>
 <?php
-require_once("../../sdk/beecloud.php");
+require_once("../../loader.php");
 date_default_timezone_set("Asia/Shanghai");
 $now = date('Y-m-d',time());
 $refund_no = str_replace("-","",$now).time() * 1000;
@@ -22,7 +22,7 @@ $data["limit"] = 10;
 
 
 try {
-    $result = BCRESTApi::bills($data);
+    $result = \beecloud\rest\api::bills($data);
     if ($result->result_code != 0 || $result->result_msg != "OK") {
         echo json_encode($result->err_detail);
         exit();

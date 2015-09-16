@@ -7,6 +7,8 @@
  */
 namespace beecloud;
 
+namespace beecloud\rest;
+
 const UNEXPECTED_RESULT = "非预期的返回结果:";
 const NEED_PARAM = "需要必填字段:";
 const NEED_VALID_PARAM = "字段值不合法:";
@@ -37,8 +39,8 @@ class api {
     }
 
     static final protected function post($api, $data, $timeout, $returnArray) {
-        $url = network::getApiUrl() . $api;
-        $httpResultStr = network::request($url, "post", $data, $timeout);
+        $url = \beecloud\network::getApiUrl() . $api;
+        $httpResultStr = \beecloud\network::request($url, "post", $data, $timeout);
         $result = json_decode($httpResultStr, !$returnArray ? false : true);
         if (!$result) {
             throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
@@ -47,8 +49,8 @@ class api {
     }
 
     static final protected function get($api, $data, $timeout, $returnArray) {
-        $url = network::getApiUrl() . $api;
-        $httpResultStr = network::request($url, "get", $data, $timeout);
+        $url = \beecloud\network::getApiUrl() . $api;
+        $httpResultStr = \beecloud\network::request($url, "get", $data, $timeout);
         $result = json_decode($httpResultStr,!$returnArray ? false : true);
         if (!$result) {
             throw new Exception(UNEXPECTED_RESULT . $httpResultStr);

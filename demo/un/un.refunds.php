@@ -7,7 +7,7 @@
 <body>
 <table border="1" align="center" cellspacing=0>
     <?php
-    require_once("../../sdk/beecloud.php");
+    require_once("../../loader.php");
     date_default_timezone_set("Asia/Shanghai");
 
     $data = array();
@@ -21,7 +21,7 @@
 
 
     try {
-        $result = BCRESTApi::refunds($data);
+        $result = \beecloud\rest\api::refunds($data);
         if ($result->result_code != 0 || $result->result_msg != "OK") {
             echo json_encode($result->err_detail);
             exit();

@@ -7,7 +7,7 @@
 <body>
 <table border="1" align="center" cellspacing=0>
 <?php
-require_once("../../sdk/beecloud.php");
+require_once("../../loader.php");
 $data = array();
 $appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
 $data["app_id"] = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
@@ -23,7 +23,7 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 
 
 try {
-    $result = BCRESTApi::refund($data);
+    $result = \beecloud\rest\api::refund($data);
     if ($result->result_code != 0 || $result->result_msg != "OK") {
         echo json_encode($result->err_detail);
         exit();

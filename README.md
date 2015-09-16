@@ -19,9 +19,45 @@
 
 ## 引入BeeCloud API
 
-拷贝beecloud.php 到你指定的目录<YourPath>下，你的代码中
+###使用composer
+在你的composer.json中添加如下依赖
+
+```
+{
+  {
+  "require": {
+    "beecloud.cn/rest": "{version}"
+  }
+}
+```
+
+其中composer支持需要version>=2.2.0  
+version ＝ dev-master为主干分支开发版本,请酌情使用
+
+然后命令行执行
+
+```
+composer install
+```
+
+在需要使用的php文件中使用 Composer 的 autoload 引入
+
+```
+require_once('vendor/autoload.php');
+use beecloud;
+```
+
+###手动使用
+适合不能使用composer（PHP < 5.3.2）或者namespace(PHP < 5.3)的情况
+拷贝当前所有文件（demo可以忽略）到你指定的目录<YourPath>下，你的代码中
 	
-	require_once("<YourPath>/beecloud.php");
+	require_once("<YourPath>/loader.php");
+	
+####原有使用v2.2.0以下的用户和不使用namespace的用户则请修改为
+
+	require_once("<YourPath>/degrade/beecloud.php");	
+		
+	
 	
 
 ## BeeCloud API 
@@ -29,6 +65,12 @@
 
 1. 发起支付订单 
 
+	~~~
+	\beecloud\rest\api::bill(array $data);
+	~~~
+	
+	不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
 	~~~
 	BCRESTApi::bill(array $data);
 	~~~
@@ -220,6 +262,12 @@
 2. 查询支付订单
 
 	~~~
+	\beecloud\rest\api::bills(array $data);
+	~~~
+	
+	不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
+	~~~
 	BCRESTApi::bills(array $data);
 	~~~
 	
@@ -269,7 +317,7 @@
 3. 发起退款 
 
 	~~~
-	BCRESTApi::refund(array $data);
+	\beecloud\rest\api::refund(array $data);
 	~~~
 	
 	data参数（array类型）:
@@ -314,6 +362,12 @@
 	
 4. 退款状态查询
 
+	~~~
+	\beecloud\rest\api::refunds(array $data);
+	~~~
+	
+	不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
 	~~~
 	BCRESTApi::refunds(array $data);
 	~~~
@@ -371,6 +425,12 @@
 5. 退款状态更新(仅微信需要) 
 
 	~~~
+	\beecloud\rest\api::refundStatus(array $data);
+	~~~
+	
+	不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
+	~~~
 	BCRESTApi::refundStatus(array $data);
 	~~~
 	
@@ -399,8 +459,14 @@
 6. 批量打款
 
     ~~~
-    BCRESTApi::transfers(array $data);
+    \beecloud\rest\api::transfers(array $data);
     ~~~
+    
+    不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
+	~~~
+	BCRESTApi::transfers(array $data);
+	~~~
     	
     data参数（array类型）:
     
@@ -446,7 +512,7 @@
 	
 	~~~
 try {
-    $result = BCRESTApi::transfers($data);
+    $result = \beecloud\rest\api::transfers($data);
     if ($result->result_code != 0) {
     	 //返回结果提示错误，此处显示错误或者打印到log中
         echo json_encode($result);

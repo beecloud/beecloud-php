@@ -6,8 +6,7 @@
 </head>
 <body>
 <?php
-require_once("../../sdk/beecloud.php");
-
+require_once("../../loader.php");
 $data = array();
 $appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
 $data["app_id"] = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
@@ -25,7 +24,7 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //$data["qr_pay_mode"] = 0;
 
 try {
-    $result = BCRESTApi::bill($data);
+    $result = \beecloud\rest\api::bill($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();
