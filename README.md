@@ -19,9 +19,39 @@
 
 ## 引入BeeCloud API
 
-拷贝beecloud.php 到你指定的目录<YourPath>下，你的代码中
+###使用composer
+在你的composer.json中添加如下依赖
+
+```
+{
+  {
+  "require": {
+    "beecloud.cn/rest": "{version}"
+  }
+}
+```
+
+其中composer支持需要version>=2.2.0  
+version ＝ dev-master为主干分支开发版本,请酌情使用
+
+然后命令行执行
+
+```
+composer install
+```
+
+在需要使用的php文件中使用 Composer 的 autoload 引入
+
+```
+require_once('vendor/autoload.php');
+```
+
+###手动使用
+拷贝/composer 到你指定的目录<YourPath>下，你的代码中
 	
 	require_once("<YourPath>/beecloud.php");
+	
+	
 	
 
 ## BeeCloud API 
