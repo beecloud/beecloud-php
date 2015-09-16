@@ -44,13 +44,19 @@ composer install
 
 ```
 require_once('vendor/autoload.php');
+use beecloud;
 ```
 
 ###手动使用
-拷贝/composer 到你指定的目录<YourPath>下，你的代码中
+适合不能使用composer（PHP < 5.3.2）或者namespace(PHP < 5.3)的情况
+拷贝当前所有文件（demo可以忽略）到你指定的目录<YourPath>下，你的代码中
 	
-	require_once("<YourPath>/beecloud.php");
+	require_once("<YourPath>/loader.php");
 	
+####原有使用v2.2.0以下的用户和不使用namespace的用户则请修改为
+
+	require_once("<YourPath>/degrade/beecloud.php");	
+		
 	
 	
 
@@ -59,6 +65,12 @@ require_once('vendor/autoload.php');
 
 1. 发起支付订单 
 
+	~~~
+	\beecloud\rest\api::bill(array $data);
+	~~~
+	
+	不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
 	~~~
 	BCRESTApi::bill(array $data);
 	~~~
@@ -250,6 +262,12 @@ require_once('vendor/autoload.php');
 2. 查询支付订单
 
 	~~~
+	\beecloud\rest\api::bills(array $data);
+	~~~
+	
+	不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
+	~~~
 	BCRESTApi::bills(array $data);
 	~~~
 	
@@ -299,7 +317,7 @@ require_once('vendor/autoload.php');
 3. 发起退款 
 
 	~~~
-	BCRESTApi::refund(array $data);
+	\beecloud\rest\api::refund(array $data);
 	~~~
 	
 	data参数（array类型）:
@@ -344,6 +362,12 @@ require_once('vendor/autoload.php');
 	
 4. 退款状态查询
 
+	~~~
+	\beecloud\rest\api::refunds(array $data);
+	~~~
+	
+	不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
 	~~~
 	BCRESTApi::refunds(array $data);
 	~~~
@@ -401,6 +425,12 @@ require_once('vendor/autoload.php');
 5. 退款状态更新(仅微信需要) 
 
 	~~~
+	\beecloud\rest\api::refundStatus(array $data);
+	~~~
+	
+	不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
+	~~~
 	BCRESTApi::refundStatus(array $data);
 	~~~
 	
@@ -429,8 +459,14 @@ require_once('vendor/autoload.php');
 6. 批量打款
 
     ~~~
-    BCRESTApi::transfers(array $data);
+    \beecloud\rest\api::transfers(array $data);
     ~~~
+    
+    不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
+	~~~
+	BCRESTApi::transfers(array $data);
+	~~~
     	
     data参数（array类型）:
     
@@ -476,7 +512,7 @@ require_once('vendor/autoload.php');
 	
 	~~~
 try {
-    $result = BCRESTApi::transfers($data);
+    $result = \beecloud\rest\api::transfers($data);
     if ($result->result_code != 0) {
     	 //返回结果提示错误，此处显示错误或者打印到log中
         echo json_encode($result);
