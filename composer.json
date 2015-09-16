@@ -11,7 +11,7 @@
             "email": "support@beecloud.cn"
         }
     ],
-    "version" : "1.0.0",
+    "version" : "2.2.0",
     "minimum-stability": "dev",
     "homepage": "https://beecloud.cn/",
     "require": {
