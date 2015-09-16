@@ -5,7 +5,7 @@
  * Date: 8/3/15
  * Time: 15:22
  */
-require_once("../../beecloud.php");
+require_once("../../../beecloud.php");
 $billNo = $_GET["billNo"];
 $data = array();
 $appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";

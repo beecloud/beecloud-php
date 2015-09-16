@@ -6,7 +6,7 @@
 </head>
 <body>
 <?php
-require_once("../beecloud.php");
+require_once("../../beecloud.php");
 
 $data = array();
 $appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";

@@ -6,7 +6,7 @@
  * 微信获取openid php代码, 运行环境是微信内置浏览器访问时
  */
 include_once('dependency/WxPayPubHelper/WxPayPubHelper.php');
-require_once("../beecloud.php");
+require_once("../../beecloud.php");
 $jsApi = new JsApi_pub();
 //网页授权获取用户openid============
 //通过code获得openid
