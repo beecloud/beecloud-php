@@ -93,6 +93,9 @@ class api {
             case "KUAIQIAN":
             case "KUAIQIAN_WAP":
             case "KUAIQIAN_WEB":
+            case "BD":
+            case "BD_WAP":
+            case "BD_WEB":
                 break;
             default:
                 throw new Exception(NEED_VALID_PARAM . "channel");
@@ -131,6 +134,7 @@ class api {
                 case "JD":
                 case "KUAIQIAN":
                 case "YEE":
+                case "BD":
                     break;
                 default:
                     throw new Exception(NEED_VALID_PARAM . "channel");
@@ -175,6 +179,9 @@ class api {
                 case "KUAIQIAN":
                 case "KUAIQIAN_WAP":
                 case "KUAIQIAN_WEB":
+                case "BD":
+                case "BD_WAP":
+                case "BD_WEB":
                     break;
                 default:
                     throw new Exception(NEED_VALID_PARAM . "channel");
@@ -212,6 +219,9 @@ class api {
                 case "KUAIQIAN":
                 case "KUAIQIAN_WAP":
                 case "KUAIQIAN_WEB":
+                case "BD":
+                case "BD_WAP":
+                case "BD_WEB":
                     break;
                 default:
                     throw new Exception(NEED_VALID_PARAM . "channel");

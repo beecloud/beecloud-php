@@ -154,6 +154,9 @@ class BCRESTApi {
             case "KUAIQIAN":
             case "KUAIQIAN_WAP":
             case "KUAIQIAN_WEB":
+            case "BD":
+            case "BD_WEB":
+            case "BD_WAP":
                 break;
             default:
                 throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
@@ -192,6 +195,7 @@ class BCRESTApi {
                 case "JD":
                 case "KUAIQIAN":
                 case "YEE":
+                case "BD":
                     break;
                 default:
                     throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
@@ -236,6 +240,9 @@ class BCRESTApi {
                 case "KUAIQIAN":
                 case "KUAIQIAN_WAP":
                 case "KUAIQIAN_WEB":
+                case "BD":
+                case "BD_WEB":
+                case "BD_WAP":
                     break;
                 default:
                     throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
@@ -273,6 +280,9 @@ class BCRESTApi {
                 case "KUAIQIAN":
                 case "KUAIQIAN_WAP":
                 case "KUAIQIAN_WEB":
+                case "BD":
+                case "BD_WEB":
+                case "BD_WAP":
                     break;
                 default:
                     throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
