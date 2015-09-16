@@ -1,6 +1,8 @@
 {
     "name": "beecloud.cn/rest",
     "description": "BeeCloud RESTful api in php",
+    "keywords" : ["beecloud","RESTFul API","restful", "rest","api", "wechat", "WECHAT",
+      "ALI", "WX", "china", "unionpay", "payment in China"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -9,10 +11,15 @@
             "email": "support@beecloud.cn"
         }
     ],
-    "minimum-stability": "stable",
+    "version" : "1.0.0",
+    "minimum-stability": "dev",
+    "homepage": "https://beecloud.cn/",
     "require": {
-    	"php" : ">=5.3.0",
-        "ext-curl" : "*",
-        "ext-json" : "*"
+      "php" : ">=5.3.2",
+      "ext-curl" : "*",
+      "ext-json" : "*"
+    },
+    "autoload": {
+      "psr-4": { "beecloud\\" : "composer/"}
     }
 }
