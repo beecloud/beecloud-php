@@ -319,6 +319,12 @@ require_once('vendor/autoload.php');
 	\beecloud\rest\api::refund(array $data);
 	~~~
 	
+	不使用namespace的用户和2.2.0之前的v2版本用户请使用
+	
+	~~~
+	BCRESTApi::refund(array $data);
+	~~~
+	
 	data参数（array类型）:
 	
 	参数名 | 类型 | 含义   | 描述 | 例子 | 是否必填 |
