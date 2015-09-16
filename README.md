@@ -37,7 +37,7 @@
     app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
     timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
     app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE_QRCODE、ALI_WAP、UN\_APP、UN\_WEB、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB(详见附注）| 是
+    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE_QRCODE、ALI_WAP、UN\_APP、UN\_WEB、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、BD\_WAP、BD\_WEB(详见附注）| 是
     total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 | 是
     bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
     title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
@@ -54,13 +54,17 @@
     ALI\_OFFLINE_QRCODE: 支付宝线下二维码支付  
     ALI\_WAP: 支付宝移动网页支付  
     UN\_APP: 银联手机原生APP支付  
-    UN\_WEB: 银联PC网页支付
-    JD\_WAP: 京东移动网页支付   
+    UN\_WEB: 银联PC网页支付  
+    JD\_WAP: 京东移动网页支付  
     JD\_WEB: 京东PC网页支付  
-    YEE\_WAP: 易宝移动网页支付  
+    YEE\_WAP: 易宝移动网页支付   
     YEE\_WEB: 易宝PC网页支付  
     KUAIQIAN\_WAP: 快钱移动网页支付  
-    KUAIQIAN\_WEB: 快钱PC网页支付  
+    KUAIQIAN\_WEB: 快钱PC网页支  
+    BD\_WAP: 百度移动网页支付  
+    BD\_WEB: 百度PC网页支付
+    
+      
     
     - 以下是`微信公众号支付(WX_JSAPI)`的**<mark>必填</mark>**参数
     
@@ -88,6 +92,7 @@
     返回结果（Object类型）:
     
     - 公共返回参数
+    
     参数名 | 类型 | 含义 
     ---- | ---- | ----
     result\_code | Integer | 返回码，0为正常
@@ -203,7 +208,7 @@
     ---- | ---- | ----
     html | String | 支付页自动提交form表单内容
     
-    - YEE_WAP、YEE_WEB
+    - YEE_WAP、YEE_WEB、BD_WAP、BD_WEB
     
     参数名 | 类型 | 含义 
     ---- | ---- | ----
@@ -222,7 +227,7 @@
     app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
     timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
     app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、JD、YEE、KUAIQIAN(详见附注）| 否
+    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、BD_WAP、BD_WEB、JD、YEE、KUAIQIAN、BD(详见附注）| 否
     bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 否
     start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 | 否
     end_time | Long | 结束时间 | 毫秒时间戳, 13位   | 1435890540000 | 否
@@ -271,7 +276,7 @@
     app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062\-5e41\-44e3\-8f52\-f89d8cf2b6eb | 是 
     timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
     app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-    channel| String | 渠道类型 | 根据不同渠道选不同的值 | WX ALI UN KUAIQIAN YEE JD| 否
+    channel| String | 渠道类型 | 根据不同渠道选不同的值 | WX ALI UN KUAIQIAN YEE JD BD| 否
     refund_no | String | 商户退款单号 | 格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。流水号可以接受数字或英文字符，建议使用数字，但不可接受“000” | 201506101035040000001 | 是
     bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 是 
     refund_fee | Integer | 退款金额 | 必须为正整数，单位为分，必须小于或等于对应的已支付订单的total_fee | 1 | 是
@@ -317,7 +322,7 @@
     app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
     timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
     app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、JD、YEE、KUAIQIAN(详见附注）| 否
+    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、JD\_WAP、JD\_WEB、YEE\_WAP、YEE\_WEB、KUAIQIAN\_WAP、KUAIQIAN\_WEB、BD\_WAP、BD\_WEB、JD、YEE、KUAIQIAN、BD(详见附注）| 否
     bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 否
     refund_no | String | 商户退款单号 | 发起退款时填写的退款单号 | 201506101035040000001 | 否
     start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 | 否
@@ -353,7 +358,7 @@
     total\_fee  | Integer      | 订单金额，单位为分
     refund\_fee | Integer      | 退款金额，单位为分
     title         | String       | 订单标题
-    channel    | String      | WX、WX\_NATIVE、WX\_JSAPI、WX\_APP、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE_QRCODE、UN、UN\_APP、UN\_WEB(详见 1. 支付 附注）
+    channel    | String      |  WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、JD\_WAP、JD\_WEB、YEE\_WAP、YEE\_WEB、KUAIQIAN\_WAP、KUAIQIAN\_WEB、BD\_WAP、BD\_WEB、JD、YEE、KUAIQIAN、BD(详见 1. 支付 附注）
     finish     | bool        | 退款是否完成
     result     | bool        | 退款是否成功
     created\_time | Long       | 退款创建时间, 毫秒时间戳, 13位
@@ -412,7 +417,7 @@
     ----  | ---- | ---- | ---- 
     transfer_id | String | 付款流水号，32位以内数字字母 | 1507290001
     receiver_account | String | 收款方支付宝账号 | someone@126.com
-    receiver_name | String | 收款方支付宝账户名 | 某某人
+    receiver_name | String | 收款方支付宝账户名 | 某某人必须和支付宝账号的一致
     transfer_fee | int | 付款金额，单位为分 | 100
     transfer_note | String | 付款备注 | 打赏
     
@@ -432,7 +437,7 @@
 
 •如果发现了bug，欢迎提交[issue](https://github.com/beecloud/beecloud-php/issues)
 
-•如果有新的需求，欢x迎提交[issue](https://github.com/beecloud/beecloud-php/issues)
+•如果有新的需求，欢迎提交[issue](https://github.com/beecloud/beecloud-php/issues)
 
 ### 代码许可
 The MIT License (MIT).
@@ -518,27 +523,44 @@ try {
 
 
 + 常见BeeCloud错误提示定位
-
+	
+	```
    支付宝BeeCloud的Demo提示"ILLEGAL_PARTNER": 
    由于支付宝不允许跨域调用支付功能，在非beecloud域名下发起支付会被加入黑名单，所以我们不再提供真实的参数，请替换为自己的参数后测试
+   ```
    
+   ```
    支付宝即时到账提示"illegal_partner_exterface":
    支付宝对应产品未开通,[参考问题](http://www.oschina.net/question/163899_23976)
+   ```
    
+   ```
    xxx字段必填：
    	PHP接口中$data中必填参数未填写
+   	```
    	
+   	```
 	字段不合法，需要xxx类型：
 	$data参数字段有类型要求，请对照文档中的说明确认类型
+	```
 	
-	微信提示"CHANNEL_ERROR:签名错误",微信提示"CHANNEL_ERROR:渠道方错误": 
+	```
+	微信提示"CHANNEL_ERROR:签名错误",微信提示"CHANNEL_ERROR:渠道方错误":  
 	请确认BeeCloud微信公众号的参数和证书正确，微信APPID和证书密码对应,证书和API密码应该是从微信商户平台下获取的
-
+   ```
+   
+   ```
 	支付宝支付跳转后提示"ALI59": 
 	bill_no字段只能是字母和数字组合
+	```
 	
+	```
 	银联支付跳转后提示"HTTP Status 400 - Invalid request": 
 	请确认BeeCloud的银联参数填写正确，根据[银联文档](http://7xavqo.com1.z0.glb.clouddn.com/证书下载、导出及上传流程.docx)确认证书正确
-	银联跳转后提示"Signature verification failed": 请确认使用的证书为生产证书而非测试证书，并且证书密码正确
-
+	```
+	
+	```
+	银联跳转后提示"Signature verification failed": 
+	请确认使用的证书为生产证书而非测试证书，并且证书密码正确
+	```
 
