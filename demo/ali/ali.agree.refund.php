@@ -29,9 +29,9 @@ try {
         exit();
     }
     $url = $result->url;
-    echo "< script language='javascript' type='text/javascript'>";
-    echo "window.location.href=".$url;
-    echo "< /script>";
+    echo "<script language='javascript' type='text/javascript'>";
+    echo 'window.location.href="'.$url.'"';
+    echo "</script>";
 
 } catch (Exception $e) {
     echo $e->getMessage();
