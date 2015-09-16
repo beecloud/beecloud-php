@@ -20,6 +20,6 @@
       "ext-json" : "*"
     },
     "autoload": {
-      "psr-4": { "beecloud\\" : "composer/"}
+      "psr-4": { "beecloud\\" : "sdk/"}
     }
 }
