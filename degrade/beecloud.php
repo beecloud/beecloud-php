@@ -5,6 +5,7 @@ class BCRESTErrMsg {
     const NEED_VALID_PARAM = "字段值不合法:";
     const NEED_WX_JSAPI_OPENID = "微信公众号支付(WX_JSAPI) 需要openid字段";
     const NEED_RETURN_URL = "当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB时 return_url为必填";
+    const BILL_TIMEOUT_ERROR = "当channel参数为 JD* 或 KUAIQIAN* 不支持bill_timeout";
 }
 
 class BCRESTUtil {
@@ -139,21 +140,32 @@ class BCRESTApi {
                     throw new Exception(BCRESTErrMsg::NEED_RETURN_URL);
                 }
                 break;
+            case "JD":
+            case "JD_WEB":
+            case "JD_WAP":
+                if (!isset($data["bill_timeout"])) {
+                    throw new Exception(BCRESTErrMsg::BILL_TIMEOUT_ERROR);
+                }
+                break;
+            case "KUAIQIAN":
+            case "KUAIQIAN_WAP":
+            case "KUAIQIAN_WEB":
+                if (!isset($data["bill_timeout"])) {
+                    throw new Exception(BCRESTErrMsg::BILL_TIMEOUT_ERROR);
+                }
+                break;
             case "WX_APP":
             case "WX_NATIVE":
             case "ALI_APP":
             case "UN_APP":
             case "ALI_WAP":
             case "ALI_OFFLINE_QRCODE":
-            case "JD":
-            case "JD_WEB":
-            case "JD_WAP":
+
             case "YEE":
             case "YEE_WAP":
             case "YEE_WEB":
-            case "KUAIQIAN":
-            case "KUAIQIAN_WAP":
-            case "KUAIQIAN_WEB":
+            case "YEE_NOBANKCARD":
+
             case "BD":
             case "BD_WEB":
             case "BD_WAP":
@@ -162,6 +174,8 @@ class BCRESTApi {
                 throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
                 break;
         }
+
+
 
         if (!isset($data["total_fee"])) {
             throw new Exception(BCRESTErrMsg::NEED_PARAM . "total_fee");
@@ -237,6 +251,7 @@ class BCRESTApi {
                 case "YEE":
                 case "YEE_WAP":
                 case "YEE_WEB":
+                case "YEE_NOBANKCARD":
                 case "KUAIQIAN":
                 case "KUAIQIAN_WAP":
                 case "KUAIQIAN_WEB":
@@ -277,6 +292,7 @@ class BCRESTApi {
                 case "YEE":
                 case "YEE_WAP":
                 case "YEE_WEB":
+                case "YEE_NOBANKCARD":
                 case "KUAIQIAN":
                 case "KUAIQIAN_WAP":
                 case "KUAIQIAN_WEB":
