@@ -18,10 +18,18 @@
     <li><a href="wx/wx.jsapi.php">微信公众号支付(微信浏览器打开)</a></li>
     <li><a href="wx/wx.bills.php">微信订单查询和退款</a></li>
     <li><a href="wx/wx.refunds.php">微信退款查询和退款状态更新</a></li>
-    <li><a href="kq/kq.web.php">快钱即时到账</a></li>
+    <li><a href="bd/bd.web.php">百度PC网页</a></li>
+    <li><a href="bd/bd.wap.php">百度移动网页</a></li>
+    <li><a href="bd/bd.bills.php">百度订单查询和退款</a></li>
+    <li><a href="bd/bd.refunds.php">百度退款查询</a></li>
+    <li><a href="kq/kq.web.php">快钱PC网页</a></li>
     <li><a href="kq/kq.wap.php">快钱移动网页</a></li>
     <li><a href="kq/kq.bills.php">快钱订单查询和退款</a></li>
     <li><a href="kq/kq.refunds.php">快钱退款查询</a></li>
+    <li><a href="yee/yee.web.php">易宝PC网页</a></li>
+    <li><a href="yee/yee.wap.php">易宝移动网页</a></li>
+    <li><a href="yee/yee.bills.php">易宝订单查询和退款</a></li>
+    <li><a href="yee/yee.refunds.php">易宝退款查询</a></li>
 </ul>
 
 <div>
