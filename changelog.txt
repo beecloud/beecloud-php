@@ -1,4 +1,4 @@
-BeeCloud PHP Chnagelog
+BeeCloud PHP Changelog
 
 ========================================================
 v2.2.0 发布日期: 2015年9月17日
