@@ -36,8 +36,11 @@ try {
     </div>
     <div align="center">
         <p>订单号：<?php echo $data["bill_no"]; ?></p>
+        <button id="query">查询订单状态</button>
+        <p id="query-result"></p>
     </div>
     <br>
+
     </body>
     <script src="dependency/qrcode.js"></script>
     <script>
@@ -51,6 +54,35 @@ try {
             var element=document.getElementById("qrcode");
             element.appendChild(wording);
             element.appendChild(canvas);
+        }
+        var billNo = "<?php echo $data["bill_no"]; ?>";
+        var queryBtn = document.getElementById("query");
+        queryBtn.onclick = function() {
+            var oAjax = new XMLHttpRequest();
+            document.getElementById("query-result").textContent = "开始查询";
+            oAjax.open('POST', "wx.native.query.php", true);
+            oAjax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+            oAjax.onreadystatechange = function () {
+                if (oAjax.readyState==4)
+                {
+                    var result = false;
+                    if (oAjax.status==200)
+                    {
+                        result = JSON.parse(oAjax.responseText);
+
+                        if (result && result.result_msg == "OK" && result.count > 0) {
+                            document.getElementById("query-result").textContent = result.bills[0].spay_result?"支付成功":"未支付";
+                        }
+
+                    } else {
+                        document.getElementById("query-result").textContent = "查询失败";
+                    }
+                }
+
+            }
+            oAjax.send("billNo=" + billNo);
+
         }
     </script>
     <?php
