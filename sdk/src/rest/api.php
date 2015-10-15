@@ -27,15 +27,15 @@ class api {
 
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
-            throw new Exception(errorMsg::NEED_PARAM . "app_id");
+            throw new \Exception(NEED_PARAM . "app_id");
         }
 
         if (!isset($data["timestamp"])) {
-            throw new Exception(errorMsg::NEED_PARAM . "timestamp");
+            throw new \Exception(NEED_PARAM . "timestamp");
         }
 
         if (!isset($data["app_sign"])) {
-            throw new Exception(errorMsg::NEED_PARAM . "app_sign");
+            throw new \Exception(NEED_PARAM . "app_sign");
         }
     }
 
@@ -44,7 +44,7 @@ class api {
         $httpResultStr = \beecloud\network::request($url, "post", $data, $timeout);
         $result = json_decode($httpResultStr, !$returnArray ? false : true);
         if (!$result) {
-            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
+            throw new \Exception(UNEXPECTED_RESULT . $httpResultStr);
         }
         return $result;
     }
@@ -54,7 +54,7 @@ class api {
         $httpResultStr = \beecloud\network::request($url, "get", $data, $timeout);
         $result = json_decode($httpResultStr,!$returnArray ? false : true);
         if (!$result) {
-            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
+            throw new \Exception(UNEXPECTED_RESULT . $httpResultStr);
         }
         return $result;
     }
@@ -62,7 +62,7 @@ class api {
     /**
      * @param array $data
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     static final public function bill(array $data) {
         //param validation
@@ -71,28 +71,28 @@ class api {
         switch ($data["channel"]) {
             case "WX_JSAPI":
                 if (!isset($data["openid"])) {
-                    throw new Exception(NEED_WX_JSAPI_OPENID);
+                    throw new \Exception(NEED_WX_JSAPI_OPENID);
                 }
                 break;
             case "ALI_WEB":
             case "ALI_QRCODE":
             case "UN_WEB":
                 if (!isset($data["return_url"])) {
-                    throw new Exception(NEED_RETURN_URL);
+                    throw new \Exception(NEED_RETURN_URL);
                 }
                 break;
             case "JD":
             case "JD_WEB":
             case "JD_WAP":
                 if (!isset($data["bill_timeout"])) {
-                    throw new Exception(BCRESTErrMsg::BILL_TIMEOUT_ERROR);
+                    throw new \Exception(BILL_TIMEOUT_ERROR);
                 }
                 break;
             case "KUAIQIAN":
             case "KUAIQIAN_WAP":
             case "KUAIQIAN_WEB":
                 if (!isset($data["bill_timeout"])) {
-                    throw new Exception(BCRESTErrMsg::BILL_TIMEOUT_ERROR);
+                    throw new \Exception(BILL_TIMEOUT_ERROR);
                 }
                 break;
             case "WX_APP":
@@ -110,25 +110,25 @@ class api {
             case "BD_WEB":
                 break;
             default:
-                throw new Exception(NEED_VALID_PARAM . "channel");
+                throw new \Exception(NEED_VALID_PARAM . "channel");
                 break;
         }
 
         if (!isset($data["total_fee"])) {
-            throw new Exception(NEED_PARAM . "total_fee");
+            throw new \Exception(NEED_PARAM . "total_fee");
         } else if(!is_int($data["total_fee"]) || 1>$data["total_fee"]) {
-            throw new Exception(NEED_VALID_PARAM . "total_fee");
+            throw new \Exception(NEED_VALID_PARAM . "total_fee");
         }
 
         if (!isset($data["bill_no"])) {
-            throw new Exception(NEED_PARAM . "bill_no");
+            throw new \Exception(NEED_PARAM . "bill_no");
         } else if (32 < strlen(isset($data["bill_no"]))) {
-            throw new Exception(NEED_VALID_PARAM . "bill_no");
+            throw new \Exception(NEED_VALID_PARAM . "bill_no");
         }
 
         if (!isset($data["title"])) {
             //TODO: 字节数
-            throw new Exception(NEED_PARAM . "title");
+            throw new \Exception(NEED_PARAM . "title");
         }
 
         return self::post(self::URI_BILL, $data, 30, false);
@@ -149,14 +149,14 @@ class api {
                 case "BD":
                     break;
                 default:
-                    throw new Exception(NEED_VALID_PARAM . "channel");
+                    throw new \Exception(NEED_VALID_PARAM . "channel");
                     break;
             }
         }
 
 
         if (!isset($data["refund_no"])) {
-            throw new Exception(NEED_PARAM . "refund_no");
+            throw new \Exception(NEED_PARAM . "refund_no");
         }
 
         // TODO: refund_no validation
@@ -197,7 +197,7 @@ class api {
                 case "BD_WEB":
                     break;
                 default:
-                    throw new Exception(NEED_VALID_PARAM . "channel");
+                    throw new \Exception(NEED_VALID_PARAM . "channel");
                     break;
             }
         }
@@ -238,7 +238,7 @@ class api {
                 case "BD_WEB":
                     break;
                 default:
-                    throw new Exception(NEED_VALID_PARAM . "channel");
+                    throw new \Exception(NEED_VALID_PARAM . "channel");
                     break;
             }
         }
@@ -254,12 +254,12 @@ class api {
             case "WX":
                 break;
             default:
-                throw new Exception(NEED_VALID_PARAM . "channel");
+                throw new \Exception(NEED_VALID_PARAM . "channel");
                 break;
         }
 
         if (!isset($data["refund_no"])) {
-            throw new Exception(NEED_PARAM . "refund_no");
+            throw new \Exception(NEED_PARAM . "refund_no");
         }
         //param validation
         return self::get(self::URI_REFUND_STATUS, $data, 30, false);
@@ -271,25 +271,25 @@ class api {
             case "ALI":
                 break;
             default:
-                throw new Exception(NEED_VALID_PARAM . "channel only ALI");
+                throw new \Exception(NEED_VALID_PARAM . "channel only ALI");
                 break;
         }
 
 
         if (!isset($data["batch_no"])) {
-            throw new Exception(NEED_PARAM . "batch_no");
+            throw new \Exception(NEED_PARAM . "batch_no");
         }
 
         if (!isset($data["account_name"])) {
-            throw new Exception(NEED_PARAM . "account_name");
+            throw new \Exception(NEED_PARAM . "account_name");
         }
 
         if (!isset($data["transfer_data"])) {
-            throw new Exception(NEED_PARAM . "transfer_data");
+            throw new \Exception(NEED_PARAM . "transfer_data");
         }
 
         if (!is_array($data["transfer_data"])) {
-            throw new Exception(NEED_VALID_PARAM . "transfer_data(array)");
+            throw new \Exception(NEED_VALID_PARAM . "transfer_data(array)");
         }
 
         return self::post(self::URI_TRANSFERS, $data, 30, false);

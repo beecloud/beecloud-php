@@ -61,16 +61,16 @@ class network {
                     curl_setopt($ch, CURLOPT_URL, $url."?para=".urlencode(json_encode($data)));
                     break;
                 default:
-                    throw new Exception('不支持的HTTP方式');
+                    throw new \Exception('不支持的HTTP方式');
             }
 
             $result = curl_exec($ch);
             if (curl_errno($ch) > 0) {
-                throw new Exception(curl_error($ch));
+                throw new \Exception(curl_error($ch));
             }
             curl_close($ch);
             return $result;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return "CURL EXCEPTION:".$e->getMessage();
         }
     }
