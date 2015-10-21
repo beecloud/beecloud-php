@@ -17,9 +17,9 @@ class network {
         //apiqd.beecloud.cn	青岛
         //apihz.beecloud.cn	杭州
 
-        $random = rand(0, 3);
-        return "https://" . $domainList[$random];
-//        return "http://58.211.191.123:8080";
+//        $random = rand(0, 3);
+//        return "https://" . $domainList[$random];
+        return "https://apihz.beecloud.cn";
     }
 
     static final public function request($url, $method, array $data, $timeout) {

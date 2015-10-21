@@ -12,6 +12,7 @@ $BCNEEDVersion='5.3.0';
 if(version_compare($BCPHPVersion,$BCNEEDVersion,'>')) {
     require_once("sdk/src/network.php");
     require_once("sdk/src/rest/api.php");
+    require_once("sdk/src/rest/international.php");
 } else {
     require_once("degrade/beecloud.php");
 }
