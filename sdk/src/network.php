@@ -19,7 +19,6 @@ class network {
 
         $random = rand(0, 3);
         return "https://" . $domainList[$random];
-//        return "http://58.211.191.123:8080";
     }
 
     static final public function request($url, $method, array $data, $timeout) {

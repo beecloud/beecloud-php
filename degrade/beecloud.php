@@ -75,6 +75,93 @@ class BCRESTUtil {
     }
 }
 
+
+class BCRESTInternational {
+    const URI_BILL = "/1/rest/international/bill";
+    const URI_REFUND = "/1/rest/international/refund";
+
+    static final private function baseParamCheck(array $data) {
+        if (!isset($data["app_id"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "app_id");
+        }
+
+        if (!isset($data["timestamp"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "timestamp");
+        }
+
+        if (!isset($data["app_sign"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "app_sign");
+        }
+
+        if (!isset($data["currency"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "currency");
+        }
+    }
+
+    static final protected function post($api, $data, $timeout) {
+        $url = BCRESTUtil::getApiUrl() . $api;
+        $httpResultStr = BCRESTUtil::request($url, "post", $data, $timeout);
+        $result = json_decode($httpResultStr);
+        if (!$result) {
+            throw new Exception(BCRESTErrMsg::UNEXPECTED_RESULT . $httpResultStr);
+        }
+        return $result;
+    }
+
+    static final protected function get($api, $data, $timeout) {
+        $url = BCRESTUtil::getApiUrl() . $api;
+        $httpResultStr = BCRESTUtil::request($url, "get", $data, $timeout);
+        $result = json_decode($httpResultStr);
+        if (!$result) {
+            throw new Exception(BCRESTErrMsg::UNEXPECTED_RESULT . $httpResultStr);
+        }
+        return $result;
+    }
+
+    static final public function bill(array $data) {
+        //param validation
+        self::baseParamCheck($data);
+
+        switch ($data["channel"]) {
+            case "PAYPAL_PAYPAL":
+                if (!isset($data["return_url"])) {
+                    throw new Exception(BCRESTErrMsg::NEED_PARAM . "return_url");
+                }
+                break;
+            case "PAYPAL_CREDITCARD":
+                if (!isset($data["credit_card_info"])) {
+                    throw new Exception(BCRESTErrMsg::NEED_PARAM . "credit_card_info");
+                }
+                break;
+            case "PAYPAL_SAVED_CREDITCARD":
+                if (!isset($data["credit_card_id"])) {
+                    throw new Exception(BCRESTErrMsg::NEED_PARAM . "credit_card_id");
+                }
+                break;
+            default:
+                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel");
+                break;
+        }
+
+        if (!isset($data["total_fee"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "total_fee");
+        } else if(!is_int($data["total_fee"]) || 1>$data["total_fee"]) {
+            throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "total_fee");
+        }
+
+        if (!isset($data["bill_no"])) {
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "bill_no");
+        }
+
+        if (!isset($data["title"])) {
+            //TODO: 字节数
+            throw new Exception(BCRESTErrMsg::NEED_PARAM . "title");
+        }
+
+        return self::post(self::URI_BILL, $data, 30, false);
+    }
+}
+
 class BCRESTApi {
     const URI_BILL = "/1/rest/bill";
     const URI_REFUND = "/1/rest/refund";

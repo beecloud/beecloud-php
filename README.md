@@ -64,6 +64,107 @@ require_once('vendor/autoload.php');
 
 1. 发起支付订单 
 
+    ###国际支付
+        
+    ~~~
+    \beecloud\rest\international::bill(array $data);
+    ~~~
+    
+    不使用namespace的用户和2.2.0之前的v2版本用户请使用
+    	
+    ~~~
+    BCRESTInteraional::bill(array $data);
+    ~~~
+    
+    data参数（array类型）:
+    
+    
+    参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+    ----  | ---- | ---- | ---- | ---- | ----
+    app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+    timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+    app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+    channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | PAYPAL_PAYPAL, PAYPAL_CREDITCARD, PAYPAL_SAVED_CREDITCARD(详见附注）| 是
+    total_fee | String | 订单总金额 | 正数，最多两位小数 | 0.01 | 是
+    currency | String | 三位货币种类代码 | 见附录 | USD | 是
+    bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
+    title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
+    credit\_card_info | Map | 信用卡信息 | 行用卡信息 | {"card\_number":"420243123344","expire\_month":07,"expire\_year":2020,"cvv":"204","first\_name:"jim","last\_name":"Green", "card\_type":"visa"} | 当channel 为PAYPAL_CREDITCARD必填
+    credit\_card_id| String | 信用卡id | 当使用PAYPAL_CREDITCARD支付完成后会返回一个credit\_card_id | CARD\_ADMJ324234DJLKJS | 当channel为PAYPAL_SAVED_CREDITCARD时为必填
+    return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径不包含?及& | http://baidu.com | 当channel参数为PAYPAL_PAYPAL时为必填
+    
+    
+    - 以下是`credit_card_info`的参数
+    
+    参数名 | 类型 | 含义 | 例子
+    ---- | ---- | ---- | ----
+    card\_number| String | 卡号 | 420243123344
+    expire\_month| int | 过期时间中的月 | 12
+    expire\_year| int | 过期时间中的年 | 2020
+    cvv| int | 信用卡的三位cvv码 | 123
+    first\_name | String | 用户名字 | Jim
+    last\_name | String | 用户的姓 | Green
+    card\_type | String | 卡类别 visa/mastercard/discover/amex | visa
+    
+    - 以下是`currency`参数 的对照表
+    
+    名称 | 缩写 
+    ---- | ---- | 
+    Australian dollar|	AUD  
+    Brazilian real**	|BRL  
+    Canadian dollar|	CAD  
+    Czech koruna|	CZK    
+    Danish krone|	DKK  
+    Euro|	EUR  
+    Hong Kong dollar|	HKD  
+    Hungarian forint|	HUF  
+    Israeli new shekel|	ILS  
+    Japanese yen|	JPY  
+    Malaysian ringgit|	MYR  
+    Mexican peso|	MXN  
+    New Taiwan dollar|	TWD  
+    New Zealand dollar|	NZD  
+    Norwegian krone|	NOK  
+    Philippine peso|	PHP  
+    Polish złoty|	PLN  
+    Pound sterling|	GBP  
+    Singapore dollar|	SGD  
+    Swedish krona	|SEK  
+    Swiss franc|	CHF  
+    Thai baht	|THB  
+    Turkish lira|	TRY  
+    United States dollar|	USD  
+    
+    返回结果（Object类型）:
+    
+    - **公共返回参数**
+    
+    参数名 | 类型 | 含义 
+    ---- | ---- | ----
+    result_code | Integer | 返回码，0为正常
+    result_msg  | String | 返回信息， OK为正常
+    err_detail  | String | 具体错误信息
+    url |String| 当channel 为PAYPAL_PAYPAL时返回，跳转支付的url
+    credit_card_id | String| 当channel为PAYPAL_CREDITCARD时返回， 信用卡id
+    id| String| 订单id
+    
+    - **公共返回参数取值列表及其含义**
+    
+    result_code | result_msg             | 含义
+    ----        | ----      		       | ----
+    0           | OK                     | 调用成功
+    1           | APP\_INVALID           | 根据app\_id找不到对应的APP或者app\_sign不正确
+    2           | PAY\_FACTOR_NOT\_SET   | 支付要素在后台没有设置
+    3           | CHANNEL\_INVALID       | channel参数不合法
+    4           | MISS\_PARAM            | 缺少必填参数
+    5           | PARAM\_INVALID         | 参数不合法
+    6           | CERT\_FILE\_ERROR      | 证书错误
+    7           | CHANNEL\_ERROR         | 渠道内部错误
+    14          | RUN\_TIME_ERROR        | 实时未知错误，请与技术联系帮助查看
+    
+
+    ### 国内支付
+    
 	~~~
 	\beecloud\rest\api::bill(array $data);
 	~~~
@@ -257,6 +358,8 @@ require_once('vendor/autoload.php');
     参数名 | 类型 | 含义 
     ---- | ---- | ----
     url | String | 支付页跳转地址
+    
+   
     
 2. 查询支付订单
 
