@@ -64,12 +64,18 @@ require_once('vendor/autoload.php');
 
 1. 发起支付订单 
 
-    1.1 国际支付
+    ###国际支付
         
     ~~~
     \beecloud\rest\international::bill(array $data);
     ~~~
-
+    
+    不使用namespace的用户和2.2.0之前的v2版本用户请使用
+    	
+    ~~~
+    BCRESTInteraional::bill(array $data);
+    ~~~
+    
     data参数（array类型）:
     
     
@@ -157,7 +163,7 @@ require_once('vendor/autoload.php');
     14          | RUN\_TIME_ERROR        | 实时未知错误，请与技术联系帮助查看
     
 
-    1.2 国内支付
+    ### 国内支付
     
 	~~~
 	\beecloud\rest\api::bill(array $data);

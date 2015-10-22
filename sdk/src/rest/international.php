@@ -34,7 +34,7 @@ class international {
         }
 
         if (!isset($data["currency"])) {
-            throw new \Exception(NEED_PARAM . "app_sign");
+            throw new \Exception(NEED_PARAM . "currency");
         }
     }
 
@@ -106,31 +106,31 @@ class international {
         return self::post(self::URI_BILL, $data, 30, false);
     }
     //TODO:
-    static final public function refund(array $data) {
-        //param validation
-        self::baseParamCheck($data);
-
-        if (isset($data["channel"])) {
-            switch ($data["channel"]) {
-                case "PAYPAL":
-                case "PAYPAL_PAYPAL":
-                case "PAYPAL_CREDITCARD":
-                case "PAYPAL_SAVED_CREDITCARD":
-                    break;
-                default:
-                    throw new \Exception(NEED_VALID_PARAM . "channel");
-                    break;
-            }
-        }
-
-
-        if (!isset($data["refund_no"])) {
-            throw new \Exception(NEED_PARAM . "refund_no");
-        }
-
-        // TODO: refund_no validation
-
-        return self::post(self::URI_REFUND, $data, 30, false);
-    }
+//    static final public function refund(array $data) {
+//        //param validation
+//        self::baseParamCheck($data);
+//
+//        if (isset($data["channel"])) {
+//            switch ($data["channel"]) {
+//                case "PAYPAL":
+//                case "PAYPAL_PAYPAL":
+//                case "PAYPAL_CREDITCARD":
+//                case "PAYPAL_SAVED_CREDITCARD":
+//                    break;
+//                default:
+//                    throw new \Exception(NEED_VALID_PARAM . "channel");
+//                    break;
+//            }
+//        }
+//
+//
+//        if (!isset($data["refund_no"])) {
+//            throw new \Exception(NEED_PARAM . "refund_no");
+//        }
+//
+//        // TODO: refund_no validation
+//
+//        return self::post(self::URI_REFUND, $data, 30, false);
+//    }
 
 }
