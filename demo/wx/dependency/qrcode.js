@@ -1235,7 +1235,9 @@ QRBitBuffer.prototype = {
         this.length++;
     }
 };
-;/**
+;
+
+/**
  * Created by dengze on 7/8/15.
  */
 (function() {
@@ -1272,37 +1274,97 @@ QRBitBuffer.prototype = {
         foreground      : "#000000"
     };
 
+    function needTable() {
+        var browser=navigator.appName
+        var b_version=navigator.appVersion
+        var version=b_version.split(";");
+        var trim_Version=version[1].replace(/[ ]/g,"");
+        if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE6.0") {
+            return true;
+        } else if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE7.0") {
+            return true;
+        }else if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE8.0") {
+            return true;
+        } else if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE9.0") {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * return DOM object
      */
-    _util.createQrCode	= function(userOptions){
-        // create the qrcode itself
-        var options = bcExtend(userOptions, _default_options, true);
-        console.log(options);
-        var qrcode	= new QRCode(options.typeNumber, options.correctLevel);
-        qrcode.addData(options.text);
-        qrcode.make();
+    if (true) {
+        _util.createQrCode = function(userOptions) {
+            // create the qrcode itself
+            var options = bcExtend(userOptions, _default_options, true);
+            var qrcode	= new QRCode(options.typeNumber, options.correctLevel);
+            qrcode.addData(options.text);
+            qrcode.make();
 
-        // create canvas element
-        var canvas	= document.createElement('canvas');
-        canvas.width	= options.width;
-        canvas.height	= options.height;
-        var ctx		= canvas.getContext('2d');
+            // create table element
+            var $table	= document.createElement("TABLE");
+            $table.style.width =  options.width+"px";
+            $table.style.height = options.height+"px";
+            $table.style.border = "0px";
+            $table.style.borderCollapse = "collapse";
+            $table.style.backgroundColor = options.background;
 
-        // compute tileW/tileH based on options.width/options.height
-        var tileW	= options.width  / qrcode.getModuleCount();
-        var tileH	= options.height / qrcode.getModuleCount();
+            //为兼容IE7 必须将<tbody></tbody>拼到页面
+            var $tbody = document.createElement("tbody");
+            $table.appendChild($tbody);
 
-        // draw in the canvas
-        for( var row = 0; row < qrcode.getModuleCount(); row++ ){
-            for( var col = 0; col < qrcode.getModuleCount(); col++ ){
-                ctx.fillStyle = qrcode.isDark(row, col) ? options.foreground : options.background;
-                var w = (Math.ceil((col+1)*tileW) - Math.floor(col*tileW));
-                var h = (Math.ceil((row+1)*tileW) - Math.floor(row*tileW));
-                ctx.fillRect(Math.round(col*tileW),Math.round(row*tileH), w, h);
+            // compute tileS percentage
+            var tileW	= options.width / qrcode.getModuleCount();
+            var tileH	= options.height / qrcode.getModuleCount();
+
+            // draw in the table
+            for(var row = 0; row < qrcode.getModuleCount(); row++ ){
+                var $row = document.createElement("TR");
+                $row.style.height = tileH+"px";
+                $tbody.appendChild($row);
+
+                for(var col = 0; col < qrcode.getModuleCount(); col++ ){
+                    var $td = document.createElement("TD");
+                    $td.style.width = tileW+"px";
+                    $td.style.backgroundColor =  qrcode.isDark(row, col) ? options.foreground : options.background;
+                    $row.appendChild($td);
+                }
             }
+            // return just built canvas
+            return $table;
         }
-        // return just built canvas
-        return canvas;
+    } else {
+        _util.createQrCode	= function(userOptions){
+            // create the qrcode itself
+            var options = bcExtend(userOptions, _default_options, true);
+
+            var qrcode	= new QRCode(options.typeNumber, options.correctLevel);
+            qrcode.addData(options.text);
+            qrcode.make();
+
+            // create canvas element
+            var canvas	= document.createElement('canvas');
+            canvas.width	= options.width;
+            canvas.height	= options.height;
+            var ctx		= canvas.getContext('2d');
+
+            // compute tileW/tileH based on options.width/options.height
+            var tileW	= options.width  / qrcode.getModuleCount();
+            var tileH	= options.height / qrcode.getModuleCount();
+
+            // draw in the canvas
+            for( var row = 0; row < qrcode.getModuleCount(); row++ ){
+                for( var col = 0; col < qrcode.getModuleCount(); col++ ){
+                    ctx.fillStyle = qrcode.isDark(row, col) ? options.foreground : options.background;
+                    var w = (Math.ceil((col+1)*tileW) - Math.floor(col*tileW));
+                    var h = (Math.ceil((row+1)*tileW) - Math.floor(row*tileW));
+                    ctx.fillRect(Math.round(col*tileW),Math.round(row*tileH), w, h);
+                }
+            }
+            // return just built canvas
+            return canvas;
+        }
     }
+
 }());
