@@ -5,6 +5,7 @@
 <body>
 <h1>BeeCloud Demo</h1>
 <ul>
+    <li><a href="transfer/index.php">单笔打款</a></li>
     <li><a href="paypal/ajax.php">paypal</a></li>
     <li><a href="ali/ali.transfers.php">支付宝批量打款</a></li>
     <li><a href="ali/ali.web.php">支付宝即时到账</a></li>

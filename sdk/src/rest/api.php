@@ -268,8 +268,28 @@ class api {
         self::baseParamCheck($data);
         switch ($data["channel"]) {
             case "WX_REDPACK":
+                $wxReruieNames = array(
+                    "redpack_info"
+                );
+                foreach($wxReruieNames as $v) {
+                    if (!isset($data[$v])) {
+                        throw new \Exception(NEED_PARAM . $v);
+                    }
+                }
+                break;
             case "WX_TRANSFER":
+                break;
             case "ALI_TRANSFER":
+                $aliRequireNames = array(
+                    "channel_user_name",
+                    "account_name"
+                );
+
+                foreach($aliRequireNames as $v) {
+                    if (!isset($data[$v])) {
+                        throw new \Exception(NEED_PARAM . $v);
+                    }
+                }
                 break;
             default:
                 throw new \Exception(NEED_VALID_PARAM . "channel = ALI_TRANSFER | WX_TRANSFER | WX_REDPACK");
@@ -283,25 +303,6 @@ class api {
             );
 
         foreach($requiedNames as $v) {
-            if (!isset($data[$v])) {
-                throw new \Exception(NEED_PARAM . $v);
-            }
-        }
-
-        $aliRequireNames = array(
-            "channel_user_name",
-            "account_name"
-        );
-
-        foreach($aliRequireNames as $v) {
-            if (!isset($data[$v])) {
-                throw new \Exception(NEED_PARAM . $v);
-            }
-        }
-        $wxReruieNames = array(
-            "redpack_info"
-        );
-        foreach($wxReruieNames as $v) {
             if (!isset($data[$v])) {
                 throw new \Exception(NEED_PARAM . $v);
             }
