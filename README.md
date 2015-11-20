@@ -1,6 +1,6 @@
-## BeeCloud PHP SDK (Open Source)
+# BeeCloud PHP SDK (Open Source)
 
-![license](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![version](https://img.shields.io/badge/version-v2.2.2-blue.svg)
+![license](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![version](https://img.shields.io/badge/version-v2.3.0-blue.svg)
 
 ## 简介
 
@@ -64,7 +64,7 @@ require_once('vendor/autoload.php');
 ## BeeCloud API 
 >$data参数和返回参数请参考BeeCloud RESTfull API,同时可以参考demo中各渠道的代码示例）
 
-1. 发起支付订单 
+##发起支付订单 
 
 ###国际支付
     
@@ -414,7 +414,7 @@ url | String | 支付页跳转地址
     
    
     
-2. 查询支付订单
+## 查询支付订单
 
 ~~~
 \beecloud\rest\api::bills(array $data);
@@ -469,7 +469,7 @@ title         | String       | 订单标题
 spay\_result  | Bool         | 订单是否成功
 created\_time | Long         | 订单创建时间, 毫秒时间戳, 13位
     
-3. 发起退款 
+## 发起退款 
 
 ~~~
 \beecloud\rest\api::refund(array $data);
@@ -521,7 +521,7 @@ result\_code | result\_msg                | 含义
 url | String | 支付宝退款地址，需用户在支付宝平台上手动输入支付密码处理
 
 	
-4. 退款状态查询
+## 退款状态查询
 
 ~~~
 \beecloud\rest\api::refunds(array $data);
@@ -583,7 +583,7 @@ created\_time | Long       | 退款创建时间, 毫秒时间戳, 13位
 
 
 
-5. 退款状态更新(仅微信需要) 
+## 退款状态更新(仅微信需要) 
 
 ~~~
 \beecloud\rest\api::refundStatus(array $data);
@@ -618,7 +618,73 @@ refund_status | String | 退款状态
 
 > 公共返回参数取值及含义参见支付公共返回参数部分
 
-6. 批量打款
+## 单笔打款
+
+~~~
+\beecloud\rest\api::transfer(array $data);
+~~~
+
+不使用namespace的用户和2.2.0之前的v2版本用户请使用
+
+~~~
+BCRESTApi::transfer(array $data);
+~~~
+
+data参数（array类型）:
+
+ 参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+**app\_secret**)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX_REDPACK, WX\_TRANSFER, ALI\_TRANSFER(详见附注）| 是
+transfer_no | String | 打款单号 | 支付宝为11-32位数字字母组合， 微信为10位数字 | udjfiienx2334/8372839123 | 是
+total_fee | Int | 打款金额 | 此次打款的金额,单位分,正整数(微信红包1.00-200元，微信打款>=1元) | 1 | 是
+desc | String | 打款说明 | 此次打款的说明 | 赔偿 | 是
+channel_user\_id | String | 用户id | 支付渠道方内收款人的标示, 微信为openid, 支付宝为支付宝账户 | someone@126.com |是
+channel_user\_name | String | 用户名| 支付渠道内收款人账户名， 支付宝必填 | 支付宝某人 | 否
+redpack_info | Object | 红包信息 | 微信红包的详细描述，详见附注, 微信红包必填 | - | 否
+account_name|String|打款方账号名称|打款方账号名全称，支付宝必填|苏州比可网络科技有限公司|否
+
+
+
+>注1：channel的参数值含义：  
+WX\_REDPACK: 微信红包  
+WX\_TRANSFER: 微信企业打款  
+ALI_TRANSFER: 支付宝企业打款 
+
+> 注2: redpack_info 参数列表
+ 
+ 参数名 | 类型 | 含义 | 例子
+---- | ---- | ---- | ----
+send_name| String | 红包发送者名称 32位 | BeeCloud
+wishing | String | 红包祝福语 128 位| BeeCloud祝福开发者工作顺利!
+act_name | String | 红包活动名称 32位 | BeeCloud开发者红包轰动
+
+返回结果 (JSON, Map)
+ 
+ 参数名 | 类型 | 含义 
+---- | ---- | ----
+result_code | Integer | 返回码，0为正常
+result_msg  | String | 返回信息， OK为正常
+err_detail  | String | 具体错误信息
+url | String | 支付宝需要跳转到支付宝链接输入支付密码确认
+ 
+> 注1: 错误码（错误详细信息 参考 **err_detail**字段)
+ 
+ result_code | result_msg             | 含义
+----        | ----      		       | ----
+0           | OK                     | 调用成功
+1           | APP\_INVALID           | 根据app\_id找不到对应的APP或者app\_sign不正确
+2           | PAY\_FACTOR_NOT\_SET   | 支付要素在后台没有设置
+3           | CHANNEL\_INVALID       | channel参数不合法
+4           | MISS\_PARAM            | 缺少必填参数
+5           | PARAM\_INVALID         | 参数不合法
+6           | CERT\_FILE\_ERROR      | 证书错误
+7           | CHANNEL\_ERROR         | 渠道内部错误
+14          | RUN\_TIME_ERROR        | 实时未知错误，请与技术联系帮助查看
+
+## 批量打款
 
 ~~~
 \beecloud\rest\api::transfers(array $data);

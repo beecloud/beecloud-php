@@ -1275,8 +1275,11 @@ QRBitBuffer.prototype = {
     };
 
     function needTable() {
-        var browser=navigator.appName
-        var b_version=navigator.appVersion
+        var browser=navigator.appName;
+        if(browser!="Microsoft Internet Explorer") {
+            return false;
+        }
+        var b_version=navigator.appVersion;
         var version=b_version.split(";");
         var trim_Version=version[1].replace(/[ ]/g,"");
         if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE6.0") {
@@ -1294,7 +1297,7 @@ QRBitBuffer.prototype = {
     /**
      * return DOM object
      */
-    if (true) {
+    if (needTable()) {
         _util.createQrCode = function(userOptions) {
             // create the qrcode itself
             var options = bcExtend(userOptions, _default_options, true);
@@ -1309,6 +1312,7 @@ QRBitBuffer.prototype = {
             $table.style.border = "0px";
             $table.style.borderCollapse = "collapse";
             $table.style.backgroundColor = options.background;
+
 
             //为兼容IE7 必须将<tbody></tbody>拼到页面
             var $tbody = document.createElement("tbody");
@@ -1366,5 +1370,5 @@ QRBitBuffer.prototype = {
             return canvas;
         }
     }
-
 }());
+
