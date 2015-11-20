@@ -1,4 +1,4 @@
-## BeeCloud PHP SDK (Open Source)
+# BeeCloud PHP SDK (Open Source)
 
 ![license](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![version](https://img.shields.io/badge/version-v2.2.2-blue.svg)
 
@@ -64,7 +64,7 @@ require_once('vendor/autoload.php');
 ## BeeCloud API 
 >$data参数和返回参数请参考BeeCloud RESTfull API,同时可以参考demo中各渠道的代码示例）
 
-1. 发起支付订单 
+##发起支付订单 
 
 ###国际支付
     
@@ -414,7 +414,7 @@ url | String | 支付页跳转地址
     
    
     
-2. 查询支付订单
+## 查询支付订单
 
 ~~~
 \beecloud\rest\api::bills(array $data);
@@ -469,7 +469,7 @@ title         | String       | 订单标题
 spay\_result  | Bool         | 订单是否成功
 created\_time | Long         | 订单创建时间, 毫秒时间戳, 13位
     
-3. 发起退款 
+## 发起退款 
 
 ~~~
 \beecloud\rest\api::refund(array $data);
@@ -521,7 +521,7 @@ result\_code | result\_msg                | 含义
 url | String | 支付宝退款地址，需用户在支付宝平台上手动输入支付密码处理
 
 	
-4. 退款状态查询
+## 退款状态查询
 
 ~~~
 \beecloud\rest\api::refunds(array $data);
@@ -583,7 +583,7 @@ created\_time | Long       | 退款创建时间, 毫秒时间戳, 13位
 
 
 
-5. 退款状态更新(仅微信需要) 
+## 退款状态更新(仅微信需要) 
 
 ~~~
 \beecloud\rest\api::refundStatus(array $data);
@@ -618,7 +618,7 @@ refund_status | String | 退款状态
 
 > 公共返回参数取值及含义参见支付公共返回参数部分
 
-6. 批量打款
+## 批量打款
 
 ~~~
 \beecloud\rest\api::transfers(array $data);

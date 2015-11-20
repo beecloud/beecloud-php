@@ -170,6 +170,7 @@ class BCRESTApi {
     const URI_REFUND_STATUS = "/1/rest/refund/status";
     const URI_BILL_STATUS = "/1/rest/bill/";
     const URI_TRANSFERS = "/1/rest/transfers";
+    const URI_TRANSFER = "/2/rest/transfer";
 
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
@@ -413,6 +414,52 @@ class BCRESTApi {
         }
         //param validation
         return self::get(self::URI_REFUND_STATUS, $data, 30);
+    }
+
+    static final public function transfer(array $data) {
+        self::baseParamCheck($data);
+        switch ($data["channel"]) {
+            case "WX_REDPACK":
+            case "WX_TRANSFER":
+            case "ALI_TRANSFER":
+                break;
+            default:
+                throw new Exception(BCRESTErrMsg::NEED_VALID_PARAM . "channel = ALI_TRANSFER | WX_TRANSFER | WX_REDPACK");
+                break;
+        }
+
+        $requiedNames = array("transfer_no",
+            "total_fee",
+            "desc",
+            "channel_user_id"
+        );
+
+        foreach($requiedNames as $v) {
+            if (!isset($data[$v])) {
+                throw new Exception(BCRESTErrMsg::NEED_PARAM . $v);
+            }
+        }
+
+        $aliRequireNames = array(
+            "channel_user_name",
+            "account_name"
+        );
+
+        foreach($aliRequireNames as $v) {
+            if (!isset($data[$v])) {
+                throw new Exception(BCRESTErrMsg::NEED_PARAM . $v);
+            }
+        }
+        $wxReruieNames = array(
+            "redpack_info"
+        );
+        foreach($wxReruieNames as $v) {
+            if (!isset($data[$v])) {
+                throw new Exception(BCRESTErrMsg::NEED_PARAM . $v);
+            }
+        }
+
+        return self::post(self::URI_TRANSFER, $data, 30, false);
     }
 
     static final public function transfers(array $data) {
