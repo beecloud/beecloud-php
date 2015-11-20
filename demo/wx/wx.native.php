@@ -50,7 +50,7 @@ try {
             //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
             var canvas = BCUtil.createQrCode(options);
             var wording=document.createElement('p');
-            wording.innerHTML = "扫我，扫我";
+            wording.innerHTML = "扫我1";
             var element=document.getElementById("qrcode");
             element.appendChild(wording);
             element.appendChild(canvas);

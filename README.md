@@ -93,7 +93,7 @@ bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自
 title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
 credit\_card_info | Map | 信用卡信息 | 行用卡信息 | {"card\_number":"420243123344","expire\_month":07,"expire\_year":2020,"cvv":"204","first\_name:"jim","last\_name":"Green", "card\_type":"visa"} | 当channel 为PAYPAL_CREDITCARD必填
 credit\_card_id| String | 信用卡id | 当使用PAYPAL_CREDITCARD支付完成后会返回一个credit\_card_id | CARD\_ADMJ324234DJLKJS | 当channel为PAYPAL_SAVED_CREDITCARD时为必填
-return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径不包含?及& | http://baidu.com | 当channel参数为PAYPAL_PAYPAL时为必填
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径不包含?及&，必须为http://或者https://开头 | http://baidu.com | 当channel参数为PAYPAL_PAYPAL时为必填
 
 
 - 以下是`credit_card_info`的参数
@@ -189,7 +189,7 @@ total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 | 
 bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
 title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
-return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径 | beecloud.cn/returnUrl.jsp | 当channel参数为 ALI\_WEB 或 ALI\_QRCODE 或 UN\_WEB时为必填
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，必须为http://或者https://开头 | beecloud.cn/returnUrl.jsp | 当channel参数为 ALI\_WEB 或 ALI\_QRCODE 或 UN\_WEB时为必填
 
 > 注：channel的参数值含义：  
 WX\_APP: 微信手机原生APP支付  

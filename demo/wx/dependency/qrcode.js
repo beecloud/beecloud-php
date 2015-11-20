@@ -1235,7 +1235,9 @@ QRBitBuffer.prototype = {
         this.length++;
     }
 };
-;/**
+;
+
+/**
  * Created by dengze on 7/8/15.
  */
 (function() {
@@ -1311,6 +1313,11 @@ QRBitBuffer.prototype = {
             $table.style.borderCollapse = "collapse";
             $table.style.backgroundColor = options.background;
 
+
+            //为兼容IE7 必须将<tbody></tbody>拼到页面
+            var $tbody = document.createElement("tbody");
+            $table.appendChild($tbody);
+
             // compute tileS percentage
             var tileW	= options.width / qrcode.getModuleCount();
             var tileH	= options.height / qrcode.getModuleCount();
@@ -1319,7 +1326,7 @@ QRBitBuffer.prototype = {
             for(var row = 0; row < qrcode.getModuleCount(); row++ ){
                 var $row = document.createElement("TR");
                 $row.style.height = tileH+"px";
-                $table.appendChild($row);
+                $tbody.appendChild($row);
 
                 for(var col = 0; col < qrcode.getModuleCount(); col++ ){
                     var $td = document.createElement("TD");
@@ -1363,5 +1370,5 @@ QRBitBuffer.prototype = {
             return canvas;
         }
     }
-
 }());
+
