@@ -12,7 +12,7 @@ $openid = $_GET["openid"];
 
 $data = array();
 $appSecret = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
-$data["app_id"] = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
+$data["app_id"] = "";
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["total_fee"] = (int) $amount;
