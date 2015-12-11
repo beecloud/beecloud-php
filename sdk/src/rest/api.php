@@ -84,14 +84,14 @@ class api {
             case "JD":
             case "JD_WEB":
             case "JD_WAP":
-                if (!isset($data["bill_timeout"])) {
+                if (isset($data["bill_timeout"])) {
                     throw new \Exception(BILL_TIMEOUT_ERROR);
                 }
                 break;
             case "KUAIQIAN":
             case "KUAIQIAN_WAP":
             case "KUAIQIAN_WEB":
-                if (!isset($data["bill_timeout"])) {
+                if (isset($data["bill_timeout"])) {
                     throw new \Exception(BILL_TIMEOUT_ERROR);
                 }
                 break;
