@@ -32,10 +32,8 @@ try {
 
     $htmlContent = $result->html;
     $url = $result->url;
+    echo $htmlContent;
     ?>
-    <script>
-        window.location.href = "<?php echo $url;?>";
-    </script>
 <?php
 } catch (Exception $e) {
     echo $e->getMessage();
