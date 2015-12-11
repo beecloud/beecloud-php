@@ -20,6 +20,10 @@
     <li><a href="wx/wx.jsapi.php">微信公众号支付(微信浏览器打开)</a></li>
     <li><a href="wx/wx.bills.php">微信订单查询和退款</a></li>
     <li><a href="wx/wx.refunds.php">微信退款查询和退款状态更新</a></li>
+    <li><a href="jd/jd.web.php">京东PC网页</a></li>
+    <li><a href="jd/jd.wap.php">京东移动网页</a></li>
+    <li><a href="jd/jd.bills.php">京东订单查询和退款</a></li>
+    <li><a href="jd/jd.refunds.php">京东退款查询</a></li>
     <li><a href="bd/bd.web.php">百度PC网页</a></li>
     <li><a href="bd/bd.wap.php">百度移动网页</a></li>
     <li><a href="bd/bd.bills.php">百度订单查询和退款</a></li>
