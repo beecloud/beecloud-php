@@ -1,3 +1,10 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>BeeCloud微信扫码示例</title>
+</head>
+<body>
 <?php
 
 /**
@@ -53,13 +60,6 @@ try {
         "signType" => $result->sign_type,
         "paySign" => $result->pay_sign);
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCloud微信扫码示例</title>
-</head>
-<body>
 </br></br></br></br>
 <div align="center">
     <button style="height:50px; background-color:rgb(47,119,231); border-radius:3px; cursor: pointer;  color:white;  font-size:36px;" type="button" onclick="callpay()" >点击发起支付</button>
