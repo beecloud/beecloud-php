@@ -1,10 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCloud微信扫码示例</title>
-</head>
-<body>
 <?php
 
 /**
@@ -45,6 +38,15 @@ $data["openid"] = $openid;
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //选填 return_url
 //$data["return_url"] = "http://payservice.beecloud.cn";
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>BeeCloud微信扫码示例</title>
+</head>
+<body>
+<?php
 
 try {
     $result = \beecloud\rest\api::bill($data);
