@@ -17,6 +17,7 @@ $data["channel"] = "YEE_WAP";
 $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
 $data["title"] = "白开水";
+$data["identity_id"] = "lengthlessthan50useruniqueid";
 $data["return_url"] = "http://payservice.beecloud.cn";
 
 //选填 optional
