@@ -18,13 +18,12 @@ if ($sign != $msg->sign) {
     exit();
 }
 
-if($msg->transactionType == "PAY") {
+if($msg->transaction_type == "PAY") {
     //付款信息
-    //支付状态是否变为支付成功
-    $result = $msg->tradeSuccess;
+    //有通知表示支付状态变为支付成功
 
     //messageDetail 参考文档
-    switch ($msg->channelType) {
+    switch ($msg->channel_type) {
         case "WX":
             /**
              * 处理业务
@@ -35,7 +34,7 @@ if($msg->transactionType == "PAY") {
         case "UN":
             break;
     }
-} else if ($msg->transactionType == "PAY") {
+} else if ($msg->transaction_type == "PAY") {
 
 }
 
