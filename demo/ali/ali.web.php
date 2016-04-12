@@ -33,7 +33,7 @@ try {
 
     $htmlContent = $result->html;
     $url = $result->url;
-    echo $htmlContent;
+    echo $htmlContent; //header("Location:$url");
 } catch (Exception $e) {
     echo $e->getMessage();
 }

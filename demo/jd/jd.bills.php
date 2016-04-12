@@ -8,18 +8,16 @@
 <table border="1" align="center" cellspacing=0>
 <?php
 require_once("../../loader.php");
-date_default_timezone_set("Asia/Shanghai");
-$now = date('Y-m-d',time());
-$refund_no = str_replace("-","",$now).time() * 1000;
+
 $data = array();
 $appSecret = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
 $data["app_id"] = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
-//选择渠道类型(WX、WX_APP、WX_NATIVE、WX_JSAPI、ALI、ALI_APP、ALI_WEB、ALI_QRCODE、UN、UN_APP、UN_WEB。。。)
 $data["channel"] = "JD";
 $data["limit"] = 10;
-
+//退款单号
+$refund_no = date('Ymd',time()).time() * 1000;
 
 try {
     $result = $api->bills($data);
