@@ -25,7 +25,7 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //$data["show_url"] = "";
 
 try {
-    $result = \beecloud\rest\api::bill($data);
+    $result = $api->bill($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();

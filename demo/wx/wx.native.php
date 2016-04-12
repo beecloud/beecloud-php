@@ -9,8 +9,8 @@
 require_once("../../loader.php");
 
 $data = array();
-$appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
-$data["app_id"] = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
+$appSecret = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
+$data["app_id"] = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["channel"] = "WX_NATIVE";
@@ -25,7 +25,7 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //$data["return_url"] = "http://payservice.beecloud.cn";
 
 try {
-    $result = \beecloud\rest\api::bill($data);
+    $result = $api->bill($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();
@@ -35,6 +35,7 @@ try {
     <div align="center" id="qrcode" >
     </div>
     <div align="center">
+        <p>id：<?php echo $result->id; ?></p>
         <p>订单号：<?php echo $data["bill_no"]; ?></p>
         <button id="query">查询订单状态</button>
         <p id="query-result"></p>
@@ -42,7 +43,7 @@ try {
     <br>
 
     </body>
-    <script src="dependency/qrcode.js"></script>
+    <script src="../../statics/qrcode.js"></script>
     <script>
 
         if(<?php echo $code_url != NULL; ?>) {
@@ -50,7 +51,7 @@ try {
             //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
             var canvas = BCUtil.createQrCode(options);
             var wording=document.createElement('p');
-            wording.innerHTML = "扫我1";
+            wording.innerHTML = "扫我 扫我";
             var element=document.getElementById("qrcode");
             element.appendChild(wording);
             element.appendChild(canvas);

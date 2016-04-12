@@ -23,19 +23,14 @@ $data["return_url"] = "http://payservice.beecloud.cn";
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //选填 show_url
 //$data["show_url"] = "";
-
 try {
-    $result = \beecloud\rest\api::bill($data);
+    $result = $api->bill($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();
     }
     $url = $result->url;
-    ?>
-    <script>
-        window.location.href = "<?php echo $url;?>";
-    </script>
-    <?php
+    header("Location: $url");
 } catch (Exception $e) {
     echo $e->getMessage();
 }

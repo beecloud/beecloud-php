@@ -20,7 +20,7 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //$data["show_url"] = "";
 
 try {
-    $result = \beecloud\rest\international::bill($data);
+    $result = $international->bill($data);
     $return = array("resultCode"=>1);
     if ($result->result_code != 0) {
         echo json_encode($result);

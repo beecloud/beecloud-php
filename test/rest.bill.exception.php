@@ -24,7 +24,7 @@ $data["return_url"] = "http://payservice.beecloud.cn";
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 
 try {
-    $result = \beecloud\rest\api::bill($data);
+    $result = $api->bill($data);
 
     echo "error:bill should throw Exception when channel error\r\n";
 } catch (Exception $e) {

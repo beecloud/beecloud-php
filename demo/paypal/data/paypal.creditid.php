@@ -19,7 +19,7 @@ $data["credit_card_id"] = $cardId;
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 
 try {
-    $result = \beecloud\rest\international::bill($data);
+    $result = $international->bill($data);
     $return = array("resultCode"=>1);
     if ($result->result_code != 0) {
         echo json_encode($return);

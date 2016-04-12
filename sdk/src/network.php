@@ -59,6 +59,12 @@ class network {
                 case "get":
                     curl_setopt($ch, CURLOPT_URL, $url."?para=".urlencode(json_encode($data)));
                     break;
+                case "put":
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); //POST数据
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    break;
                 default:
                     throw new \Exception('不支持的HTTP方式');
             }

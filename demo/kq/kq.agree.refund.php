@@ -22,12 +22,12 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 
 
 try {
-    $result = \beecloud\rest\api::refund($data);
+    $result = $api->refund($data);
     if ($result->result_code != 0 || $result->result_msg != "OK") {
         echo json_encode($result->err_detail);
         exit();
     }
-    echo $result->html;
+    echo "退款成功";
 } catch (Exception $e) {
     echo $e->getMessage();
 }

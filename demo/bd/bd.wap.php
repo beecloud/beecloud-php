@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCloud京东WAP支付</title>
+    <title>BeeCloud百度WAP支付</title>
 </head>
 <body>
 <?php
@@ -25,15 +25,14 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //$data["show_url"] = "";
 
 try {
-    $result = \beecloud\rest\api::bill($data);
+    $result = $api->bill($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();
     }
 
-    $htmlContent = $result->html;
     $url = $result->url;
-    echo $htmlContent;
+    header("Location:$url");
 } catch (Exception $e) {
     echo $e->getMessage();
 }

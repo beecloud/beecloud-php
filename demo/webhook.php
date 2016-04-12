@@ -8,7 +8,7 @@ $jsonStr = file_get_contents("php://input");
 
 $msg = json_decode($jsonStr);
 
-// webhook字段文档: http://beecloud.cn/doc/php.php#webhook
+// webhook字段文档: https://beecloud.cn/doc/?index=webhook
 
 // 验证签名
 $sign = md5($appId . $appSecret . $msg->timestamp);
@@ -26,13 +26,14 @@ if ($sign != $msg->sign) {
 // 如果发现这样的情况，请及时与我们联系，我们会与客户一起与这些不法分子做斗争。而且即使有这样极端的情况发生，
 // 只要按照前述要求做了购买的产品与订单金额的匹配性验证，在你的后端服务器不被入侵的前提下，你就不会有任何经济损失。
 
-if($msg->transactionType == "PAY") {
+if($msg->transaction_type == "PAY") { //支付的结果
     //付款信息
-    //支付状态是否变为支付成功
-    $result = $msg->tradeSuccess;
+    //支付状态是否变为支付成功,true代表成功
+    $result = $msg->trade_success;
 
-    //messageDetail 参考文档
-    switch ($msg->channelType) {
+    //message_detail 参考文档
+    //channel_type 微信/支付宝/银联/快钱/京东/百度/易宝/PAYPAL
+    switch ($msg->channel_type) {
         case "WX":
             /**
              * 处理业务
@@ -42,8 +43,18 @@ if($msg->transactionType == "PAY") {
             break;
         case "UN":
             break;
+        case "KUAIQIAN":
+            break;
+        case "JD":
+            break;
+        case "BD":
+            break;
+        case "YEE":
+            break;
+        case "PAYPAL":
+            break;
     }
-} else if ($msg->transactionType == "PAY") {
+} else if ($msg->transaction_type == "REFUND") { //退款的结果
 
 }
 

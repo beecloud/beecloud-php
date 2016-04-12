@@ -29,7 +29,7 @@
         <h2>login paypal to pay</h2>
         <button id="paypal">Paypal login to pay</button>
     </div>
-    <script type="text/javascript" src="dependency/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="../../statics/jquery-1.11.1.min.js"></script>
     <script>
         $(function() {
             $("#paypal").click(function() {

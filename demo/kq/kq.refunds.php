@@ -20,20 +20,21 @@
     $data["limit"] = 10;
 
     try {
-        $result = \beecloud\rest\api::refunds($data);
+        $result = $api->refunds($data);
         if ($result->result_code != 0 || $result->result_msg != "OK") {
             echo json_encode($result->err_detail);
             exit();
         }
         $refunds = $result->refunds;
-        echo "<tr><td>退款是否成功</td><td>退款创建时间</td><td>退款号</td><td>订单金额(分)</td><td>退款金额(分)</td><td>渠道类型</td><td>订单号</td><td>退款是否完成</td><td>订单标题</td></tr>";
+        $str = "<tr><td>退款是否成功</td><td>退款创建时间</td><td>退款号</td><td>订单金额(分)</td><td>退款金额(分)</td><td>渠道类型</td><td>订单号</td><td>退款是否完成</td><td>订单标题</td></tr>";
         foreach($refunds as $list) {
-            echo "<tr>";
-            foreach($list as $k=>$v) {
-                echo "<td>".($k=="result"?($v?"成功":"失败"):($k=="created_time"?date('Y-m-d H:i:s',$v/1000):($k=="finish"?($v?"完成":"未完成"):$v)))."</td>";
-            }
-            echo "</tr>";
+            $result = $list->result ? "成功" : "失败";
+            $create_time = $list->create_time ? date('Y-m-d H:i:s',$list->create_time/1000) : '';
+            $finish = $list->finish ? "完成" : "未完成";
+            $str .= "<tr><td>$result</td><td>$create_time</td><td>{$list->refund_no}</td><td>{$list->total_fee}</td>
+            	<td>{$list->refund_fee}</td><td>{$list->sub_channel}</td><td>{$list->bill_no}</td><td>$finish</td><td>{$list->title}</td></tr>";
         }
+        echo $str;
     } catch (Exception $e) {
         echo $e->getMessage();
     }

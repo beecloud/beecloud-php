@@ -32,19 +32,14 @@ $data["transfer_data"][] = json_decode(json_encode(array(
     "transfer_note" => "test"
 )));
 
-//选填 optional
-$data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
-
 try {
-    $result = \beecloud\rest\api::transfers($data);
+    $result = $api->transfers($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();
     }
     $url = $result->url;
-    ?>
-    <a href="<?php echo $url;?>">点击开始批量打款</a>
-    <?php
+    echo "<a href='$url'>点击开始批量打款</a>";
 } catch (Exception $e) {
     echo $e->getMessage();
 }

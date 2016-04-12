@@ -9,8 +9,8 @@
 require_once("../../../loader.php");
 
 $data = array();
-$appSecret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
-$data["app_id"] = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
+$appSecret = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
+$data["app_id"] = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["channel"] = "ALI_OFFLINE_QRCODE";
@@ -25,13 +25,12 @@ $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //$data["qr_pay_mode"] = 0;
 
 try {
-    $result = \beecloud\rest\api::bill($data);
+    $result = $api->offline_bill($data);
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();
     }
-
-    $code = $result->qr_code;
+    $code = $result->code_url;
 } catch (Exception $e) {
     echo $e->getMessage();
     exit();
@@ -42,10 +41,10 @@ try {
     <div id="msg"></div>
     <button id="cancel">取消支付</button>
 </div>
-<script type="text/javascript" src="../dependency/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="../dependency/qrcode.js"></script>
+<script type="text/javascript" src="../../../statics/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../../statics/qrcode.js"></script>
 <script>
-    if(<?php echo $code != NULL; ?>) {
+    if("<?php echo $code != NULL; ?>") {
         var options = {text: "<?php echo $code;?>"};
         var canvas = BCUtil.createQrCode(options);
         var wording=document.createElement('p');
@@ -55,24 +54,29 @@ try {
         element.appendChild(canvas);
     }
 
-    JQuery(function(){
+    $(function(){
         var billNo = "<?php echo $data["bill_no"];?>";
         var queryTimer = setInterval(function() {
-            JQuery("#msg").text("开始查询支付状态...");
-            JQuery.getJSON("ali.bill.status.php", {billNo:billNo}, function(res) {
-                console.log(res);
+            $("#msg").text("开始查询支付状态...");
+            $.getJSON("ali.bill.status.php", {billNo:billNo}, function(res) {
+                if(res.resultCode == 0 && res.pay_result){
+                    clearInterval(queryTimer);
+                    queryTimer = null;
+                    $("#msg").text("已经支付");
+                    $("#cancel").hide();
+                }
             });
         }, 3000);
-        Jquery("#cancel").click(function() {
+        $("#cancel").click(function() {
             if (queryTimer) {
                 clearInterval(queryTimer);
                 queryTimer = null;
             }
-            JQuery("#qrcode").empty();
-            JQuery("#msg").text("支付取消。。。");
-            JQuery.getJSON("ali.bill.status.php", {billNo:billNo}, function(res) {
+            $("#qrcode").empty();
+            $("#msg").text("支付取消。。。");
+            $.getJSON("ali.bill.status.php", {billNo:billNo}, function(res) {
                 console.log(res);
-                JQuery("#msg").text("支付已经取消");
+                $("#msg").text("支付已经取消");
             });
 
         });
