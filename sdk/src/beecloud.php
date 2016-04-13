@@ -236,10 +236,20 @@ class BCRESTApi {
         return $result;
     }
 
+    static final protected function put($api, $data, $timeout, $returnArray) {
+        $url = BCRESTUtil::getApiUrl() . $api;
+        $httpResultStr = BCRESTUtil::request($url, "put", $data, $timeout);
+        $result = json_decode($httpResultStr,!$returnArray ? false : true);
+        if (!$result) {
+            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
+        }
+        return $result;
+    }
+
     /**
      * @param array $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     static final public function bill(array $data, $method = 'post') {
         //param validation
@@ -249,12 +259,12 @@ class BCRESTApi {
             switch ($data["channel"]) {
                 case "WX_JSAPI":
                     if (!isset($data["openid"])) {
-                        throw new \Exception(NEED_WX_JSAPI_OPENID);
+                        throw new Exception(NEED_WX_JSAPI_OPENID);
                     }
                     break;
                 case "ALI_QRCODE":
                     if (!isset($data["qr_pay_mode"])) {
-                        throw new \Exception(NEED_QR_PAY_MODE);
+                        throw new Exception(NEED_QR_PAY_MODE);
                     }
                     break;
                 case "ALI_WEB":
@@ -263,37 +273,37 @@ class BCRESTApi {
                 case 'JD_WAP':
                 case "UN_WEB":
                     if (!isset($data["return_url"])) {
-                        throw new \Exception(NEED_RETURN_URL);
+                        throw new Exception(NEED_RETURN_URL);
                     }
                     break;
                 case "YEE_WAP":
                     if (!isset($data["identity_id"])) {
-                        throw new \Exception(NEED_IDENTITY_ID);
+                        throw new Exception(NEED_IDENTITY_ID);
                     }
                     break;
                 case "YEE_NOBANKCARD":
                     if (!isset($data["cardno"])) {
-                        throw new \Exception(NEED_CARDNO);
+                        throw new Exception(NEED_CARDNO);
                     }
                     if (!isset($data["cardpwd"])) {
-                        throw new \Exception(NEED_CARDPWD);
+                        throw new Exception(NEED_CARDPWD);
                     }
                     if (!isset($data["frqid"])) {
-                        throw new \Exception(NEED_FRQID);
+                        throw new Exception(NEED_FRQID);
                     }
                     break;
                 case "JD":
                 case "JD_WEB":
                 case "JD_WAP":
                     if (isset($data["bill_timeout"])) {
-                        throw new \Exception(BILL_TIMEOUT_ERROR);
+                        throw new Exception(BILL_TIMEOUT_ERROR);
                     }
                     break;
                 case "KUAIQIAN":
                 case "KUAIQIAN_WAP":
                 case "KUAIQIAN_WEB":
                     if (isset($data["bill_timeout"])) {
-                        throw new \Exception(BILL_TIMEOUT_ERROR);
+                        throw new Exception(BILL_TIMEOUT_ERROR);
                     }
                     break;
                 case "WX_APP":
@@ -311,7 +321,7 @@ class BCRESTApi {
                 case "PAYPAL_LIVE":
                     break;
                 default:
-                    throw new \Exception(NEED_VALID_PARAM . "channel");
+                    throw new Exception(NEED_VALID_PARAM . "channel");
                     break;
             }
         }
@@ -319,7 +329,7 @@ class BCRESTApi {
         switch ($method) {
             case 'get'://支付订单查询
                 if (!isset($data["id"])) {
-                    throw new \Exception(NEED_PARAM . "id");
+                    throw new Exception(NEED_PARAM . "id");
                 }
                 $order_id = $data["id"];
                 unset($data["id"]);
@@ -328,24 +338,24 @@ class BCRESTApi {
             case 'post': // 支付
             default:
                 if (!isset($data["channel"])) {
-                    throw new \Exception(NEED_PARAM . "channel");
+                    throw new Exception(NEED_PARAM . "channel");
                 }
                 if (!isset($data["total_fee"])) {
-                    throw new \Exception(NEED_PARAM . "total_fee");
+                    throw new Exception(NEED_PARAM . "total_fee");
                 } else if(!is_int($data["total_fee"]) || 1>$data["total_fee"]) {
-                    throw new \Exception(NEED_VALID_PARAM . "total_fee");
+                    throw new Exception(NEED_VALID_PARAM . "total_fee");
                 }
 
                 if (!isset($data["bill_no"])) {
-                    throw new \Exception(NEED_PARAM . "bill_no");
+                    throw new Exception(NEED_PARAM . "bill_no");
                 }
                 if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
-                    throw new \Exception(NEED_VALID_PARAM . "bill_no");
+                    throw new Exception(NEED_VALID_PARAM . "bill_no");
                 }
 
                 if (!isset($data["title"])) {
                     //TODO: 字节数
-                    throw new \Exception(NEED_PARAM . "title");
+                    throw new Exception(NEED_PARAM . "title");
                 }
                 return self::post(self::URI_BILL, $data, 30, false);
                 break;
@@ -367,7 +377,7 @@ class BCRESTApi {
         self::channelCheck($data);
 
         if (isset($data["bill_no"]) && !preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
-            throw new \Exception(NEED_VALID_PARAM . "bill_no");
+            throw new Exception(NEED_VALID_PARAM . "bill_no");
         }
         return self::get(self::URI_BILLS_COUNT, $data, 30, false);
     }
@@ -387,7 +397,7 @@ class BCRESTApi {
                 case "BD":
                     break;
                 default:
-                    throw new \Exception(NEED_VALID_PARAM . "channel");
+                    throw new Exception(NEED_VALID_PARAM . "channel");
                     break;
             }
         }
@@ -395,22 +405,22 @@ class BCRESTApi {
         switch ($method){
             case 'put': //预退款批量审核
                 if (!isset($data["channel"])) {
-                    throw new \Exception(NEED_PARAM . "channel");
+                    throw new Exception(NEED_PARAM . "channel");
                 }
                 if (!isset($data["ids"])) {
-                    throw new \Exception(NEED_PARAM . "ids");
+                    throw new Exception(NEED_PARAM . "ids");
                 }
                 if (!is_array($data["ids"])) {
-                    throw new \Exception(NEED_VALID_PARAM . "ids(array)");
+                    throw new Exception(NEED_VALID_PARAM . "ids(array)");
                 }
                 if (!isset($data["agree"])) {
-                    throw new \Exception(NEED_PARAM . "agree");
+                    throw new Exception(NEED_PARAM . "agree");
                 }
                 return self::put(self::URI_REFUND, $data, 30, false);
                 break;
             case 'get'://退款订单查询
                 if (!isset($data["id"])) {
-                    throw new \Exception(NEED_PARAM . "id");
+                    throw new Exception(NEED_PARAM . "id");
                 }
                 $order_id = $data["id"];
                 unset($data["id"]);
@@ -419,21 +429,21 @@ class BCRESTApi {
             case 'post': //退款
             default :
                 if (!isset($data["bill_no"])) {
-                    throw new \Exception(NEED_PARAM . "bill_no");
+                    throw new Exception(NEED_PARAM . "bill_no");
                 }
                 if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
-                    throw new \Exception(NEED_VALID_PARAM . "bill_no");
+                    throw new Exception(NEED_VALID_PARAM . "bill_no");
                 }
 
                 if (!isset($data["refund_no"])) {
-                    throw new \Exception(NEED_PARAM . "refund_no");
+                    throw new Exception(NEED_PARAM . "refund_no");
                 }
                 if (!preg_match('/^\d{8}[0-9A-Za-z]{3,24}$/', $data["refund_no"]) || preg_match('/^\d{8}0{3}/', $data["refund_no"])) {
-                    throw new \Exception(NEED_VALID_PARAM . "refund_no");
+                    throw new Exception(NEED_VALID_PARAM . "refund_no");
                 }
 
                 if(!is_int($data["refund_fee"]) || 1>$data["refund_fee"]) {
-                    throw new \Exception(NEED_VALID_PARAM . "refund_fee");
+                    throw new Exception(NEED_VALID_PARAM . "refund_fee");
                 }
                 return self::post(self::URI_REFUND, $data, 30, false);
                 break;
@@ -468,12 +478,12 @@ class BCRESTApi {
             case "BD":
                 break;
             default:
-                throw new \Exception(NEED_VALID_PARAM . "channel");
+                throw new Exception(NEED_VALID_PARAM . "channel");
                 break;
         }
 
         if (!isset($data["refund_no"])) {
-            throw new \Exception(NEED_PARAM . "refund_no");
+            throw new Exception(NEED_PARAM . "refund_no");
         }
         //param validation
         return self::get(self::URI_REFUND_STATUS, $data, 30, false);
@@ -485,7 +495,7 @@ class BCRESTApi {
         switch ($data["channel"]) {
             case "WX_REDPACK":
                 if (!isset($data['redpack_info'])) {
-                    throw new \Exception(NEED_PARAM . 'redpack_info');
+                    throw new Exception(NEED_PARAM . 'redpack_info');
                 }
                 break;
             case "WX_TRANSFER":
@@ -498,12 +508,12 @@ class BCRESTApi {
 
                 foreach($aliRequireNames as $v) {
                     if (!isset($data[$v])) {
-                        throw new \Exception(NEED_PARAM . $v);
+                        throw new Exception(NEED_PARAM . $v);
                     }
                 }
                 break;
             default:
-                throw new \Exception(NEED_VALID_PARAM . "channel = ALI_TRANSFER | WX_TRANSFER | WX_REDPACK");
+                throw new Exception(NEED_VALID_PARAM . "channel = ALI_TRANSFER | WX_TRANSFER | WX_REDPACK");
                 break;
         }
 
@@ -515,7 +525,7 @@ class BCRESTApi {
 
         foreach($requiedNames as $v) {
             if (!isset($data[$v])) {
-                throw new \Exception(NEED_PARAM . $v);
+                throw new Exception(NEED_PARAM . $v);
             }
         }
 
@@ -529,24 +539,24 @@ class BCRESTApi {
             case "ALI":
                 break;
             default:
-                throw new \Exception(NEED_VALID_PARAM . "channel only ALI");
+                throw new Exception(NEED_VALID_PARAM . "channel only ALI");
                 break;
         }
 
         if (!isset($data["batch_no"])) {
-            throw new \Exception(NEED_PARAM . "batch_no");
+            throw new Exception(NEED_PARAM . "batch_no");
         }
 
         if (!isset($data["account_name"])) {
-            throw new \Exception(NEED_PARAM . "account_name");
+            throw new Exception(NEED_PARAM . "account_name");
         }
 
         if (!isset($data["transfer_data"])) {
-            throw new \Exception(NEED_PARAM . "transfer_data");
+            throw new Exception(NEED_PARAM . "transfer_data");
         }
 
         if (!is_array($data["transfer_data"])) {
-            throw new \Exception(NEED_VALID_PARAM . "transfer_data(array)");
+            throw new Exception(NEED_VALID_PARAM . "transfer_data(array)");
         }
 
         return self::post(self::URI_TRANSFERS, $data, 30, false);
@@ -562,7 +572,7 @@ class BCRESTApi {
 
         foreach ($params as $v) {
             if (!isset($data[$v])) {
-                throw new \Exception(NEED_PARAM . $v);
+                throw new Exception(NEED_PARAM . $v);
             }
         }
         return self::post(self::URI_BC_TRANSFER, $data, 30, false);
@@ -576,7 +586,7 @@ class BCRESTApi {
                 case "WX_SCAN":
                 case "ALI_SCAN":
                     if (!isset($data['method']) && !isset($data['auth_code'])) {
-                        throw new \Exception(NEED_PARAM . "auth_code");
+                        throw new Exception(NEED_PARAM . "auth_code");
                     }
                     break;
                 case "WX_NATIVE":
@@ -584,30 +594,30 @@ class BCRESTApi {
                 case "SCAN":
                     break;
                 default:
-                    throw new \Exception(NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN | SCAN");
+                    throw new Exception(NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN | SCAN");
                     break;
             }
         }
 
         if (!isset($data["bill_no"])) {
-            throw new \Exception(NEED_PARAM . "bill_no");
+            throw new Exception(NEED_PARAM . "bill_no");
         }
         if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
-            throw new \Exception(NEED_VALID_PARAM . "bill_no");
+            throw new Exception(NEED_VALID_PARAM . "bill_no");
         }
 
         if (!isset($data['method'])) {
             if (!isset($data["channel"])) {
-                throw new \Exception(NEED_PARAM . "channel");
+                throw new Exception(NEED_PARAM . "channel");
             }
             if (!isset($data["total_fee"])) {
-                throw new \Exception(NEED_PARAM . "total_fee");
+                throw new Exception(NEED_PARAM . "total_fee");
             } else if(!is_int($data["total_fee"]) || 1>$data["total_fee"]) {
-                throw new \Exception(NEED_VALID_PARAM . "total_fee");
+                throw new Exception(NEED_VALID_PARAM . "total_fee");
             }
 
             if (!isset($data["title"])) {
-                throw new \Exception(NEED_PARAM . "title");
+                throw new Exception(NEED_PARAM . "title");
             }
         }
         return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
@@ -624,16 +634,16 @@ class BCRESTApi {
                 case "ALI_OFFLINE_QRCODE":
                     break;
                 default:
-                    throw new \Exception(NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN");
+                    throw new Exception(NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN");
                     break;
             }
         }
 
         if (!isset($data["bill_no"])) {
-            throw new \Exception(NEED_PARAM . "bill_no");
+            throw new Exception(NEED_PARAM . "bill_no");
         }
         if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
-            throw new \Exception(NEED_VALID_PARAM . "bill_no");
+            throw new Exception(NEED_VALID_PARAM . "bill_no");
         }
         return self::post(self::URI_OFFLINE_BILL_STATUS, $data, 30, false);
     }
@@ -646,29 +656,29 @@ class BCRESTApi {
                 case "WX":
                     break;
                 default:
-                    throw new \Exception(NEED_VALID_PARAM . "channel = ALI | WX");
+                    throw new Exception(NEED_VALID_PARAM . "channel = ALI | WX");
                     break;
             }
         }
 
         if (!isset($data["refund_fee"])) {
-            throw new \Exception(NEED_PARAM . "refund_fee");
+            throw new Exception(NEED_PARAM . "refund_fee");
         } else if(!is_int($data["refund_fee"]) || 1>$data["refund_fee"]) {
-            throw new \Exception(NEED_VALID_PARAM . "refund_fee");
+            throw new Exception(NEED_VALID_PARAM . "refund_fee");
         }
 
         if (!isset($data["bill_no"])) {
-            throw new \Exception(NEED_PARAM . "bill_no");
+            throw new Exception(NEED_PARAM . "bill_no");
         }
         if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
-            throw new \Exception(NEED_VALID_PARAM . "bill_no");
+            throw new Exception(NEED_VALID_PARAM . "bill_no");
         }
 
         if (!isset($data["refund_no"])) {
-            throw new \Exception(NEED_PARAM . "refund_no");
+            throw new Exception(NEED_PARAM . "refund_no");
         }
         if (!preg_match('/^\d{8}[0-9A-Za-z]{3,24}$/', $data["refund_no"]) || preg_match('/^\d{8}0{3}/', $data["refund_no"])) {
-            throw new \Exception(NEED_VALID_PARAM . "refund_no");
+            throw new Exception(NEED_VALID_PARAM . "refund_no");
         }
 
         return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
@@ -709,9 +719,61 @@ class BCRESTApi {
                 case "PAYPAL_LIVE":
                     break;
                 default:
-                    throw new \Exception(NEED_VALID_PARAM . "channel");
+                    throw new Exception(NEED_VALID_PARAM . "channel");
                     break;
             }
+        }
+    }
+
+    static final public function gateway_withdraw($data, $method){
+        self::baseParamCheck($data);
+
+        switch($method){
+            case 'post':
+                $validFields = array('bank_account_name', 'bank_account_no', 'bank_name', 'branch_bank_name',
+                    'subbranch_bank_name', 'is_personal', 'bank_province', 'bank_city', 'note',
+                    'email', 'withdraw_amount'
+                );
+                foreach($validFields as $v) {
+                    if (!isset($data[$v])) {
+                        throw new Exception(NEED_PARAM . $v);
+                    }
+                }
+                return self::post(self::URI_GATEWAY_WITHDRAW, $data, 30, false);
+                break;
+            case 'put':
+                $validFields = array('withdraw_id', 'agree');
+                foreach($validFields as $v) {
+                    if (!isset($data[$v])) {
+                        throw new Exception(NEED_PARAM . $v);
+                    }
+                }
+                return self::put(self::URI_GATEWAY_WITHDRAW, $data, 30, false);
+                break;
+        }
+    }
+
+    static final public function gateway_amount($data, $method){
+        self::baseParamCheck($data);
+        switch($method){
+            case 'post':
+                if (!isset($data['email'])) {
+                    throw new Exception(NEED_PARAM . 'email');
+                }
+                return self::get(self::URI_GATEWAY_AMOUNT, $data, 30, false);
+                break;
+            case 'put':
+                $validFields = array('email', 'delta_amount');
+                foreach($validFields as $v) {
+                    if (!isset($data[$v])) {
+                        throw new Exception(NEED_PARAM . $v);
+                    }
+                }
+                if(!is_numeric($data['delta_amount'])){
+                    throw new Exception(NEED_VALID_PARAM.'delta_amount');
+                }
+                return self::put(self::URI_GATEWAY_AMOUNT, $data, 30, false);
+                break;
         }
     }
 }

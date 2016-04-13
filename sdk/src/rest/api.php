@@ -36,7 +36,10 @@ class api {
     const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
     const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
     const URI_OFFLINE_REFUND = '/2/rest/offline/refund'; //线下退款
-    
+
+    const URI_GATEWAY_WITHDRAW = '/2/rest/gateway/withdraw'; //提现申请/提现审批
+    const URI_GATEWAY_AMOUNT = '/2/rest/gateway/amount'; //余额查询/余额修改
+
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
             throw new \Exception(NEED_PARAM . "app_id");
@@ -325,7 +328,7 @@ class api {
         return self::get(self::URI_REFUND_STATUS, $data, 30, false);
     }
     
-    //单笔打款 - 支付宝/微信
+    //单笔打款 - 支付宝/微信红包
     static final public function transfer(array $data) {
         self::baseParamCheck($data);
         switch ($data["channel"]) {
@@ -558,6 +561,58 @@ class api {
                     throw new \Exception(NEED_VALID_PARAM . "channel");
                     break;
             }
+        }
+    }
+
+    static final public function gateway_withdraw($data, $method){
+        self::baseParamCheck($data);
+
+        switch($method){
+            case 'post':
+                $validFields = array('bank_account_name', 'bank_account_no', 'bank_name', 'branch_bank_name',
+                        'subbranch_bank_name', 'is_personal', 'bank_province', 'bank_city', 'note',
+                        'email', 'withdraw_amount'
+                );
+                foreach($validFields as $v) {
+                    if (!isset($data[$v])) {
+                        throw new \Exception(NEED_PARAM . $v);
+                    }
+                }
+                return self::post(self::URI_GATEWAY_WITHDRAW, $data, 30, false);
+                break;
+            case 'put':
+                $validFields = array('withdraw_id', 'agree');
+                foreach($validFields as $v) {
+                    if (!isset($data[$v])) {
+                        throw new \Exception(NEED_PARAM . $v);
+                    }
+                }
+                return self::put(self::URI_GATEWAY_WITHDRAW, $data, 30, false);
+                break;
+        }
+    }
+
+    static final public function gateway_amount($data, $method){
+        self::baseParamCheck($data);
+        switch($method){
+            case 'post':
+                if (!isset($data['email'])) {
+                    throw new \Exception(NEED_PARAM . 'email');
+                }
+                return self::get(self::URI_GATEWAY_AMOUNT, $data, 30, false);
+                break;
+            case 'put':
+                $validFields = array('email', 'delta_amount');
+                foreach($validFields as $v) {
+                    if (!isset($data[$v])) {
+                        throw new \Exception(NEED_PARAM . $v);
+                    }
+                }
+                if(!is_numeric($data['delta_amount'])){
+                    throw new \Exception(NEED_VALID_PARAM.'delta_amount');
+                }
+                return self::put(self::URI_GATEWAY_AMOUNT, $data, 30, false);
+                break;
         }
     }
 }

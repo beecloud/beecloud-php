@@ -1,54 +1,271 @@
+<!doctype html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <title>支付页面</title>
+    <link rel="stylesheet" href="statics/index.css" type="text/css">
 </head>
 <body>
-<h1>BeeCloud Demo</h1>
-<ul>
-<!--    <li><a href="transfer/index.php">单笔打款</a></li>-->
-    <li><a href="paypal/ajax.php">paypal</a></li>
-    
-<!--    <li><a href="ali/ali.transfers.php">支付宝批量打款</a></li>-->
-    <li><a href="ali/ali.web.php">支付宝即时到账</a></li>
-    <li><a href="ali/ali.wap.php">支付宝移动网页</a></li>
-    <li><a href="ali/ali.qrcode.php">支付宝扫码</a></li>
-    <li><a href="ali/ali.bills.php">支付宝订单查询和退款</a></li>
-    <li><a href="ali/ali.refunds.php">支付宝退款查询</a></li>
-    
-    <li><a href="un/un.web.php">银联网页收银台</a></li>
-    <li><a href="un/un.bills.php">银联订单查询和退款</a></li>
-    <li><a href="un/un.refunds.php">银联退款查询</a></li>
-    
-    <li><a href="wx/wx.native.php">微信扫码</a></li>
-    <li><a href="wx/wx.jsapi.php">微信公众号支付(微信浏览器打开)</a></li>
-    <li><a href="wx/wx.bills.php">微信订单查询和退款</a></li>
-    <li><a href="wx/wx.refunds.php">微信退款查询和退款状态更新</a></li>
-    
-    <li><a href="jd/jd.web.php">京东PC网页</a></li>
-    <li><a href="jd/jd.wap.php">京东移动网页</a></li>
-    <li><a href="jd/jd.bills.php">京东订单查询和退款</a></li>
-    <li><a href="jd/jd.refunds.php">京东退款查询</a></li>
-    
-    <li><a href="bd/bd.web.php">百度PC网页</a></li>
-    <li><a href="bd/bd.wap.php">百度移动网页</a></li>
-    <li><a href="bd/bd.bills.php">百度订单查询和退款</a></li>
-    <li><a href="bd/bd.refunds.php">百度退款查询</a></li>
-    
-<!--    <li><a href="kq/kq.web.php">快钱PC网页</a></li>-->
-<!--    <li><a href="kq/kq.wap.php">快钱移动网页</a></li>-->
-<!--    <li><a href="kq/kq.bills.php">快钱订单查询和退款</a></li>-->
-<!--    <li><a href="kq/kq.refunds.php">快钱退款查询</a></li>-->
-    
-    <li><a href="yee/yee.web.php">易宝PC网页</a></li>
-    <li><a href="yee/yee.wap.php">易宝移动网页</a></li>
-    <li><a href="yee/yee.bills.php">易宝订单查询和退款</a></li>
-    <li><a href="yee/yee.refunds.php">易宝退款查询</a></li>
-    
-    <li><a href="queryById/index.php">根据ID查询订单记录、退款记录</a></li>
-</ul>
+<div>
+    <h2>应付总额： ¥0.01</h2>
+    <p>请选择支付方式</p>
+</div>
+<div>
+支付平台
+</div>
+<form action="" method="POST" target="_blank">
+    <div>
+        <ul class="clear" style="margin-top:20px">
+            <li class="clicked" onclick="paySwitch(this)">
+                <input type="radio" value="ALI_WEB" name="paytype" checked="checked">
+                <img src="http://beeclouddoc.qiniudn.com/ali.png" alt="">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="ALI_WAP" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/aliwap.png" alt="">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="ALI_QRCODE" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/alis.png" alt="">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="WX_NATIVE" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/wechats.png" alt="">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="WX_JSAPI" name="paytype">
+                <img src="http://7xavqo.com1.z0.glb.clouddn.com/wechatgzh.png" alt="">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="UN_WEB" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/unionpay.png" alt="">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="JD_WEB" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/jd.png" alt="JD　WEB">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="JD_WAP" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/jdwap.png" alt="JD　WAP">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="BD_WEB" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/bd.png" alt="BD WEB">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="BD_WAP" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/bdwap.png" alt="BD WEB">
+            </li>
+            <!--<li onclick="paySwitch(this)">
+                <input type="radio" value="KUAIQIAN_WEB" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/kq.png" alt="KUAIQIAN WEB">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="KUAIQIAN_WAP" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/kqwap.png" alt="KUAIQIAN WAP">
+            </li>-->
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="YEE_WEB" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/yb.png" alt="YEE WEB">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="YEE_WAP" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/ybwap.png" alt="YEE WAP">
+            </li>
+            <!--<li onclick="paySwitch(this)">
+                <input type="radio" value="YEE_NOBANKCARD" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/ybcard.png" alt="YEE NOBANKCARD">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="PAYPAL_PAYPAL" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/paypal.png" alt="PAYPAL PAYPAL">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="PAYPAL_CREDITCARD" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/icon_paypal_credit.png" alt="PAYPAL CREDITCARD WEB">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="PAYPAL_SAVED_CREDITCARD" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/icon_paypal_kuaijiezhifu.png" alt="PAYPAL SAVED CREDITCARD">
+            </li>-->
+        </ul>
+    </div>
+    <div style="clear: both;">
+        <input type="button" id="btn_pay" class="button" value="确认付款">
+    </div>
+</form>
+<hr/>
+<div>
+    <h2>微信、支付宝企业打款</h2>
+    <p>请选择渠道进行操作</p>
+    <p>注:单个微信红包金额介于[1.00元，200.00元]之间</p>
+</div>
+<form method="POST" >
+	<div>
+    	<ul>
+   		 	<li class="clicked" onclick="paySwitch(this)">
+                <input type="radio" value="WX_REDPACK" name="transferType"  checked="checked">
+                <img src="http://beeclouddoc.qiniudn.com/wx_redpack.png" alt="微信红包">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="WX_TRANSFER" name="transferType">
+                <img src="http://beeclouddoc.qiniudn.com/wx_transfer.png" alt="微信单笔打款">
+            </li>
+            <!--<li onclick="paySwitch(this)">
+                <input type="radio" value="ALI_TRANSFER" name="transferType">
+                <img src="http://beeclouddoc.qiniudn.com/ali_transfer.png" alt="支付宝单笔打款">
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="ALI_TRANSFERS" name="transferType">
+                <img src="http://beeclouddoc.qiniudn.com/alitransfer.png" alt="支付宝批量打款">
+            </li>-->
+    	</ul>
+    </div>
+    <br/><br/>
+     <div style="clear: both;">
+        <input type="button" id="play_money" class="button" value="确认打款">
+    </div>
+</form>
+<hr/>
+
+<!--<div>
+    <h2>BC代付</h2>
+</div>
+<form action="" method="POST" >
+    <tr><input type="input" name="email" size=10 value ="test@beecloud.cn" /></tr>
+    <input type="button" id="bc_helppay" class="button" value="确认BC代付">
+</form>
+<hr/>-->
 
 <div>
-    <h1>Supported By:<a href="https://github.com/beecloud/beecloud-rest-api">BeeCloud RESTful API</a></h1>
+    <h2>订单查询及发起退款，退款查询，退款状态查询</h2>
+    <p>请选择渠道进行操作</p>
 </div>
+
+<form method="POST">
+    <div>
+        <ul class="clear" style="margin-top:20px">
+            <li class="clicked" onclick="querySwitch(this)">
+                <input type="radio" value="ALI" name="querytype" checked="checked">
+                <img src="http://beeclouddoc.qiniudn.com/ali.png" alt="">
+            </li>
+            <li onclick="querySwitch(this)">
+                <input type="radio" value="WX" name="querytype">
+                <img src="http://beeclouddoc.qiniudn.com/wechat.png" alt="WX">
+            </li>
+            <li onclick="querySwitch(this)">
+                <input type="radio" value="UN" name="querytype">
+                <img src="http://beeclouddoc.qiniudn.com/unionpay.png" alt="UN">
+            </li>
+            <li onclick="querySwitch(this)">
+                <input type="radio" value="JD" name="querytype">
+                <img src="http://beeclouddoc.qiniudn.com/jd.png" alt="JD">
+            </li>
+            <li onclick="querySwitch(this)">
+                <input type="radio" value="BD" name="querytype">
+                <img src="http://beeclouddoc.qiniudn.com/bd.png" alt="BAIDU">
+            </li>
+            <!--<li onclick="querySwitch(this)">
+                <input type="radio" value="KUAIQIAN" name="querytype">
+                <img src="http://beeclouddoc.qiniudn.com/kq.png" alt="KUAIQIAN">
+            </li>-->
+            <li onclick="querySwitch(this)">
+                <input type="radio" value="YEE" name="querytype">
+                <img src="http://beeclouddoc.qiniudn.com/yb.png" alt="YEE">
+            </li>
+        </ul>
+    </div>
+    <div style="clear: both;">
+        <input id="queryBIll" type="button" class="button" style="display:inline;" value="订单查询">
+        <input id="queryRefund" type="button" class="button" style="display:inline;" value="退款查询">
+    </div>
+</form>
+
+<hr/>
+
+<div style="margin:0px 0px 30px 0px;">
+    <h2>根据ID查询订单记录、退款记录</h2>
+    <p>请输入ID:</p>
+    <form method="POST">
+        <input type="text" name="id" style="display:block;width:300px;height:25px">
+        <div style="clear: both;">
+            <input id="billQueryById" type="button" class="button" style="display:inline;" value="订单查询">
+            <input id="refundQueryById" type="button" class="button" style="display:inline;" value="退款查询">
+        </div>
+    </form>
+</div>
+
+
 </body>
+<script type="text/javascript" src="statics/jquery-1.11.1.min.js"></script>
+<script type="text/javascript">
+    function paySwitch(that) {
+        var li = that.parentNode.children;
+        for (var i = 0; i < li.length; i++) {
+            li[i].className = "";
+            li[i].childNodes[1].removeAttribute("checked");
+        }
+        that.className = "clicked";
+        that.childNodes[1].setAttribute("checked", "checked");
+    }
+    function querySwitch(that) {
+        var li = that.parentNode.children;
+        for (var i = 0; i < li.length; i++) {
+            li[i].className = "";
+            li[i].childNodes[1].removeAttribute("checked");
+        }
+        that.className = "clicked";
+        that.childNodes[1].setAttribute("checked", "checked");
+    }
+
+    $("#btn_pay").click(function(){
+        var type = $("input[name='paytype']:checked").val();
+        if(!type){
+            alert("请选择支付方式");return;
+        }
+        window.open('./pay.bill.php?type=' + type);
+    });
+
+    $("#queryBIll").click(function(){
+        var type = $("input[name='querytype']:checked").val();
+        if(!type){
+            alert("请选择渠道方式");return;
+        }
+        window.open('./bill.query.php?type=' + type);
+    });
+
+    $("#queryRefund").click(function(){
+        var type = $("input[name='querytype']:checked").val();
+        if(!type){
+            alert("请选择渠道方式");return;
+        }
+        window.open('./refund.query.php?type=' + type);
+    });
+
+    $("#billQueryById").click(function(){
+        var id = $("input[name='id']").val();
+        if(!id){
+            alert('请输入订单唯一标识id');
+            return;
+        }
+        window.open('./query.byid.php?type=bill&id=' + id);
+    });
+
+    $("#refundQueryById").click(function(){
+        var id = $("input[name='id']").val();
+        if(!id){
+            alert('请输入退款订单唯一标识id');
+            return;
+        }
+        window.open('./query.byid.php?type=refund&id=' + id);
+    });
+
+    $("#play_money").click(function(){
+        var type = $("input[name='transferType']:checked").val();
+        if(!type){
+            alert("请选择渠道方式");return;
+        }
+        window.open('./transfer.bill.php?type=' + type);
+    });
+</script>
 </html>
