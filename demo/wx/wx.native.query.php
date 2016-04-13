@@ -13,8 +13,3 @@ $data["channel"] = "WX_NATIVE";
 $result = $api->bills($data);
 print json_encode($result);
 
-
-
-
-
-
