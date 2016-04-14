@@ -38,6 +38,7 @@ class apiTest extends PHPUnit_Framework_TestCase
 		$data["timestamp"] = $this->timestamp;
 		$data["app_sign"] = $this->appSign;
 		$data["channel"] = "ALI";
+		$data["limit"] = 10;
 		$result = $this->api->bills($data);
 		$this->assertGreaterThan(0, count($result->bills));
 	}
@@ -82,6 +83,7 @@ class apiTest extends PHPUnit_Framework_TestCase
 		$data["timestamp"] = $this->timestamp;
 		$data["app_sign"] = $this->appSign;
 		$data["channel"] = "ALI";
+		$data["limit"] = 10;
 		$result = $this->api->refunds($data);
 		$this->assertGreaterThan(0, count($result->refunds));
 	}
