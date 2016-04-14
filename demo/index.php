@@ -131,8 +131,7 @@
 <!--<div>
     <h2>BC代付</h2>
 </div>
-<form action="" method="POST" >
-    <tr><input type="input" name="email" size=10 value ="test@beecloud.cn" /></tr>
+<form method="POST" >
     <input type="button" id="bc_helppay" class="button" value="确认BC代付">
 </form>
 <hr/>-->
@@ -258,6 +257,10 @@
             return;
         }
         window.open('./query.byid.php?type=refund&id=' + id);
+    });
+
+    $("#bc_helppay").click(function(){
+        window.open('./transfer.bill.php?type=BC_TRANSFER');
     });
 
     $("#play_money").click(function(){

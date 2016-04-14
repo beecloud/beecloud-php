@@ -4,18 +4,6 @@
  *
  */
 
-const UNEXPECTED_RESULT = "非预期的返回结果:";
-const NEED_PARAM = "需要必填字段:";
-const NEED_VALID_PARAM = "字段值不合法:";
-const NEED_WX_JSAPI_OPENID = "微信公众号支付(WX_JSAPI) 需要openid字段";
-const NEED_RETURN_URL = "当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或JD_WAP 或 JD_WEB时 return_url为必填";
-const NEED_IDENTITY_ID = "当channel参数为 YEE_WAP时 identity_id为必填";
-const BILL_TIMEOUT_ERROR = "当channel参数为 JD* 不支持bill_timeout";
-const NEED_QR_PAY_MODE = '当channel参数为 ALI_QRCODE时 qr_pay_mode为必填';
-const NEED_CARDNO = '当channel参数为 YEE_NOBANKCARD时 cardno为必填';
-const NEED_CARDPWD = '当channel参数为 YEE_NOBANKCARD时 cardpwd为必填';
-const NEED_FRQID = '当channel参数为 YEE_NOBANKCARD时 frqid为必填';
-
 class BCRESTUtil {
     static final public function getApiUrl() {
         $domainList = array("apibj.beecloud.cn", "apisz.beecloud.cn", "apiqd.beecloud.cn", "apihz.beecloud.cn");
@@ -566,7 +554,7 @@ class BCRESTApi {
     static final public function bc_transfer(array $data) {
         self::baseParamCheck($data);
         $params = array(
-            'bill_no', 'title', 'trade_source', 'bank_code', 'bank_associated_code', 'bank_fullname',
+            'total_fee', 'bill_no', 'title', 'trade_source', 'bank_code', 'bank_associated_code', 'bank_fullname',
             'card_type', 'account_type', 'account_no', 'account_name'
         );
 
@@ -575,6 +563,9 @@ class BCRESTApi {
                 throw new Exception(NEED_PARAM . $v);
             }
         }
+        if(!in_array($data['card_type'], array('DE', 'CR'))) throw new Exception(NEED_VALID_PARAM . $v);
+        if(!in_array($data['account_type'], array('P', 'C'))) throw new Exception(NEED_VALID_PARAM . $v);
+
         return self::post(self::URI_BC_TRANSFER, $data, 30, false);
     }
 

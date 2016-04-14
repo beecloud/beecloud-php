@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCloud<?php echo $title;?>订单查询示例</title>
+    <title>BeeCloud 根据ID查询记录示例</title>
 </head>
 <body>
 <table border="1" align="center" cellspacing=0>
@@ -10,8 +10,8 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
-$data["app_id"] = "c37d661d-7e61-49ea-96a5-68c34e83db3b";
+$appSecret = APP_ID;
+$data["app_id"] = APP_SECRET;
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["id"] = $_GET['id'];
