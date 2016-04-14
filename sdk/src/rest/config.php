@@ -11,7 +11,5 @@ const NEED_CARDNO = '当channel参数为 YEE_NOBANKCARD时 cardno为必填';
 const NEED_CARDPWD = '当channel参数为 YEE_NOBANKCARD时 cardpwd为必填';
 const NEED_FRQID = '当channel参数为 YEE_NOBANKCARD时 frqid为必填';
 
-const BILL_TIMEOUT_ERROR = "当channel参数为 JD* 或 KUAIQIAN* 不支持bill_timeout";
-
 const APP_ID = 'c37d661d-7e61-49ea-96a5-68c34e83db3b';
 const APP_SECRET = 'c37d661d-7e61-49ea-96a5-68c34e83db3b';

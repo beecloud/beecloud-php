@@ -2,8 +2,8 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = APP_ID;
-$data["app_id"] = APP_SECRET;
+$appSecret = APP_SECRET;
+$data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["total_fee"] = 100;
@@ -34,8 +34,8 @@ switch($type) {
         $data["transfer_no"] = "trans" . time();
 
         //收款方的id 账号和 名字也需要对应
-        $data["channel_user_id"] = 'h07061108@163.com';   //收款人账户
-        $data["channel_user_name"] = '胡中有'; //收款人账户姓名
+        $data["channel_user_id"] = '';   //收款人账户
+        $data["channel_user_name"] = ''; //收款人账户姓名
 
         $data["account_name"] = "苏州比可网络科技有限公司"; //注意此处需要和企业账号对应的全称
         break;

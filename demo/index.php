@@ -2,16 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>支付页面</title>
+    <title>BeeCloud支付示例</title>
     <link rel="stylesheet" href="statics/index.css" type="text/css">
 </head>
 <body>
 <div>
     <h2>应付总额： ¥0.01</h2>
     <p>请选择支付方式</p>
-</div>
-<div>
-支付平台
 </div>
 <form action="" method="POST" target="_blank">
     <div>
@@ -88,9 +85,14 @@
                 <input type="radio" value="PAYPAL_SAVED_CREDITCARD" name="paytype">
                 <img src="http://beeclouddoc.qiniudn.com/icon_paypal_kuaijiezhifu.png" alt="PAYPAL SAVED CREDITCARD">
             </li>-->
+
+            <li onclick="paySwitch(this)">
+                <input type="radio" name="paytype" value="BC_GATEWAY">
+                <img src="statics/images/gateway_pay.png" alt="BC GATEWAY" >
+            </li>
         </ul>
     </div>
-    <div style="clear: both;">
+    <div>
         <input type="button" id="btn_pay" class="button" value="确认付款">
     </div>
 </form>
@@ -102,7 +104,7 @@
 </div>
 <form method="POST" >
 	<div>
-    	<ul>
+    	<ul class="clear">
    		 	<li class="clicked" onclick="paySwitch(this)">
                 <input type="radio" value="WX_REDPACK" name="transferType"  checked="checked">
                 <img src="http://beeclouddoc.qiniudn.com/wx_redpack.png" alt="微信红包">
@@ -121,8 +123,7 @@
             </li>-->
     	</ul>
     </div>
-    <br/><br/>
-     <div style="clear: both;">
+     <div>
         <input type="button" id="play_money" class="button" value="确认打款">
     </div>
 </form>
@@ -140,7 +141,6 @@
     <h2>订单查询及发起退款，退款查询，退款状态查询</h2>
     <p>请选择渠道进行操作</p>
 </div>
-
 <form method="POST">
     <div>
         <ul class="clear" style="margin-top:20px">
@@ -172,9 +172,13 @@
                 <input type="radio" value="YEE" name="querytype">
                 <img src="http://beeclouddoc.qiniudn.com/yb.png" alt="YEE">
             </li>
+            <li onclick="querySwitch(this)">
+                <input type="radio" name="querytype" value="BC">
+                <img src="statics/images/bc.png" alt="BC" >
+            </li>
         </ul>
     </div>
-    <div style="clear: both;">
+    <div>
         <input id="queryBIll" type="button" class="button" style="display:inline;" value="订单查询">
         <input id="queryRefund" type="button" class="button" style="display:inline;" value="退款查询">
     </div>
@@ -182,19 +186,18 @@
 
 <hr/>
 
-<div style="margin:0px 0px 30px 0px;">
+<div>
     <h2>根据ID查询订单记录、退款记录</h2>
     <p>请输入ID:</p>
-    <form method="POST">
-        <input type="text" name="id" style="display:block;width:300px;height:25px">
-        <div style="clear: both;">
-            <input id="billQueryById" type="button" class="button" style="display:inline;" value="订单查询">
-            <input id="refundQueryById" type="button" class="button" style="display:inline;" value="退款查询">
-        </div>
-    </form>
 </div>
-
-
+<form method="POST">
+    <div></div>
+    <div style="margin-bottom: 20px;">
+        <input type="text" name="id" style="display:block;width:300px;height:25px">
+        <input id="billQueryById" type="button" class="button" style="display:inline;" value="订单查询">
+        <input id="refundQueryById" type="button" class="button" style="display:inline;" value="退款查询">
+    </div>
+</form>
 </body>
 <script type="text/javascript" src="statics/jquery-1.11.1.min.js"></script>
 <script type="text/javascript">
@@ -257,10 +260,6 @@
             return;
         }
         window.open('./query.byid.php?type=refund&id=' + id);
-    });
-
-    $("#bc_helppay").click(function(){
-        window.open('./transfer.bill.php?type=BC_TRANSFER');
     });
 
     $("#play_money").click(function(){

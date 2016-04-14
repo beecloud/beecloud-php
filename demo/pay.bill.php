@@ -2,8 +2,8 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = APP_ID;
-$data["app_id"] = APP_SECRET;
+$appSecret = APP_SECRET;
+$data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["total_fee"] = 1;
@@ -146,7 +146,6 @@ try {
     }else{
         $result =  $api->bill($data);
     }
-    file_put_contents('/tmp/a', print_r($result, 1));
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();

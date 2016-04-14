@@ -22,6 +22,14 @@ body {
     font-size: 1em;
 }
 
+div{
+    margin: 0 15px;
+}
+
+hr {
+    margin: 10px 0px 0px 15px;
+}
+
 ul {
     list-style: none;
     padding: 0;
