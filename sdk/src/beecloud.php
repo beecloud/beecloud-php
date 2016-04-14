@@ -307,6 +307,12 @@ class BCRESTApi {
                 case "BD_WEB":
                 case "PAYPAL_SANDBOX":
                 case "PAYPAL_LIVE":
+                case "BC_KUAIJIE" :
+                    break;
+                case "BC_GATEWAY":
+                    if (!isset($data["bank"])) {
+                        throw new Exception(NEED_PARAM.'bank');
+                    }
                     break;
                 default:
                     throw new Exception(NEED_VALID_PARAM . "channel");
@@ -383,6 +389,7 @@ class BCRESTApi {
                 case "KUAIQIAN":
                 case "YEE":
                 case "BD":
+                case "BC":
                     break;
                 default:
                     throw new Exception(NEED_VALID_PARAM . "channel");
@@ -708,6 +715,9 @@ class BCRESTApi {
                 case "PAYPAL":
                 case "PAYPAL_SANDBOX":
                 case "PAYPAL_LIVE":
+                case "BC" :
+                case "BC_GATEWAY" :
+                case "BC_KUAIJIE" :
                     break;
                 default:
                     throw new Exception(NEED_VALID_PARAM . "channel");

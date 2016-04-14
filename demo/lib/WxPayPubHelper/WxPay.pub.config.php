@@ -15,7 +15,7 @@ class WxPayConf_pub {
 
 	//=======【JSAPI路径设置】===================================
 	//获取access_token过程中的跳转uri，通过跳转将code传入jsapi支付页面
-	const JS_API_CALL_URL = 'https://beecloud.cn/beecloud-demo/v2/demo/wx.jsapi.php';
+	const JS_API_CALL_URL = 'http://wxactivity.beecloud.cn/redpack/demo/pay.bill.php?type=WX_JSAPI';
 
 	//=======【curl超时设置】===================================
 	//本例程通过curl使用HTTP POST方法，此处可修改其超时时间，默认为30秒

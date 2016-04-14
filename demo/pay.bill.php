@@ -113,6 +113,23 @@ switch($type){
         require_once 'ali.offline.qrcode/index.php';
         exit();
         break;
+    case 'BC_GATEWAY' :
+        $data["channel"] = "BC_GATEWAY";
+        /*
+        CMB	  招商银行    ICBC	工商银行   CCB   建设银行（暂时不支持）
+        BOC	  中国银行    ABC    农业银行   BOCM	交通银行
+        SPDB  浦发银行    GDB	广发银行   CITIC	中信银行
+        CEB	  光大银行    CIB	兴业银行   SDB	平安银行
+        CMBC  民生银行
+        */
+        $data["bank"] = "ICBC";
+        break;
+    case 'BC_KUAIJIE' :
+        $data["channel"] = "BC_KUAIJIE";
+        break;
+    default :
+        exit("No this type.");
+        break;
 }
 ?>
 <!DOCTYPE html>
@@ -129,6 +146,7 @@ try {
     }else{
         $result =  $api->bill($data);
     }
+    file_put_contents('/tmp/a', print_r($result, 1));
     if ($result->result_code != 0) {
         echo json_encode($result);
         exit();

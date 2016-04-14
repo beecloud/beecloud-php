@@ -41,6 +41,13 @@ switch($type){
         $data["channel"] = "KUAIQIAN";
         $title = "快钱";
         break;
+    case "BC" :
+        $data["channel"] = "BC";
+        $title = "BC网关/快捷支付";
+        break;
+    default :
+        exit("No this type.");
+        break;
 }
 ?>
 <!DOCTYPE html>

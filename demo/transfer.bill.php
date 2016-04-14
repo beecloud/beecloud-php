@@ -78,6 +78,9 @@ switch($type) {
         //选填optional
         $data["optional"] = (object)array("tag"=>"msgtoreturn"); //附加数据
         break;
+    default :
+        exit("No this type.");
+        break;
 }
 ?>
 <!DOCTYPE html>

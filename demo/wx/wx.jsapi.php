@@ -19,7 +19,6 @@ if (!isset($_GET['code'])){
     $openid = $jsApi->getOpenId();
 }
 
-//$data["openid"] = "o3kKrjlUsMnv__cK5DYZMl0JoAkY";
 $data["openid"] = $openid;
 ?>
 
