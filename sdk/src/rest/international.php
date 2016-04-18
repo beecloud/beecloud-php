@@ -1,9 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dengze
- * Date: 9/6/15
- * Time: 15:59
+ * paypal
  */
 namespace beecloud;
 
@@ -83,7 +80,7 @@ class international {
 
         if (!isset($data["total_fee"])) {
             throw new \Exception(NEED_PARAM . "total_fee");
-        } else if(!is_int($data["total_fee"]) || 1>$data["total_fee"]) {
+        } else if(!is_int($data["total_fee"]*100) || 1>$data["total_fee"]*100) {
             throw new \Exception(NEED_VALID_PARAM . "total_fee");
         }
 

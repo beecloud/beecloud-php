@@ -43,6 +43,10 @@ switch($type){
         $data["channel"] = "BC";
         $title = "BC支付";
         break;
+    case "PAYPAL" :
+        $data["channel"] = "PAYPAL";
+        $title = "PAYPAL";
+        break;
     default :
         exit("No this type.");
         break;

@@ -41,6 +41,10 @@ switch($type){
         $data["channel"] = "KUAIQIAN";
         $title = "快钱";
         break;
+    case "PAYPAL" :
+        $data["channel"] = "PAYPAL";
+        $title = "PAYPAL";
+        break;
     case "BC" :
         $data["channel"] = "BC";
         $title = "BC网关/快捷支付";

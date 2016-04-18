@@ -157,7 +157,7 @@ class BCRESTInternational {
 
         if (!isset($data["total_fee"])) {
             throw new Exception(NEED_PARAM . "total_fee");
-        } else if(!is_int($data["total_fee"]) || 1>$data["total_fee"]) {
+        } else if(!is_int($data["total_fee"]*100) || 1>$data["total_fee"]*100) {
             throw new Exception(NEED_VALID_PARAM . "total_fee");
         }
 
@@ -260,6 +260,7 @@ class BCRESTApi {
                 case 'JD_WEB':
                 case 'JD_WAP':
                 case "UN_WEB":
+                case "JD_B2B":
                     if (!isset($data["return_url"])) {
                         throw new Exception(NEED_RETURN_URL);
                     }

@@ -8,4 +8,4 @@ $aliTradeSuccess = ($_GET["trade_status"] == "TRADE_SUCCESS" || $_GET["trade_sta
  * 银联 return_url 获取支付状态
  */
 
-$unTradeSuccess = $_POST["respCode"] == "00" ? true : false;
+$unTradeSuccess = $_GET["respCode"] == "00" ? true : false;

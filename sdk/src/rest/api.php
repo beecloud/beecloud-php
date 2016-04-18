@@ -97,6 +97,7 @@ class api {
 	            case 'JD_WEB':
 	            case 'JD_WAP': 
 	            case "UN_WEB":
+				case "JD_B2B":
 	                if (!isset($data["return_url"])) {
 	                    throw new \Exception(NEED_RETURN_URL);
 	                }

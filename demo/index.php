@@ -72,12 +72,12 @@
             <!--<li onclick="paySwitch(this)">
                 <input type="radio" value="YEE_NOBANKCARD" name="paytype">
                 <img src="http://beeclouddoc.qiniudn.com/ybcard.png" alt="YEE NOBANKCARD">
-            </li>
+            </li>-->
             <li onclick="paySwitch(this)">
                 <input type="radio" value="PAYPAL_PAYPAL" name="paytype">
                 <img src="http://beeclouddoc.qiniudn.com/paypal.png" alt="PAYPAL PAYPAL">
             </li>
-            <li onclick="paySwitch(this)">
+            <!--<li onclick="paySwitch(this)">
                 <input type="radio" value="PAYPAL_CREDITCARD" name="paytype">
                 <img src="http://beeclouddoc.qiniudn.com/icon_paypal_credit.png" alt="PAYPAL CREDITCARD WEB">
             </li>
@@ -171,6 +171,10 @@
             <li onclick="querySwitch(this)">
                 <input type="radio" value="YEE" name="querytype">
                 <img src="http://beeclouddoc.qiniudn.com/yb.png" alt="YEE">
+            </li>
+            <li onclick="querySwitch(this)">
+                <input type="radio" value="PAYPAL" name="querytype">
+                <img src="http://beeclouddoc.qiniudn.com/paypal.png" alt="PAYPAL">
             </li>
             <li onclick="querySwitch(this)">
                 <input type="radio" name="querytype" value="BC">

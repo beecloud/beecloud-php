@@ -40,6 +40,10 @@ switch($type){
         $data["channel"] = "BD_WAP";
         $title = "百度移动网页";
         break;
+    case 'JD_B2B' :
+        $data["channel"] = "JD_B2B";
+        $title = "京东B2B";
+        break;
     case 'JD_WEB' :
         $data["channel"] = "JD_WEB";
         $title = "京东网页";
@@ -152,8 +156,10 @@ try {
     }
     if(isset($result->html)) {
         echo $result->html;
-    }else{
+    }else if(isset($result->url)){
         header("Location:$result->url");
+    }else if(isset($result->credit_card_id)){
+        echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
     }
 } catch (Exception $e) {
     echo $e->getMessage();

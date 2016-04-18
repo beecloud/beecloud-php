@@ -15,8 +15,6 @@
 1. BeeCloud[注册](http://beecloud.cn/register/)账号
 2. BeeCloud中创建应用，[填写支付渠道所需参数](http://beecloud.cn/doc/payapply)
 
-使用中遇到的问题欢迎来QQ群-429506653提问
-
 ## 引入BeeCloud API
 
 ###使用[composer](https://getcomposer.org/)
