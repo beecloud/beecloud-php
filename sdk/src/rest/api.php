@@ -456,8 +456,11 @@ class api {
 	        if (!isset($data["title"])) {
 	            throw new \Exception(NEED_PARAM . "title");
 	        }
+        	return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
         }
-        return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
+		$bill_no = $data["bill_no"];
+		unset($data["bill_no"]);
+		return self::post(self::URI_OFFLINE_BILL.'/'.$bill_no, $data, 30, false);
     }
     
 	static final public function offline_bill_status(array $data) {

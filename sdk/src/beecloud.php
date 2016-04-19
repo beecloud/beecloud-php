@@ -618,8 +618,11 @@ class BCRESTApi {
             if (!isset($data["title"])) {
                 throw new Exception(NEED_PARAM . "title");
             }
+            return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
         }
-        return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
+        $bill_no = $data["bill_no"];
+        unset($data["bill_no"]);
+        return self::post(self::URI_OFFLINE_BILL.'/'.$bill_no, $data, 30, false);
     }
 
     static final public function offline_bill_status(array $data) {
@@ -724,58 +727,6 @@ class BCRESTApi {
                     throw new Exception(NEED_VALID_PARAM . "channel");
                     break;
             }
-        }
-    }
-
-    static final public function gateway_withdraw($data, $method){
-        self::baseParamCheck($data);
-
-        switch($method){
-            case 'post':
-                $validFields = array('bank_account_name', 'bank_account_no', 'bank_name', 'branch_bank_name',
-                    'subbranch_bank_name', 'is_personal', 'bank_province', 'bank_city', 'note',
-                    'email', 'withdraw_amount'
-                );
-                foreach($validFields as $v) {
-                    if (!isset($data[$v])) {
-                        throw new Exception(NEED_PARAM . $v);
-                    }
-                }
-                return self::post(self::URI_GATEWAY_WITHDRAW, $data, 30, false);
-                break;
-            case 'put':
-                $validFields = array('withdraw_id', 'agree');
-                foreach($validFields as $v) {
-                    if (!isset($data[$v])) {
-                        throw new Exception(NEED_PARAM . $v);
-                    }
-                }
-                return self::put(self::URI_GATEWAY_WITHDRAW, $data, 30, false);
-                break;
-        }
-    }
-
-    static final public function gateway_amount($data, $method){
-        self::baseParamCheck($data);
-        switch($method){
-            case 'post':
-                if (!isset($data['email'])) {
-                    throw new Exception(NEED_PARAM . 'email');
-                }
-                return self::get(self::URI_GATEWAY_AMOUNT, $data, 30, false);
-                break;
-            case 'put':
-                $validFields = array('email', 'delta_amount');
-                foreach($validFields as $v) {
-                    if (!isset($data[$v])) {
-                        throw new Exception(NEED_PARAM . $v);
-                    }
-                }
-                if(!is_numeric($data['delta_amount'])){
-                    throw new Exception(NEED_VALID_PARAM.'delta_amount');
-                }
-                return self::put(self::URI_GATEWAY_AMOUNT, $data, 30, false);
-                break;
         }
     }
 }
