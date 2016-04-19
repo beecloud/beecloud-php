@@ -56,9 +56,11 @@ try {
             }
             $("#qrcode").empty();
             $("#msg").text("支付取消。。。");
-            $.getJSON("ali.offline.qrcode/ali.bill.status.php", {"billNo":billNo}, function(res) {
-                $("#msg").text("支付已经取消");
-                $("#cancel").hide();
+            $.getJSON("ali.offline.qrcode/ali.bill.cancel.php", {"billNo":billNo}, function(res) {
+                if(res.resultCode == 0 && res.revert_status){
+                    $("#msg").text("支付已经取消");
+                    $("#cancel").hide();
+                }
             });
         });
     });
