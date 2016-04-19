@@ -15,8 +15,6 @@
 1. BeeCloud[注册](http://beecloud.cn/register/)账号
 2. BeeCloud中创建应用，[填写支付渠道所需参数](http://beecloud.cn/doc/payapply)
 
-使用中遇到的问题欢迎来QQ群-321545822提问
-
 ## 引入BeeCloud API
 
 ###使用[composer](https://getcomposer.org/)
@@ -854,3 +852,11 @@ bill_no字段只能是字母和数字组合
 银联跳转后提示"Signature verification failed": 
 请确认使用的证书为生产证书而非测试证书，并且证书密码正确
 ```
+
+## 联系我们
+- 如果有什么问题，可以到BeeCloud开发者1群:**321545822** 或 BeeCloud开发者2群:**427128840** 提问
+- 如果发现了bug，欢迎提交[issue](https://github.com/beecloud/beecloud-webhook/issues)
+- 如果有新的需求，欢迎提交[issue](https://github.com/beecloud/beecloud-webhook/issues)
+
+## 代码许可
+The MIT License (MIT).
