@@ -13,3 +13,11 @@ const NEED_FRQID = '当channel参数为 YEE_NOBANKCARD时 frqid为必填';
 
 const APP_ID = 'c37d661d-7e61-49ea-96a5-68c34e83db3b';
 const APP_SECRET = 'c37d661d-7e61-49ea-96a5-68c34e83db3b';
+
+/*
+9102    中国工商银行      9107    招商银行
+9103    中国农业银行      9108    光大银行
+9104    交通银行          9109    中国银行
+9105    中国建设银行
+*/
+const BANK_CODE = array(9102, 9103, 9104, 9105, 9107, 9108, 9109);

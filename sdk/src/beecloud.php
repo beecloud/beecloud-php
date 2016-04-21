@@ -260,9 +260,19 @@ class BCRESTApi {
                 case 'JD_WEB':
                 case 'JD_WAP':
                 case "UN_WEB":
+                    if (!isset($data["return_url"])) {
+                        throw new Exception(NEED_RETURN_URL);
+                    }
+                    break;
                 case "JD_B2B":
                     if (!isset($data["return_url"])) {
                         throw new Exception(NEED_RETURN_URL);
+                    }
+                    if (!isset($data["bank_code"])) {
+                        throw new Exception(NEED_PARAM.'bank_code');
+                    }
+                    if (!in_array($data["bank_code"], BANK_CODE)) {
+                        throw new Exception(NEED_VALID_PARAM.'bank_code');
                     }
                     break;
                 case "YEE_WAP":
