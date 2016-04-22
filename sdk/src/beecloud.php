@@ -271,7 +271,7 @@ class BCRESTApi {
                     if (!isset($data["bank_code"])) {
                         throw new Exception(NEED_PARAM.'bank_code');
                     }
-                    if (!in_array($data["bank_code"], BANK_CODE)) {
+                    if (!in_array($data["bank_code"], unserialize(BANK_CODE))) {
                         throw new Exception(NEED_VALID_PARAM.'bank_code');
                     }
                     break;
