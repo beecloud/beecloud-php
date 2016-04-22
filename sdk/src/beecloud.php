@@ -157,7 +157,7 @@ class BCRESTInternational {
 
         if (!isset($data["total_fee"])) {
             throw new Exception(NEED_PARAM . "total_fee");
-        } else if(!is_int($data["total_fee"]*100) || 1>$data["total_fee"]*100) {
+        } else if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
             throw new Exception(NEED_VALID_PARAM . "total_fee");
         }
 
