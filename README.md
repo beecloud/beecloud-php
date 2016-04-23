@@ -308,8 +308,8 @@ API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【�
 
 
 ## 联系我们
-- 如果发现了bug，欢迎提交[issue](https://github.com/beecloud/beecloud-webhook/issues)
-- 如果有新的需求，欢迎提交[issue](https://github.com/beecloud/beecloud-webhook/issues)
+- 如果发现了bug，欢迎提交[issue](https://github.com/beecloud/beecloud-php/issues)
+- 如果有新的需求，欢迎提交[issue](https://github.com/beecloud/beecloud-php/issues)
 
 
 ## 代码许可

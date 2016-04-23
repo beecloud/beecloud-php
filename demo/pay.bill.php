@@ -42,6 +42,7 @@ switch($type){
         break;
     case 'JD_B2B' :
         $data["channel"] = "JD_B2B";
+        $data["bank_code"] = 9102;
         $title = "京东B2B";
         break;
     case 'JD_WEB' :

@@ -157,7 +157,7 @@ class BCRESTInternational {
 
         if (!isset($data["total_fee"])) {
             throw new Exception(NEED_PARAM . "total_fee");
-        } else if(!is_int($data["total_fee"]*100) || 1>$data["total_fee"]*100) {
+        } else if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
             throw new Exception(NEED_VALID_PARAM . "total_fee");
         }
 
@@ -260,9 +260,19 @@ class BCRESTApi {
                 case 'JD_WEB':
                 case 'JD_WAP':
                 case "UN_WEB":
+                    if (!isset($data["return_url"])) {
+                        throw new Exception(NEED_RETURN_URL);
+                    }
+                    break;
                 case "JD_B2B":
                     if (!isset($data["return_url"])) {
                         throw new Exception(NEED_RETURN_URL);
+                    }
+                    if (!isset($data["bank_code"])) {
+                        throw new Exception(NEED_PARAM.'bank_code');
+                    }
+                    if (!in_array($data["bank_code"], unserialize(BANK_CODE))) {
+                        throw new Exception(NEED_VALID_PARAM.'bank_code');
                     }
                     break;
                 case "YEE_WAP":
