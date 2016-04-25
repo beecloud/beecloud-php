@@ -2,8 +2,8 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = '';
-$data["app_id"] = '';
+$appSecret = APP_SECRET;
+$data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["total_fee"] = 1;
