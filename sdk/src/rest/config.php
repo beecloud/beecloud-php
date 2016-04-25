@@ -11,8 +11,8 @@ const NEED_CARDNO = '当channel参数为 YEE_NOBANKCARD时 cardno为必填';
 const NEED_CARDPWD = '当channel参数为 YEE_NOBANKCARD时 cardpwd为必填';
 const NEED_FRQID = '当channel参数为 YEE_NOBANKCARD时 frqid为必填';
 
-const APP_ID = 'c37d661d-7e61-49ea-96a5-68c34e83db3b';
-const APP_SECRET = 'c37d661d-7e61-49ea-96a5-68c34e83db3b';
+const APP_ID = 'c5d1cba1-5e3f-4ba0-941d-9b0a371fe719';
+const APP_SECRET = '39a7a518-9ac8-4a9e-87bc-7885f33cf18c';
 
 /*
  * bank_code for channel JD_B2B
