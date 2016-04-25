@@ -2,16 +2,21 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = APP_SECRET;
-$data["app_id"] = APP_ID;
+$appSecret = '';
+$data["app_id"] = '';
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
 $data["title"] = "白开水";
+//渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
 $data["return_url"] = "http://payservice.beecloud.cn";
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
+//选填 订单失效时间bill_timeout
+//必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒
+//京东(JD*)不支持该参数。
+//$data["bill_timeout"] = 360;
 
 $type = $_GET['type'];
 switch($type){
