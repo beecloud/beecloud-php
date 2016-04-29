@@ -100,13 +100,10 @@ switch($type) {
                 $result = $api->bc_transfer($data);
                 break;
             default :
-                echo '<pre>';
-                print_r($data);
                 $result = $api->transfer($data);
                 break;
 
         }
-        file_put_contents('/tmp/wxtransfer', print_r($result, 1));
         if ($result->result_code != 0) {
             echo json_encode($result);
             exit();

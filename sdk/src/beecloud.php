@@ -29,11 +29,7 @@ class BCRESTUtil {
             curl_setopt($ch, CURLOPT_FAILONERROR, 1);
             curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            if (!empty($timeout)) {
-                curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-            } else {
-                curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-            }
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 
             //设置 CURLINFO_HEADER_OUT 选项之后 curl_getinfo 函数返回的数组将包含 cURL
             //请求的 header 信息。而要看到回应的 header 信息可以在 curl_setopt 中设置
@@ -63,6 +59,7 @@ class BCRESTUtil {
                     break;
                 default:
                     throw new Exception('不支持的HTTP方式');
+                    break;
             }
 
             $result = curl_exec($ch);
@@ -72,12 +69,14 @@ class BCRESTUtil {
             curl_close($ch);
             return $result;
         } catch (Exception $e) {
-            return "CURL EXCEPTION:".$e->getMessage();
+            return "CURL EXCEPTION: ".$e->getMessage();
         }
     }
 }
 
-
+/**
+ * paypal pay
+ */
 class BCRESTInternational {
     const URI_BILL = "/1/rest/international/bill";
     const URI_REFUND = "/1/rest/international/refund";
@@ -301,10 +300,10 @@ class BCRESTApi {
                 case "KUAIQIAN":
                 case "KUAIQIAN_WAP":
                 case "KUAIQIAN_WEB":
-                    if (isset($data["bill_timeout"])) {
-                        throw new Exception(BILL_TIMEOUT_ERROR);
-                    }
-                    break;
+//                    if (isset($data["bill_timeout"])) {
+//                        throw new Exception(BILL_TIMEOUT_ERROR);
+//                    }
+//                    break;
                 case "WX_APP":
                 case "WX_NATIVE":
                 case "ALI_APP":
@@ -581,8 +580,8 @@ class BCRESTApi {
                 throw new Exception(NEED_PARAM . $v);
             }
         }
-        if(!in_array($data['card_type'], array('DE', 'CR'))) throw new Exception(NEED_VALID_PARAM . $v);
-        if(!in_array($data['account_type'], array('P', 'C'))) throw new Exception(NEED_VALID_PARAM . $v);
+        if(!in_array($data['card_type'], array('DE', 'CR'))) throw new Exception(NEED_VALID_PARAM . 'card_type(DE, CR)');
+        if(!in_array($data['account_type'], array('P', 'C'))) throw new Exception(NEED_VALID_PARAM . 'account_type(P, C)');
 
         return self::post(self::URI_BC_TRANSFER, $data, 30, false);
     }

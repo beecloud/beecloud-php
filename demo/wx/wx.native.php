@@ -41,7 +41,12 @@
     $('#query').click(function(){
         $.getJSON('wx/wx.native.query.php', {'billNo' : '<?php echo $data["bill_no"]; ?>'}, function(res){
             if (res && res.result_msg == "OK" && res.count > 0) {
-                var str = res.bills[0].spay_result?"支付成功":"未支付";
+                var str = '';
+                if (res && res.result_msg == "OK" && res.count > 0) {
+                    str = res.bills[0].spay_result?"支付成功":"未支付";
+                }else{
+                    str = 'Error: ' + res.err_detail;
+                }
                 $('#query-result').text(str);
             }
         })

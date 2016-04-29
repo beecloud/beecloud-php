@@ -11,11 +11,14 @@ const NEED_CARDNO = '当channel参数为 YEE_NOBANKCARD时 cardno为必填';
 const NEED_CARDPWD = '当channel参数为 YEE_NOBANKCARD时 cardpwd为必填';
 const NEED_FRQID = '当channel参数为 YEE_NOBANKCARD时 frqid为必填';
 
-const APP_ID = 'c5d1cba1-5e3f-4ba0-941d-9b0a371fe719';
-const APP_SECRET = '39a7a518-9ac8-4a9e-87bc-7885f33cf18c';
+//const APP_ID = 'c5d1cba1-5e3f-4ba0-941d-9b0a371fe719';
+//const APP_SECRET = '39a7a518-9ac8-4a9e-87bc-7885f33cf18c';
+
+const APP_ID = 'e66e760b-0f78-44bb-a9ae-b22729d51678';
+const APP_SECRET = '6fb7db77-96ed-46ef-ae10-1118ee564dd3';
 
 /*
- * bank_code for channel JD_B2B
+ * bank_code(int 类型) for channel JD_B2B
 9102    中国工商银行      9107    招商银行
 9103    中国农业银行      9108    光大银行
 9104    交通银行          9109    中国银行

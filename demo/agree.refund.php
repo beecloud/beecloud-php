@@ -11,6 +11,8 @@ $data["refund_no"] = $_GET["refund_no"];
 $data["refund_fee"] = (int)$_GET["refund_fee"];
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
+//选填,是否为预退款,预退款need_approval->true,直接退款->不加此参数或者false
+//$data["need_approval"] = true;
 
 $type = $_GET['type'];
 switch($type){

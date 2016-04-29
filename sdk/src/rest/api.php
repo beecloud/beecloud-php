@@ -15,17 +15,14 @@ class api {
     const URI_REFUNDS = "/2/rest/refunds";			//退款查询
     const URI_REFUNDS_COUNT = "/2/rest/refunds/count"; //退款总数查询
     const URI_REFUND_STATUS = "/2/rest/refund/status"; //退款状态更新
-    
+
     const URI_TRANSFERS = "/2/rest/transfers"; //批量打款 - 支付宝
     const URI_TRANSFER = "/2/rest/transfer";  //单笔打款 - 支付宝/微信
     const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
-    
+
     const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
     const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
     const URI_OFFLINE_REFUND = '/2/rest/offline/refund'; //线下退款
-
-    const URI_GATEWAY_WITHDRAW = '/2/rest/gateway/withdraw'; //提现申请/提现审批
-    const URI_GATEWAY_AMOUNT = '/2/rest/gateway/amount'; //余额查询/余额修改
 
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
@@ -135,10 +132,10 @@ class api {
 	            case "KUAIQIAN":
 	            case "KUAIQIAN_WAP":
 	            case "KUAIQIAN_WEB":
-	                if (isset($data["bill_timeout"])) {
-	                    throw new \Exception(BILL_TIMEOUT_ERROR);
-	                }
-	                break;
+//	                if (isset($data["bill_timeout"])) {
+//	                    throw new \Exception(BILL_TIMEOUT_ERROR);
+//	                }
+//	                break;
 	            case "WX_APP":
 	            case "WX_NATIVE":
 	            case "ALI_APP":
@@ -416,8 +413,8 @@ class api {
                 throw new \Exception(NEED_PARAM . $v);
             }
         }
-        if(!in_array($data['card_type'], array('DE', 'CR'))) throw new \Exception(NEED_VALID_PARAM . $v);
-        if(!in_array($data['account_type'], array('P', 'C'))) throw new \Exception(NEED_VALID_PARAM . $v);
+        if(!in_array($data['card_type'], array('DE', 'CR'))) throw new \Exception(NEED_VALID_PARAM . 'card_type(DE, CR)');
+        if(!in_array($data['account_type'], array('P', 'C'))) throw new \Exception(NEED_VALID_PARAM . 'account_type(P, C)');
 
         return self::post(self::URI_BC_TRANSFER, $data, 30, false);
     }
