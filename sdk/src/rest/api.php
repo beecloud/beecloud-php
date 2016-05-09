@@ -76,8 +76,23 @@ class api {
     static final public function bill(array $data, $method = 'post') {
         //param validation
         self::baseParamCheck($data);
-
+		self::channelCheck($data);
         if (isset($data["channel"])) {
+			switch($data["channel"]){
+				case 'ALI_WEB':
+				case 'ALI_QRCODE':
+				case 'UN_WEB':
+				case 'JD_WAP':
+				case 'JD_WEB':
+				case 'JD_B2B':
+				case "BC_GATEWAY":
+				case "BC_KUAIJIE":
+					if (!isset($data["return_url"])) {
+						throw new \Exception(NEED_RETURN_URL);
+					}
+					break;
+			}
+
 	        switch ($data["channel"]) {
 	            case "WX_JSAPI":
 	                if (!isset($data["openid"])) {
@@ -89,19 +104,7 @@ class api {
 	                    throw new \Exception(NEED_QR_PAY_MODE);
 	                }
 	            	break;
-	            case "ALI_WEB":
-	            case "ALI_QRCODE":
-	            case 'JD_WEB':
-	            case 'JD_WAP': 
-	            case "UN_WEB":
-	                if (!isset($data["return_url"])) {
-	                    throw new \Exception(NEED_RETURN_URL);
-	                }
-	                break;
 				case "JD_B2B":
-					if (!isset($data["return_url"])) {
-						throw new \Exception(NEED_RETURN_URL);
-					}
 					if (!in_array($data["bank_code"], unserialize(BANK_CODE))) {
 						throw new \Exception(NEED_VALID_PARAM.'bank_code');
 					}
@@ -122,43 +125,31 @@ class api {
 	                    throw new \Exception(NEED_FRQID);
 	                }
 	            	break;
-	            case "JD":
 	            case "JD_WEB":
 	            case "JD_WAP":
 	                if (isset($data["bill_timeout"])) {
 	                    throw new \Exception(BILL_TIMEOUT_ERROR);
 	                }
 	                break;
-	            case "KUAIQIAN":
 	            case "KUAIQIAN_WAP":
 	            case "KUAIQIAN_WEB":
 //	                if (isset($data["bill_timeout"])) {
 //	                    throw new \Exception(BILL_TIMEOUT_ERROR);
 //	                }
 //	                break;
-	            case "WX_APP":
-	            case "WX_NATIVE":
-	            case "ALI_APP":
-	            case "UN_APP":
-	            case "ALI_WAP":
-	            case "ALI_OFFLINE_QRCODE":
-	            case "YEE":
-	            case "YEE_WEB":
-	            case "BD":
-	            case "BD_WAP":
-	            case "BD_WEB":
-	            case "PAYPAL_SANDBOX":
-                case "PAYPAL_LIVE":
-                case "BC_KUAIJIE" :
-                    break;
 	            case "BC_GATEWAY":
                     if (!isset($data["bank"])) {
                         throw new \Exception(NEED_PARAM.'bank');
                     }
+					if (!in_array($data["bank"], unserialize(BANK))) {
+						throw new \Exception(NEED_VALID_PARAM.'bank');
+					}
                     break;
-	            default:
-	                throw new \Exception(NEED_VALID_PARAM . "channel");
-	                break;
+				case "BC_KUAIJIE" :
+					if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
+						throw new \Exception(NEED_TOTAL_FEE);
+					}
+					break;
 	        }
     	}
         
@@ -548,6 +539,7 @@ class api {
                 case "JD":
                 case "JD_WEB":
                 case "JD_WAP":
+                case "JD_B2B":
                 case "YEE":
                 case "YEE_WAP":
                 case "YEE_WEB":

@@ -25,7 +25,7 @@
     try {
         $result = $api->refund($data);
         if ($result->result_code != 0 || $result->result_msg != "OK") {
-            echo json_encode($result->err_detail);
+            print_r($result);
             exit();
         }
         $url = $result->url;

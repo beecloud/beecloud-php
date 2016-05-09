@@ -65,7 +65,7 @@ switch($type){
 try {
     $result = $api->bills($data);
     if ($result->result_code != 0 || $result->result_msg != "OK") {
-        echo json_encode($result->err_detail);
+        print_r($result);
         exit();
     }
     $bills = $result->bills;
@@ -83,7 +83,7 @@ try {
     unset($data["limit"]);
     $result = $api->bills_count($data);
     if ($result->result_code != 0 || $result->result_msg != "OK") {
-        echo json_encode($result->err_detail);
+        print_r($result);
         exit();
     }
     $count = $result->count;

@@ -64,7 +64,7 @@ switch($type){
     try {
         $result = $api->refunds($data);
         if ($result->result_code != 0 || $result->result_msg != "OK") {
-            echo json_encode($result->err_detail);
+            print_r($result);
             exit();
         }
         $refunds = $result->refunds;
@@ -77,6 +77,15 @@ switch($type){
                     <td>{$list->refund_fee}</td><td>{$list->sub_channel}</td><td>{$list->bill_no}</td><td>$finish</td><td>{$list->title}</td></tr>";
         }
         echo $str;
+
+        unset($data["limit"]);
+        $result = $api->refunds_count($data);
+        if ($result->result_code != 0 || $result->result_msg != "OK") {
+            print_r($result);
+            exit();
+        }
+        $count = $result->count;
+        echo '<tr><td colspan="2">退款订单总数:</td><td colspan="8">'.$count.'</td></tr>';
     } catch (Exception $e) {
         echo $e->getMessage();
     }

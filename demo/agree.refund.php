@@ -69,7 +69,7 @@ switch($type){
     try {
         $result = $api->refund($data);
         if ($result->result_code != 0 || $result->result_msg != "OK") {
-            echo json_encode($result);
+            print_r($result);
             exit();
         }
         if($type == 'ALI'){

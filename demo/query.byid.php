@@ -25,7 +25,7 @@ try {
         case 'bill':
             $result = $api->bill($data, 'get');
             if ($result->result_code != 0 || $result->result_msg != "OK") {
-                echo json_encode($result);
+                print_r($result);
                 exit();
             }
             $data = $result->pay;
@@ -40,7 +40,7 @@ try {
         case 'refund':
             $result = $api->refund($data, 'get');
             if ($result->result_code != 0 || $result->result_msg != "OK") {
-                echo json_encode(array('result_code' => 1, 'err_detail' => $result->err_detail));
+                print_r($result);
                 exit();
             }
             $data = $result->refund;

@@ -11,7 +11,7 @@ $data["bill_no"] = $_GET["billNo"];
 try {
     $result = $api->offline_bill_status($data);
     if ($result->result_code != 0) {
-        echo json_encode($result);
+        print_r($result);
         exit();
     }
     echo json_encode($result);

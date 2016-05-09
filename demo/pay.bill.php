@@ -6,11 +6,12 @@ $appSecret = APP_SECRET;
 $data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
+//total_fee(int 类型) 单位分
 $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
 $data["title"] = "白开水";
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
-$data["return_url"] = "http://payservice.beecloud.cn";
+$data["return_url"] = "http://payservice.beecloud.cn/return_url/slt/index.php";
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //选填 订单失效时间bill_timeout
@@ -47,6 +48,13 @@ switch($type){
         break;
     case 'JD_B2B' :
         $data["channel"] = "JD_B2B";
+        /*
+         * bank_code(int 类型) for channel JD_B2B
+        9102    中国工商银行      9107    招商银行
+        9103    中国农业银行      9108    光大银行
+        9104    交通银行          9109    中国银行
+        9105    中国建设银行		9110 	 平安银行
+        */
         $data["bank_code"] = 9102;
         $title = "京东B2B";
         break;
@@ -126,6 +134,7 @@ switch($type){
     case 'BC_GATEWAY' :
         $data["channel"] = "BC_GATEWAY";
         /*
+         * bank(string 类型) for channel BC_GATEWAY
         CMB	  招商银行    ICBC	工商银行   CCB   建设银行（暂时不支持）
         BOC	  中国银行    ABC    农业银行   BOCM	交通银行
         SPDB  浦发银行    GDB	广发银行   CITIC	中信银行
@@ -136,6 +145,8 @@ switch($type){
         break;
     case 'BC_KUAIJIE' :
         $data["channel"] = "BC_KUAIJIE";
+        //渠道类型BC_KUAIJIE, total_fee(int 类型) 单位分, 最小金额100分
+        $data["total_fee"] = 100;
         break;
     default :
         exit("No this type.");
@@ -156,8 +167,9 @@ try {
     }else{
         $result =  $api->bill($data);
     }
+    file_put_contents('/tmp/aaa', print_r($result, 1));
     if ($result->result_code != 0) {
-        echo json_encode($result);
+        print_r($result);
         exit();
     }
     if(isset($result->html)) {
