@@ -11,7 +11,7 @@ $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
 $data["title"] = "白开水";
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
-$data["return_url"] = "http://payservice.beecloud.cn/return_url/slt/index.php";
+$data["return_url"] = "http://payservice.beecloud.cn";
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //选填 订单失效时间bill_timeout
@@ -143,8 +143,8 @@ switch($type){
         */
         $data["bank"] = "ICBC";
         break;
-    case 'BC_KUAIJIE' :
-        $data["channel"] = "BC_KUAIJIE";
+    case 'BC_EXPRESS' :
+        $data["channel"] = "BC_EXPRESS";
         //渠道类型BC_KUAIJIE, total_fee(int 类型) 单位分, 最小金额100分
         $data["total_fee"] = 100;
         break;

@@ -10,7 +10,7 @@ const NEED_QR_PAY_MODE = '当channel参数为 ALI_QRCODE时 qr_pay_mode为必填
 const NEED_CARDNO = '当channel参数为 YEE_NOBANKCARD时 cardno为必填';
 const NEED_CARDPWD = '当channel参数为 YEE_NOBANKCARD时 cardpwd为必填';
 const NEED_FRQID = '当channel参数为 YEE_NOBANKCARD时 frqid为必填';
-const NEED_TOTAL_FEE = '当channel参数为 BC_KUAIJIE时 total_fee单位分,最小金额100分';
+const NEED_TOTAL_FEE = '当channel参数为 BC_EXPRESS时 total_fee单位分,最小金额100分';
 
 const APP_ID = 'c5d1cba1-5e3f-4ba0-941d-9b0a371fe719';
 const APP_SECRET = '39a7a518-9ac8-4a9e-87bc-7885f33cf18c';

@@ -91,8 +91,8 @@
                 <img src="statics/images/gateway_pay.png" alt="BC GATEWAY" >
             </li>
             <li onclick="paySwitch(this)">
-                <input type="radio" name="paytype" value="BC_KUAIJIE">
-                <img src="statics/images/bc_kuaijie.png" alt="BC KUAIJIE" >
+                <input type="radio" name="paytype" value="BC_EXPRESS">
+                <img src="statics/images/bc_kuaijie.png" alt="BC EXPRESS" >
             </li>
         </ul>
     </div>

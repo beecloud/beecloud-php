@@ -14,7 +14,6 @@ class BCRESTUtil {
 
         $random = rand(0, 3);
         return "https://" . $domainList[$random];
-//        return "http://58.211.191.123:8080";
     }
 
     static final public function request($url, $method, array $data, $timeout) {
@@ -251,7 +250,7 @@ class BCRESTApi {
                 case 'JD_WEB':
                 case 'JD_B2B':
                 case "BC_GATEWAY":
-                case "BC_KUAIJIE":
+                case "BC_EXPRESS":
                     if (!isset($data["return_url"])) {
                         throw new Exception(NEED_RETURN_URL);
                     }
@@ -313,7 +312,7 @@ class BCRESTApi {
                         throw new Exception(NEED_VALID_PARAM.'bank');
                     }
                     break;
-                case "BC_KUAIJIE" :
+                case "BC_EXPRESS" :
                     if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
                         throw new Exception(NEED_TOTAL_FEE);
                     }
@@ -722,7 +721,7 @@ class BCRESTApi {
                 case "PAYPAL_LIVE":
                 case "BC" :
                 case "BC_GATEWAY" :
-                case "BC_KUAIJIE" :
+                case "BC_EXPRESS" :
                     break;
                 default:
                     throw new Exception(NEED_VALID_PARAM . "channel");
