@@ -9,9 +9,10 @@ $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 //total_fee(int 类型) 单位分
 $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
-$data["title"] = "白开水";
+//title UTF8编码格式，32个字节内，最长支持16个汉字
+$data["title"] = "PHP ".$_GET['type'].'支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
-$data["return_url"] = "http://payservice.beecloud.cn";
+$data["return_url"] = "http://beecloud.cn";
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //选填 订单失效时间bill_timeout
@@ -141,7 +142,7 @@ switch($type){
         CEB	  光大银行    CIB	兴业银行   SDB	平安银行
         CMBC  民生银行
         */
-        $data["bank"] = "ICBC";
+        $data["bank"] = "BOC";
         break;
     case 'BC_EXPRESS' :
         $data["channel"] = "BC_EXPRESS";
@@ -167,7 +168,6 @@ try {
     }else{
         $result =  $api->bill($data);
     }
-    file_put_contents('/tmp/aaa', print_r($result, 1));
     if ($result->result_code != 0) {
         print_r($result);
         exit();

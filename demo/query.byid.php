@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>BeeCloud 根据ID查询记录示例</title>
+    <link type="text/css" rel="stylesheet" href="statics/demo.css" />
 </head>
 <body>
 <table border="1" align="center" cellspacing=0>

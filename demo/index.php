@@ -125,6 +125,10 @@
                 <input type="radio" value="ALI_TRANSFERS" name="transferType">
                 <img src="http://beeclouddoc.qiniudn.com/alitransfer.png" alt="支付宝批量打款">
             </li>-->
+            <li onclick="paySwitch(this)">
+                <input type="radio" value="BC_TRANSFER" name="transferType">
+                <img src="http://beeclouddoc.qiniudn.com/icon-companypay.png" alt="BC打款-银行卡">
+            </li>
     	</ul>
     </div>
      <div>
@@ -132,14 +136,6 @@
     </div>
 </form>
 <hr/>
-
-<!--<div>
-    <h2>BC代付</h2>
-</div>
-<form method="POST" >
-    <input type="button" id="bc_helppay" class="button" value="确认BC代付">
-</form>
-<hr/>-->
 
 <div>
     <h2>订单查询及发起退款，退款查询，退款状态查询</h2>
@@ -189,6 +185,7 @@
     <div>
         <input id="queryBIll" type="button" class="button" style="display:inline;" value="订单查询">
         <input id="queryRefund" type="button" class="button" style="display:inline;" value="退款查询">
+        <input id="queryApprovalRefund" type="button" class="button" style="display:inline;" value="预退款查询">
     </div>
 </form>
 
@@ -251,6 +248,16 @@
         }
         window.open('./refund.query.php?type=' + type);
     });
+
+    $("#queryApprovalRefund").click(function(){
+        var type = $("input[name='querytype']:checked").val();
+        if(!type){
+            alert("请选择渠道方式");return;
+        }
+        window.open('./preprefund.query.php?type=' + type);
+    });
+
+
 
     $("#billQueryById").click(function(){
         var id = $("input[name='id']").val();

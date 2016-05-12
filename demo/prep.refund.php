@@ -6,17 +6,16 @@ $appSecret = APP_SECRET;
 $data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
-$data["bill_no"] = $_GET["bill_no"];
-$data["refund_no"] = $_GET["refund_no"];
-$data["refund_fee"] = (int)$_GET["refund_fee"];
-//选填,是否为预退款,预退款need_approval->true,直接退款->不加此参数或者false
-if(isset($_GET["need_approval"])){
-    $data["need_approval"] = true;
-}
-//选填 optional
-$data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
+//agree, boolean: 批量驳回传false，批量同意传true
+$data["agree"] = true;
+//deny_reason选填, 驳回理由
+//$data["deny_reason"] = '';
 
-$type = $_GET['type'];
+//退款记录id列表
+if(!isset($_GET['ids']) || !$_GET['ids']) exit('请选择要预退款的记录!');
+$data["ids"] = explode('@', $_GET['ids']);
+
+$type = $_GET['channel'];
 switch($type){
     case 'ALI' :
         $title = "支付宝";
@@ -69,17 +68,19 @@ switch($type){
 <body>
 <?php
     try {
-        $result = $api->refund($data);
+        $result = $api->refund($data, 'put');
         if ($result->result_code != 0 || $result->result_msg != "OK") {
             print_r($result);
             exit();
         }
-        //当channel为ALI_APP、ALI_WEB、ALI_QRCODE，并且不是预退款
-        if(!isset($data["need_approval"]) && $type == 'ALI'){
+        //agree为true时,支付宝退款地址，需用户在支付宝平台上手动输入支付密码处理
+        if($data["channel"] == 'ALI'){
             header("Location:$result->url");
             exit();
         }
-        echo (isset($_GET["need_approval"]) && $_GET["need_approval"] ? '预' : '')."退款成功, 退款表记录唯一标识ID: ".$result->id;
+        //agree为true时,批量同意单笔结果集合，key:单笔记录id; value:此笔记录结果。
+        //当退款处理成功时，value值为"OK"；当退款处理失败时， value值为具体的错误信息。
+        print_r($result->result_map);
     } catch (Exception $e) {
         echo $e->getMessage();
     }

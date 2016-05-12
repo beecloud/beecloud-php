@@ -557,7 +557,7 @@ class BCRESTApi {
         return self::post(self::URI_TRANSFERS, $data, 30, false);
     }
 
-    //代付 - 银行卡
+    //打款 - 银行卡
     static final public function bc_transfer(array $data) {
         self::baseParamCheck($data);
         $params = array(
@@ -568,6 +568,9 @@ class BCRESTApi {
         foreach ($params as $v) {
             if (!isset($data[$v])) {
                 throw new Exception(NEED_PARAM . $v);
+            }
+            if(empty($data[$v])){
+                throw new Exception($v.FIELD_VALUE_EMPTY);
             }
         }
         if(!in_array($data['card_type'], array('DE', 'CR'))) throw new Exception(NEED_VALID_PARAM . 'card_type(DE, CR)');
