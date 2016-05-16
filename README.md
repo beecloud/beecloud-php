@@ -21,7 +21,7 @@
 
 ## 引入BeeCloud API
 
-###使用[composer](https://getcomposer.org/)
+### 使用[composer](https://getcomposer.org/)
 > composer 是php的包管理工具， 通过composer.json里的配置管理依赖的包，同时可以在使用类时自动加载对应的包
 
 在你的composer.json中添加如下依赖
@@ -49,21 +49,22 @@ composer install
 require_once('vendor/autoload.php');
 ```
 
-###手动使用
+### 手动使用
 适合不能使用composer(PHP < 5.3.2)或者namespace(PHP <
 5.3)的情况，拷贝当前所有文件(demo可以忽略)到你指定的目录<YourPath>下，你的代码中
 
-	require_once("<YourPath>/loader.php");
-
+```
+require_once('<YourPath>/loader.php');
+```
 
 ## BeeCloud API
 - 请求参数和返回参数请参考BeeCloud RESTfull API，同时可以参考demo中各渠道的代码示例
 - [常见问题](https://beecloud.cn/faq/)
 - [错误对照码](https://github.com/beecloud/beecloud-rest-api/tree/master/error_code)
 
-##发起支付订单
+## 发起支付订单
 
-###国际支付
+### 国际支付
 
 国际支付目前主要是PayPal支付方式，主要提供了三种支付渠道类型：
 
@@ -267,9 +268,7 @@ BCRESTApi::refundStatus(array $data);
 注：具体的请求参数和返回参数，请参考[线上支付REST
 API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【9. 退款状态更新】**部分
 
-## BeeCloud打款 - 银行卡
-
-批量打款目前只适用于支付宝的批量打款
+## BeeCloud企业打款 - 打款到银行卡
 
 调用方法：
 ```
@@ -282,11 +281,11 @@ API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【9. �
 BCRESTApi::bc_transfer(array $data);
 ```
 
-注：具体的请求参数和返回参数，请参考[打款REST API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【BeeCloud打款 - 银行卡】**部分
+注：具体的请求参数和返回参数，请参考[企业打款REST API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【BeeCloud企业打款 - 打款到银行卡】**部分
 
-## 单笔打款
+## 微信企业打款/微信红包
 
-单笔打款主要包括微信红包、微信企业打款、支付宝企业打款
+主要包括微信红包、微信企业打款
 
 打款调用方法：
 
@@ -300,33 +299,27 @@ BCRESTApi::bc_transfer(array $data);
 BCRESTApi::transfer(array $data);
 ```
 
-注：具体的请求参数和返回参数，请参考[打款REST
-API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【单笔打款 - 支付宝/微信】**部分
+注：具体的请求参数和返回参数，请参考[企业打款REST
+API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【微信企业打款/微信红包】**部分
 
 
-## 批量打款
+## Demo
 
-批量打款目前只适用于支付宝的批量打款
+项目文件夹demo为我们的样例项目,可根据自己的需要做出相应的调整
 
-调用方法：
-```
-\beecloud\rest\api::transfers(array $data);
-```
+- 微信没有return_url，如果用户需要支付完成做类似同步跳转的形式，需根据微信支付提供的jsapi完成。
+- 关于支付宝支付、银联在线支付、百度钱包支付、京东支付、PayPal等支付方式的return_url,需要用户自己设定
+- 关于weekhook的接收 请参考demo中的webhook.php, 文档请阅读 [webhook](https://github.com/beecloud/beecloud-webhook)
 
-不使用namespace的用户和2.2.0之前的v2版本用户请使用
+## 测试
 
-```
-BCRESTApi::transfers(array $data);
-```
+项目文件夹tests为我们的样例测试,可根据自己的需要做出相应的调整
 
-注：具体的请求参数和返回参数，请参考[打款REST
-API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【批量打款 - 支付宝】**部分
-
+- 测试采用PHPUnit,请参考[PHPUnit](https://phpunit.de/)
 
 ## 联系我们
 - 如果发现了bug，欢迎提交[issue](https://github.com/beecloud/beecloud-php/issues)
 - 如果有新的需求，欢迎提交[issue](https://github.com/beecloud/beecloud-php/issues)
-
 
 ## 代码许可
 The MIT License (MIT).
