@@ -15,17 +15,14 @@ class api {
     const URI_REFUNDS = "/2/rest/refunds";			//退款查询
     const URI_REFUNDS_COUNT = "/2/rest/refunds/count"; //退款总数查询
     const URI_REFUND_STATUS = "/2/rest/refund/status"; //退款状态更新
-    
+
     const URI_TRANSFERS = "/2/rest/transfers"; //批量打款 - 支付宝
     const URI_TRANSFER = "/2/rest/transfer";  //单笔打款 - 支付宝/微信
     const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
-    
+
     const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
     const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
     const URI_OFFLINE_REFUND = '/2/rest/offline/refund'; //线下退款
-
-    const URI_GATEWAY_WITHDRAW = '/2/rest/gateway/withdraw'; //提现申请/提现审批
-    const URI_GATEWAY_AMOUNT = '/2/rest/gateway/amount'; //余额查询/余额修改
 
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
@@ -79,8 +76,23 @@ class api {
     static final public function bill(array $data, $method = 'post') {
         //param validation
         self::baseParamCheck($data);
-
+		self::channelCheck($data);
         if (isset($data["channel"])) {
+			switch($data["channel"]){
+				case 'ALI_WEB':
+				case 'ALI_QRCODE':
+				case 'UN_WEB':
+				case 'JD_WAP':
+				case 'JD_WEB':
+				case 'JD_B2B':
+				case "BC_GATEWAY":
+				case "BC_EXPRESS":
+					if (!isset($data["return_url"])) {
+						throw new \Exception(NEED_RETURN_URL);
+					}
+					break;
+			}
+
 	        switch ($data["channel"]) {
 	            case "WX_JSAPI":
 	                if (!isset($data["openid"])) {
@@ -92,19 +104,7 @@ class api {
 	                    throw new \Exception(NEED_QR_PAY_MODE);
 	                }
 	            	break;
-	            case "ALI_WEB":
-	            case "ALI_QRCODE":
-	            case 'JD_WEB':
-	            case 'JD_WAP': 
-	            case "UN_WEB":
-	                if (!isset($data["return_url"])) {
-	                    throw new \Exception(NEED_RETURN_URL);
-	                }
-	                break;
 				case "JD_B2B":
-					if (!isset($data["return_url"])) {
-						throw new \Exception(NEED_RETURN_URL);
-					}
 					if (!in_array($data["bank_code"], unserialize(BANK_CODE))) {
 						throw new \Exception(NEED_VALID_PARAM.'bank_code');
 					}
@@ -125,43 +125,31 @@ class api {
 	                    throw new \Exception(NEED_FRQID);
 	                }
 	            	break;
-	            case "JD":
 	            case "JD_WEB":
 	            case "JD_WAP":
 	                if (isset($data["bill_timeout"])) {
 	                    throw new \Exception(BILL_TIMEOUT_ERROR);
 	                }
 	                break;
-	            case "KUAIQIAN":
 	            case "KUAIQIAN_WAP":
 	            case "KUAIQIAN_WEB":
-	                if (isset($data["bill_timeout"])) {
-	                    throw new \Exception(BILL_TIMEOUT_ERROR);
-	                }
-	                break;
-	            case "WX_APP":
-	            case "WX_NATIVE":
-	            case "ALI_APP":
-	            case "UN_APP":
-	            case "ALI_WAP":
-	            case "ALI_OFFLINE_QRCODE":
-	            case "YEE":
-	            case "YEE_WEB":
-	            case "BD":
-	            case "BD_WAP":
-	            case "BD_WEB":
-	            case "PAYPAL_SANDBOX":
-                case "PAYPAL_LIVE":
-                case "BC_KUAIJIE" :
-                    break;
+//	                if (isset($data["bill_timeout"])) {
+//	                    throw new \Exception(BILL_TIMEOUT_ERROR);
+//	                }
+//	                break;
 	            case "BC_GATEWAY":
                     if (!isset($data["bank"])) {
                         throw new \Exception(NEED_PARAM.'bank');
                     }
+					if (!in_array($data["bank"], unserialize(BANK))) {
+						throw new \Exception(NEED_VALID_PARAM.'bank');
+					}
                     break;
-	            default:
-	                throw new \Exception(NEED_VALID_PARAM . "channel");
-	                break;
+				case "BC_EXPRESS" :
+					if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
+						throw new \Exception(NEED_TOTAL_FEE);
+					}
+					break;
 	        }
     	}
         
@@ -403,7 +391,7 @@ class api {
         return self::post(self::URI_TRANSFERS, $data, 30, false);
     }
     
-    //代付 - 银行卡
+    //打款 - 银行卡
     static final public function bc_transfer(array $data) {
         self::baseParamCheck($data);
         $params = array(
@@ -415,9 +403,12 @@ class api {
          	if (!isset($data[$v])) {
                 throw new \Exception(NEED_PARAM . $v);
             }
+			if(empty($data[$v])){
+				throw new \Exception($v.FIELD_VALUE_EMPTY);
+			}
         }
-        if(!in_array($data['card_type'], array('DE', 'CR'))) throw new \Exception(NEED_VALID_PARAM . $v);
-        if(!in_array($data['account_type'], array('P', 'C'))) throw new \Exception(NEED_VALID_PARAM . $v);
+        if(!in_array($data['card_type'], array('DE', 'CR'))) throw new \Exception(NEED_VALID_PARAM . 'card_type(DE, CR)');
+        if(!in_array($data['account_type'], array('P', 'C'))) throw new \Exception(NEED_VALID_PARAM . 'account_type(P, C)');
 
         return self::post(self::URI_BC_TRANSFER, $data, 30, false);
     }
@@ -551,6 +542,7 @@ class api {
                 case "JD":
                 case "JD_WEB":
                 case "JD_WAP":
+                case "JD_B2B":
                 case "YEE":
                 case "YEE_WAP":
                 case "YEE_WEB":
@@ -566,7 +558,7 @@ class api {
                 case "PAYPAL_LIVE":
                 case "BC" :
                 case "BC_GATEWAY" :
-                case "BC_KUAIJIE" :
+                case "BC_EXPRESS" :
                     break;
                 default:
                     throw new \Exception(NEED_VALID_PARAM . "channel");

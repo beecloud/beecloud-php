@@ -32,7 +32,7 @@ $data["openid"] = $openid;
 try {
     $result = $api->bill($data);
     if ($result->result_code != 0) {
-        echo json_encode($result);
+        print_r($result);
         exit();
     }
     $jsApiParam = array(

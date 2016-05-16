@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dengze
- * Date: 9/6/15
- * Time: 15:58
- */
-
 namespace beecloud;
 
 
@@ -33,11 +26,7 @@ class network {
             curl_setopt($ch, CURLOPT_FAILONERROR, 1);
             curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            if (!empty($timeout)) {
-                curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-            } else {
-                curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-            }
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 
             //设置 CURLINFO_HEADER_OUT 选项之后 curl_getinfo 函数返回的数组将包含 cURL
             //请求的 header 信息。而要看到回应的 header 信息可以在 curl_setopt 中设置
@@ -67,6 +56,7 @@ class network {
                     break;
                 default:
                     throw new \Exception('不支持的HTTP方式');
+                    break;
             }
 
             $result = curl_exec($ch);
@@ -76,7 +66,7 @@ class network {
             curl_close($ch);
             return $result;
         } catch (\Exception $e) {
-            return "CURL EXCEPTION:".$e->getMessage();
+            return "CURL EXCEPTION: ".$e->getMessage();
         }
     }
 

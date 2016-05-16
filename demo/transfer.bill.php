@@ -66,11 +66,11 @@ switch($type) {
         $data["bill_no"] = "bcdemo" . $data["timestamp"];
         $data["title"] = "白开水";
         $data["trade_source"] = "OUT_PC";
-        $data["bank_code"] = "";   //银行缩写编码
-        $data["bank_associated_code"] = ""; //银行联行行号
-        $data["bank_fullname"] = ""; //银行全称
-        $data["card_type"] = ""; //银行卡类型,区分借记卡和信用卡，DE代表借记卡，CR代表信用卡，其他值为非法
-        $data["account_type"] = ""; //帐户类型，P代表私户，C代表公户，其他值为非法
+        $data["bank_code"] = "BOC";   //银行缩写编码
+        $data["bank_associated_code"] = "104305045476"; //银行联行行号 eg:104305045476 中国银行股份有限公司苏州跨塘支行
+        $data["bank_fullname"] = "中国银行"; //银行全称
+        $data["card_type"] = "DE"; //银行卡类型,区分借记卡和信用卡，DE代表借记卡，CR代表信用卡，其他值为非法
+        $data["account_type"] = "P"; //帐户类型，P代表私户，C代表公户，其他值为非法
         $data["account_no"] = "";   //收款方的银行卡号
         $data["account_name"] = ""; //收款方的姓名或者单位名
         //选填mobile
@@ -100,15 +100,12 @@ switch($type) {
                 $result = $api->bc_transfer($data);
                 break;
             default :
-                echo '<pre>';
-                print_r($data);
                 $result = $api->transfer($data);
                 break;
 
         }
-        file_put_contents('/tmp/wxtransfer', print_r($result, 1));
         if ($result->result_code != 0) {
-            echo json_encode($result);
+            print_r($result);
             exit();
         }
         if(isset($result->url)){

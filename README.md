@@ -267,6 +267,22 @@ BCRESTApi::refundStatus(array $data);
 注：具体的请求参数和返回参数，请参考[线上支付REST
 API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【9. 退款状态更新】**部分
 
+## BeeCloud打款 - 银行卡
+
+批量打款目前只适用于支付宝的批量打款
+
+调用方法：
+```
+\beecloud\rest\api::bc_transfer(array $data);
+```
+
+不使用namespace的用户和2.2.0之前的v2版本用户请使用
+
+```
+BCRESTApi::bc_transfer(array $data);
+```
+
+注：具体的请求参数和返回参数，请参考[打款REST API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【BeeCloud打款 - 银行卡】**部分
 
 ## 单笔打款
 

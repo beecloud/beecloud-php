@@ -14,7 +14,7 @@ $data["method"] = "REVERT";
 try {
     $result = $api->offline_bill($data);
     if ($result->result_code != 0) {
-        echo json_encode($result);
+        print_r($result);
         exit();
     }
     echo json_encode($result);

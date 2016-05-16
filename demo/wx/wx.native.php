@@ -9,7 +9,7 @@
     try {
         $result = $api->bill($data);
         if ($result->result_code != 0) {
-            echo json_encode($result);
+            print_r($result);
             exit();
         }
         $code_url = $result->code_url;
@@ -40,10 +40,13 @@
     }
     $('#query').click(function(){
         $.getJSON('wx/wx.native.query.php', {'billNo' : '<?php echo $data["bill_no"]; ?>'}, function(res){
+            var str = '';
             if (res && res.result_msg == "OK" && res.count > 0) {
-                var str = res.bills[0].spay_result?"支付成功":"未支付";
-                $('#query-result').text(str);
+                str = res.bills[0].spay_result?"支付成功":"未支付";
+            }else{
+                str = 'Error: ' + res.err_detail;
             }
+            $('#query-result').text(str);
         })
     });
 </script>

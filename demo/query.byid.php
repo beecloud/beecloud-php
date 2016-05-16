@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>BeeCloud 根据ID查询记录示例</title>
+    <link type="text/css" rel="stylesheet" href="statics/demo.css" />
 </head>
 <body>
 <table border="1" align="center" cellspacing=0>
@@ -25,7 +26,7 @@ try {
         case 'bill':
             $result = $api->bill($data, 'get');
             if ($result->result_code != 0 || $result->result_msg != "OK") {
-                echo json_encode($result);
+                print_r($result);
                 exit();
             }
             $data = $result->pay;
@@ -40,7 +41,7 @@ try {
         case 'refund':
             $result = $api->refund($data, 'get');
             if ($result->result_code != 0 || $result->result_msg != "OK") {
-                echo json_encode(array('result_code' => 1, 'err_detail' => $result->err_detail));
+                print_r($result);
                 exit();
             }
             $data = $result->refund;
