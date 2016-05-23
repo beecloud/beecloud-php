@@ -570,6 +570,9 @@ class BCRESTApi {
                 throw new Exception(NEED_PARAM . $v);
             }
             if(empty($data[$v])){
+                if($v == 'bank_associated_code' && $data['total_fee'] < 5000000){
+                    continue;
+                }
                 throw new Exception($v.FIELD_VALUE_EMPTY);
             }
         }
