@@ -64,9 +64,10 @@ switch($type) {
     case 'BC_TRANSFER' :
         unset($data['desc']);
         $data["bill_no"] = "bcdemo" . $data["timestamp"];
-        $data["title"] = "白开水";
+        $data["title"] = 'PHP测试BC企业打款';
         $data["trade_source"] = "OUT_PC";
         $data["bank_code"] = "BOC";   //银行缩写编码
+        //total_fee小于5万时，只需填写字符串0即可。超过5万时，可以到http://www.lianhanghao.com/ 上查询银行联号。若未找到，请向银行咨询
         $data["bank_associated_code"] = "104305045476"; //银行联行行号 eg:104305045476 中国银行股份有限公司苏州跨塘支行
         $data["bank_fullname"] = "中国银行"; //银行全称
         $data["card_type"] = "DE"; //银行卡类型,区分借记卡和信用卡，DE代表借记卡，CR代表信用卡，其他值为非法
