@@ -2,7 +2,7 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = APP_SECRET;
+$appSecret = TEST_MODE ? TEST_SECRET : APP_SECRET;
 $data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
@@ -12,7 +12,7 @@ $data["bill_no"] = "bcdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = "PHP ".$_GET['type'].'支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
-$data["return_url"] = "http://beecloud.cn";
+$data["return_url"] = "http://payservice.beecloud.cn/return_url/slt/index.php";
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //选填 订单失效时间bill_timeout
@@ -38,6 +38,11 @@ switch($type){
         //1： 订单码-前置模式, 对应 iframe 宽度不能小于 300px, 高度不能小于 600px
         //3： 订单码-迷你前置模式, 对应 iframe 宽度不能小于 75px, 高度不能小于 75px
         $data["qr_pay_mode"] = "0";
+        break;
+    case 'ALI_OFFLINE_QRCODE' :
+        $data["channel"] = "ALI_OFFLINE_QRCODE";
+        require_once 'ali.offline.qrcode/index.php';
+        exit();
         break;
     case 'BD_WEB' :
         $data["channel"] = "BD_WEB";
@@ -70,6 +75,10 @@ switch($type){
     case 'UN_WEB' :
         $data["channel"] = "UN_WEB";
         $title = "银联网页";
+        break;
+    case 'UN_WAP' : //由于银联做了适配,需在移动端打开,PC端仍显示网页支付
+        $data["channel"] = "UN_WAP";
+        $title = "银联移动网页";
         break;
     case 'WX_NATIVE':
         $data["channel"] = "WX_NATIVE";
@@ -127,11 +136,6 @@ switch($type){
         $data["credit_card_id"] = '';
         $title = "Paypal快捷";
         break;
-    case 'ALI_OFFLINE_QRCODE' :
-        $data["channel"] = "ALI_OFFLINE_QRCODE";
-        require_once 'ali.offline.qrcode/index.php';
-        exit();
-        break;
     case 'BC_GATEWAY' :
         $data["channel"] = "BC_GATEWAY";
         /*
@@ -145,6 +149,7 @@ switch($type){
         $data["bank"] = "BOC";
         break;
     case 'BC_EXPRESS' :
+        $data["total_fee"] = 100;
         $data["channel"] = "BC_EXPRESS";
         //渠道类型BC_KUAIJIE, total_fee(int 类型) 单位分, 最小金额100分
         $data["total_fee"] = 100;

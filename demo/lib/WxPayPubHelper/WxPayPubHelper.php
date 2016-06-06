@@ -787,7 +787,7 @@ class JsApi_pub extends Common_util_pub
 	function createOauthUrlForCode($redirectUrl)
 	{
 		$urlObj["appid"] = WxPayConf_pub::APPID;
-		$urlObj["redirect_uri"] = "$redirectUrl";
+		$urlObj["redirect_uri"] = urlencode($redirectUrl);
 		$urlObj["response_type"] = "code";
 		$urlObj["scope"] = "snsapi_base";
 		$urlObj["state"] = "STATE"."#wechat_redirect";

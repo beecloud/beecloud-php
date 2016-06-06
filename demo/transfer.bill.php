@@ -2,11 +2,11 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = APP_SECRET;
+$masterSecret = MASTER_SECRET;
 $data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
-$data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
-$data["total_fee"] = 100;
+$data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $masterSecret);
+$data["total_fee"] = 1;
 $data["desc"] = "transfer test";
 
 $type = $_GET['type'];
@@ -64,15 +64,23 @@ switch($type) {
     case 'BC_TRANSFER' :
         unset($data['desc']);
         $data["bill_no"] = "bcdemo" . $data["timestamp"];
-        $data["title"] = "白开水";
+        $data["title"] = 'PHP测试BC企业打款';
         $data["trade_source"] = "OUT_PC";
-        $data["bank_code"] = "BOC";   //银行缩写编码
-        $data["bank_associated_code"] = "104305045476"; //银行联行行号 eg:104305045476 中国银行股份有限公司苏州跨塘支行
+        /*
+         *  如果未能确认银行的全称信息,可通过下面的接口获取并进行确认
+         *  //P_DE:对私借记卡,P_CR:对私信用卡,C:对公账户
+         *  $banks = $api->bc_transfer_banks(array('type' => 'P_DE'));
+         *  if ($result->result_code != 0) {
+         *      print_r($result);
+         *      exit();
+         *  }
+         *  print_r($banks->bank_list);die;
+         */
         $data["bank_fullname"] = "中国银行"; //银行全称
         $data["card_type"] = "DE"; //银行卡类型,区分借记卡和信用卡，DE代表借记卡，CR代表信用卡，其他值为非法
         $data["account_type"] = "P"; //帐户类型，P代表私户，C代表公户，其他值为非法
-        $data["account_no"] = "";   //收款方的银行卡号
-        $data["account_name"] = ""; //收款方的姓名或者单位名
+        $data["account_no"] = "6222691921993848888";   //收款方的银行卡号
+        $data["account_name"] = "test"; //收款方的姓名或者单位名
         //选填mobile
         $data["mobile"] = ""; //银行绑定的手机号
         //选填optional

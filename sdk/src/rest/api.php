@@ -3,26 +3,9 @@
  * php version >= 5.3
  *
  */
-namespace beecloud;
-
 namespace beecloud\rest;
 
 class api {
-    const URI_BILL = "/2/rest/bill";  			//支付
-    const URI_REFUND = "/2/rest/refund";		//退款 预退款批量审核 退款订单查询(制定id)
-    const URI_BILLS = "/2/rest/bills";			//订单查询
-    const URI_BILLS_COUNT = "/2/rest/bills/count";		//订单总数查询
-    const URI_REFUNDS = "/2/rest/refunds";			//退款查询
-    const URI_REFUNDS_COUNT = "/2/rest/refunds/count"; //退款总数查询
-    const URI_REFUND_STATUS = "/2/rest/refund/status"; //退款状态更新
-
-    const URI_TRANSFERS = "/2/rest/transfers"; //批量打款 - 支付宝
-    const URI_TRANSFER = "/2/rest/transfer";  //单笔打款 - 支付宝/微信
-    const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
-
-    const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
-    const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
-    const URI_OFFLINE_REFUND = '/2/rest/offline/refund'; //线下退款
 
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
@@ -70,6 +53,7 @@ class api {
 
     /**
      * @param array $data
+     * @param $method post(default),get
      * @return mixed
      * @throws \Exception
      */
@@ -86,7 +70,7 @@ class api {
 				case 'JD_WEB':
 				case 'JD_B2B':
 				case "BC_GATEWAY":
-				case "BC_EXPRESS":
+				//case "BC_EXPRESS":
 					if (!isset($data["return_url"])) {
 						throw new \Exception(NEED_RETURN_URL);
 					}
@@ -160,10 +144,9 @@ class api {
 		        }
 		        $order_id = $data["id"];
 		        unset($data["id"]);
-		        return self::get(self::URI_BILL.'/'.$order_id, $data, 30, false);
+		        return self::get(URI_BILL.'/'.$order_id, $data, 30, false);
         		break;
         	case 'post': // 支付
-        	default:
         		if (!isset($data["channel"])) {
         			throw new \Exception(NEED_PARAM . "channel");
         		}
@@ -181,11 +164,13 @@ class api {
 		        }
 		
 		        if (!isset($data["title"])) {
-		            //TODO: 字节数
 		            throw new \Exception(NEED_PARAM . "title");
 		        }
-		        return self::post(self::URI_BILL, $data, 30, false);
+				return self::post(URI_BILL, $data, 30, false);
         		break;
+			default :
+				exit('No this method');
+				break;
         }
     }
     
@@ -195,7 +180,7 @@ class api {
  		self::channelCheck($data);
 
         //param validation
-        return self::get(self::URI_BILLS, $data, 30, false);
+        return self::get(URI_BILLS, $data, 30, false);
     }
     
     
@@ -206,7 +191,7 @@ class api {
     	if (isset($data["bill_no"]) && !preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
         	throw new \Exception(NEED_VALID_PARAM . "bill_no");
 		}
-    	return self::get(self::URI_BILLS_COUNT, $data, 30, false);
+    	return self::get(URI_BILLS_COUNT, $data, 30, false);
     }
 
     static final public function refund(array $data, $method = 'post') {
@@ -244,7 +229,7 @@ class api {
         		if (!isset($data["agree"])) {
 		            throw new \Exception(NEED_PARAM . "agree");
 		        }
-		        return self::put(self::URI_REFUND, $data, 30, false);
+		        return self::put(URI_REFUND, $data, 30, false);
         		break;
         	case 'get'://退款订单查询
         		if (!isset($data["id"])) {
@@ -252,7 +237,7 @@ class api {
 		        }
 		        $order_id = $data["id"];
 		        unset($data["id"]);
-		        return self::get(self::URI_REFUND.'/'.$order_id, $data, 30, false);
+		        return self::get(URI_REFUND.'/'.$order_id, $data, 30, false);
         		break;
         	case 'post': //退款
         	default :
@@ -273,7 +258,7 @@ class api {
 		    	if(!is_int($data["refund_fee"]) || 1>$data["refund_fee"]) {
 		            throw new \Exception(NEED_VALID_PARAM . "refund_fee");
 		        }
-		        return self::post(self::URI_REFUND, $data, 30, false);
+		        return self::post(URI_REFUND, $data, 30, false);
         		break;
         }
     }
@@ -284,7 +269,7 @@ class api {
         self::baseParamCheck($data);
         self::channelCheck($data);
         //param validation
-        return self::get(self::URI_REFUNDS, $data, 30, false);
+        return self::get(URI_REFUNDS, $data, 30, false);
     }
     
 	static final public function refunds_count(array $data) {
@@ -292,7 +277,7 @@ class api {
         self::baseParamCheck($data);
         self::channelCheck($data);
         //param validation
-        return self::get(self::URI_REFUNDS_COUNT, $data, 30, false);
+        return self::get(URI_REFUNDS_COUNT, $data, 30, false);
     }
     
 
@@ -315,7 +300,7 @@ class api {
             throw new \Exception(NEED_PARAM . "refund_no");
         }
         //param validation
-        return self::get(self::URI_REFUND_STATUS, $data, 30, false);
+        return self::get(URI_REFUND_STATUS, $data, 30, false);
     }
     
     //单笔打款 - 支付宝/微信红包
@@ -358,7 +343,7 @@ class api {
             }
         }
 
-        return self::post(self::URI_TRANSFER, $data, 30, false);
+        return self::post(URI_TRANSFER, $data, 30, false);
     }
 
     //批量打款 - 支付宝
@@ -388,29 +373,36 @@ class api {
             throw new \Exception(NEED_VALID_PARAM . "transfer_data(array)");
         }
 
-        return self::post(self::URI_TRANSFERS, $data, 30, false);
+        return self::post(URI_TRANSFERS, $data, 30, false);
     }
-    
-    //打款 - 银行卡
+
+	//BC企业打款 - 支持bank
+	static final public function bc_transfer_banks($data) {
+		if (!isset($data["type"])) {
+			throw new \Exception(NEED_PARAM . "type");
+		}
+
+		if(!in_array($data['type'], array('P_DE', 'P_CR', 'C'))) throw new \Exception(NEED_VALID_PARAM . 'type(P_DE, P_CR, C)');
+
+		return self::get(URL_BC_TRANSFER_BANKS, $data, 30, false);
+	}
+
+    //BC企业打款 - 银行卡
     static final public function bc_transfer(array $data) {
         self::baseParamCheck($data);
         $params = array(
-        	'total_fee', 'bill_no', 'title', 'trade_source', 'bank_code', 'bank_associated_code', 'bank_fullname',
+        	'total_fee', 'bill_no', 'title', 'trade_source', 'bank_fullname',
         	'card_type', 'account_type', 'account_no', 'account_name'
         );
-		
         foreach ($params as $v) {
          	if (!isset($data[$v])) {
                 throw new \Exception(NEED_PARAM . $v);
             }
-			if(empty($data[$v])){
-				throw new \Exception($v.FIELD_VALUE_EMPTY);
-			}
         }
         if(!in_array($data['card_type'], array('DE', 'CR'))) throw new \Exception(NEED_VALID_PARAM . 'card_type(DE, CR)');
         if(!in_array($data['account_type'], array('P', 'C'))) throw new \Exception(NEED_VALID_PARAM . 'account_type(P, C)');
 
-        return self::post(self::URI_BC_TRANSFER, $data, 30, false);
+        return self::post(URI_BC_TRANSFER, $data, 30, false);
     }
     
     
@@ -454,11 +446,11 @@ class api {
 	        if (!isset($data["title"])) {
 	            throw new \Exception(NEED_PARAM . "title");
 	        }
-        	return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
+        	return self::post(URI_OFFLINE_BILL, $data, 30, false);
         }
 		$bill_no = $data["bill_no"];
 		unset($data["bill_no"]);
-		return self::post(self::URI_OFFLINE_BILL.'/'.$bill_no, $data, 30, false);
+		return self::post(URI_OFFLINE_BILL.'/'.$bill_no, $data, 30, false);
     }
     
 	static final public function offline_bill_status(array $data) {
@@ -483,7 +475,7 @@ class api {
     	if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
         	throw new \Exception(NEED_VALID_PARAM . "bill_no");
         }
-        return self::post(self::URI_OFFLINE_BILL_STATUS, $data, 30, false);
+        return self::post(URI_OFFLINE_BILL_STATUS, $data, 30, false);
     }
     
     static final private function offline_refund(array $data){
@@ -519,7 +511,7 @@ class api {
         	throw new \Exception(NEED_VALID_PARAM . "refund_no");
         }
 
-        return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
+        return self::post(URI_OFFLINE_BILL, $data, 30, false);
     }
     
     
@@ -535,6 +527,7 @@ class api {
                 case "UN":
                 case "UN_WEB":
                 case "UN_APP":
+                case "UN_WAP":
                 case "WX":
                 case "WX_JSAPI":
                 case "WX_NATIVE":
@@ -566,4 +559,118 @@ class api {
             }
         }
     }
+}
+
+class international {
+	const URI_BILL = "/1/rest/international/bill";
+	const URI_REFUND = "/1/rest/international/refund";
+
+	static final private function baseParamCheck(array $data) {
+		if (!isset($data["app_id"])) {
+			throw new \Exception(NEED_PARAM . "app_id");
+		}
+
+		if (!isset($data["timestamp"])) {
+			throw new \Exception(NEED_PARAM . "timestamp");
+		}
+
+		if (!isset($data["app_sign"])) {
+			throw new \Exception(NEED_PARAM . "app_sign");
+		}
+
+		if (!isset($data["currency"])) {
+			throw new \Exception(NEED_PARAM . "currency");
+		}
+	}
+
+	static final protected function post($api, $data, $timeout, $returnArray) {
+		$url = \beecloud\network::getApiUrl() . $api;
+		$httpResultStr = \beecloud\network::request($url, "post", $data, $timeout);
+		$result = json_decode($httpResultStr, !$returnArray ? false : true);
+		if (!$result) {
+			throw new \Exception(UNEXPECTED_RESULT . $httpResultStr);
+		}
+		return $result;
+	}
+
+	static final protected function get($api, $data, $timeout, $returnArray) {
+		$url = \beecloud\network::getApiUrl() . $api;
+		$httpResultStr = \beecloud\network::request($url, "get", $data, $timeout);
+		$result = json_decode($httpResultStr,!$returnArray ? false : true);
+		if (!$result) {
+			throw new \Exception(UNEXPECTED_RESULT . $httpResultStr);
+		}
+		return $result;
+	}
+
+	/**
+	 * @param array $data
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	static final public function bill(array $data) {
+		//param validation
+		self::baseParamCheck($data);
+
+		switch ($data["channel"]) {
+			case "PAYPAL_PAYPAL":
+				if (!isset($data["return_url"])) {
+					throw new \Exception(NEED_PARAM . "return_url");
+				}
+				break;
+			case "PAYPAL_CREDITCARD":
+				if (!isset($data["credit_card_info"])) {
+					throw new \Exception(NEED_PARAM . "credit_card_info");
+				}
+				break;
+			case "PAYPAL_SAVED_CREDITCARD":
+				if (!isset($data["credit_card_id"])) {
+					throw new \Exception(NEED_PARAM . "credit_card_id");
+				}
+				break;
+			default:
+				throw new \Exception(NEED_VALID_PARAM . "channel");
+				break;
+		}
+
+		if (!isset($data["total_fee"])) {
+			throw new \Exception(NEED_PARAM . "total_fee");
+		} else if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
+			throw new \Exception(NEED_VALID_PARAM . "total_fee");
+		}
+
+		if (!isset($data["bill_no"])) {
+			throw new \Exception(NEED_PARAM . "bill_no");
+		}
+
+		if (!isset($data["title"])) {
+			throw new \Exception(NEED_PARAM . "title");
+		}
+
+		return self::post(URI_INTERNATIONAL_BILL, $data, 30, false);
+	}
+	/*//TODO:
+    static final public function refund(array $data) {
+        //param validation
+        self::baseParamCheck($data);
+
+        if (isset($data["channel"])) {
+            switch ($data["channel"]) {
+                case "PAYPAL":
+                case "PAYPAL_PAYPAL":
+                case "PAYPAL_CREDITCARD":
+                case "PAYPAL_SAVED_CREDITCARD":
+                    break;
+                default:
+                    throw new \Exception(NEED_VALID_PARAM . "channel");
+                    break;
+            }
+        }
+
+        if (!isset($data["refund_no"])) {
+            throw new \Exception(NEED_PARAM . "refund_no");
+        }
+        // TODO: refund_no validation
+        return self::post(URI_INTERNATIONAL_REFUND, $data, 30, false);
+    }*/
 }

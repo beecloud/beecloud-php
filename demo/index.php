@@ -38,6 +38,10 @@
                 <img src="http://beeclouddoc.qiniudn.com/unionpay.png" alt="">
             </li>
             <li onclick="paySwitch(this)">
+                <input type="radio" value="UN_WAP" name="paytype">
+                <img src="http://beeclouddoc.qiniudn.com/icon-unwap.png" alt="">
+            </li>
+            <li onclick="paySwitch(this)">
                 <input type="radio" value="JD_WEB" name="paytype">
                 <img src="http://beeclouddoc.qiniudn.com/jd.png" alt="JD　WEB">
             </li>
