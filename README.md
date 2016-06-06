@@ -20,6 +20,7 @@
 具体可参考[快速开始](https://beecloud.cn/apply/)
 
 ## 流程
+
 下图为整个支付的流程: 
 ![Flow](http://7xavqo.com1.z0.glb.clouddn.com/img-beecloud%20sdk.png)
 
@@ -38,8 +39,6 @@
 步骤⑤：**（在商户后端服务端）处理异步回调结果（[Webhook](https://beecloud.cn/doc/?index=webhook)）**
  
 付款完成之后，根据客户在BeeCloud后台的设置，BeeCloud会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
-
-
 
 ## 引入BeeCloud API
 
