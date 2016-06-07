@@ -8,6 +8,8 @@ v2.3.4 发布日期: 2016年6月6日
 + 修改企业打款API
 + 原demo的lib/WxPayPubHelper中提供的WxPayPubHelper.php方法createOauthUrlForCode现增加urlencode($redirectUrl),
   用户在使用获取code时不需要再次urlencode,请注意!!!
++ 提供下单和查询的Sandbox模式，即设置TEST_MODE＝true
+  
 
 BeeCloud PHP Changelog
 ========================================================
