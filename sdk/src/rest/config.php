@@ -1,6 +1,6 @@
 <?php
 //test model,只提供下单和查询的Sandbox模式
-define('TEST_MODE', true);
+define('TEST_MODE', false);
 /*
  * bank_code(int 类型) for channel JD_B2B
 9102    中国工商银行      9107    招商银行
@@ -21,9 +21,10 @@ CMBC  民生银行
 define('BANK', serialize(array('CMB', 'ICBC', 'CCB', 'BOC', 'ABC', 'BOCM', 'SPDB', 'GDB', 'CITIC', 'CEB', 'CIB', 'SDB', 'CMBC')));
 
 
-const URI_BILL = TEST_MODE ? "/2/rest/sandbox/bill" : "/2/rest/bill"; //支付;支付订单查询(指定id)
-const URI_BILLS = TEST_MODE ? "/2/rest/sandbox/bills" : "/2/rest/bills" ;//订单查询
-const URI_BILLS_COUNT = TEST_MODE ? "/2/rest/sandbox/bills/count" : "/2/rest/bills/count";//订单总数查询
+define('URI_BILL', TEST_MODE ? "/2/rest/sandbox/bill" : "/2/rest/bill"); //支付;支付订单查询(指定id)
+define('URI_BILLS', TEST_MODE ? "/2/rest/sandbox/bills" : "/2/rest/bills"); //订单查询
+define('URI_BILLS_COUNT', TEST_MODE ? "/2/rest/sandbox/bills/count" : "/2/rest/bills/count"); //订单总数查询
+
 const URI_REFUND = "/2/rest/refund";		//退款;预退款批量审核;退款订单查询(指定id)
 const URI_REFUNDS = "/2/rest/refunds";		//退款查询
 const URI_REFUNDS_COUNT = "/2/rest/refunds/count"; //退款总数查询
