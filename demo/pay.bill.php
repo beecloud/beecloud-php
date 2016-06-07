@@ -12,7 +12,7 @@ $data["bill_no"] = "bcdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = "PHP ".$_GET['type'].'支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
-$data["return_url"] = "http://payservice.beecloud.cn/return_url/slt/index.php";
+$data["return_url"] = "https://beecloud.cn";
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 //选填 订单失效时间bill_timeout
