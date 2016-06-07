@@ -73,10 +73,10 @@
                 <input type="radio" value="YEE_WAP" name="paytype">
                 <img src="http://beeclouddoc.qiniudn.com/ybwap.png" alt="YEE WAP">
             </li>
-            <!--<li onclick="paySwitch(this)">
+            <li onclick="paySwitch(this)">
                 <input type="radio" value="YEE_NOBANKCARD" name="paytype">
                 <img src="http://beeclouddoc.qiniudn.com/ybcard.png" alt="YEE NOBANKCARD">
-            </li>-->
+            </li>
             <li onclick="paySwitch(this)">
                 <input type="radio" value="PAYPAL_PAYPAL" name="paytype">
                 <img src="http://beeclouddoc.qiniudn.com/paypal.png" alt="PAYPAL PAYPAL">
@@ -92,11 +92,11 @@
 
             <li onclick="paySwitch(this)">
                 <input type="radio" name="paytype" value="BC_GATEWAY">
-                <img src="statics/images/gateway_pay.png" alt="BC GATEWAY" >
+                <img src="http://7xavqo.com1.z0.glb.clouddn.com/icon_gateway.png" alt="BC GATEWAY" >
             </li>
             <li onclick="paySwitch(this)">
                 <input type="radio" name="paytype" value="BC_EXPRESS">
-                <img src="statics/images/bc_kuaijie.png" alt="BC EXPRESS" >
+                <img src="http://beeclouddoc.qiniudn.com/icon_BcExpress.png" alt="BC EXPRESS" >
             </li>
         </ul>
     </div>

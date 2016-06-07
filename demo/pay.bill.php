@@ -10,11 +10,11 @@ $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
-$data["title"] = "PHP ".$_GET['type'].'支付测试';
+$data["title"] = 'PHP '.$_GET['type'].'支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
 $data["return_url"] = "https://beecloud.cn";
 //选填 optional
-$data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
+$data["optional"] = (object)array("tag"=>"msgtoreturn");
 //选填 订单失效时间bill_timeout
 //必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒
 //京东(JD*)不支持该参数。
@@ -101,6 +101,23 @@ switch($type){
         $data["identity_id"] = "lengthlessthan50useruniqueid";
         $title = "易宝移动网页";
         break;
+    case 'YEE_NOBANKCARD':
+        //total_fee(订单金额)必须和充值卡面额相同，否则会造成金额丢失(渠道方决定)
+        $data["total_fee"] = 10;
+        $data["channel"] = "YEE_NOBANKCARD";
+        //点卡卡号，每种卡的要求不一样
+        $data["cardno"] = "15078120125091678";
+        //点卡密码，简称卡密
+        $data["cardpwd"] = "121684730734269992";
+        /*
+         * frqid 点卡类型编码
+         * 骏网一卡通(JUNNET),盛大卡(SNDACARD),神州行(SZX),征途卡(ZHENGTU),Q币卡(QQCARD),联通卡(UNICOM),
+         * 久游卡(JIUYOU),易充卡(YICHONGCARD),网易卡(NETEASE),完美卡(WANMEI),搜狐卡(SOHU),电信卡(TELECOM),
+         * 纵游一卡通(ZONGYOU),天下一卡通(TIANXIA),天宏一卡通(TIANHONG),32 一卡通(THIRTYTWOCARD)
+         */
+        $data["frqid"] = "SZX";
+        $title = "易宝点卡支付";
+        break;
     case 'KUAIQIAN_WEB' :
         $data["channel"] = "KUAIQIAN_WEB";
         $title = "快钱移动网页";
@@ -177,17 +194,18 @@ try {
         print_r($result);
         exit();
     }
-    if(isset($result->html)) {
-        echo $result->html;
-    }else if(isset($result->url)){
+    if(isset($result->url)){
         header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
     }else if(isset($result->credit_card_id)){
         echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
+    }else if(isset($result->id)){
+        echo $type.'支付成功: '.$result->id;
     }
 } catch (Exception $e) {
     echo $e->getMessage();
 }
 ?>
-
 </body>
 </html>
