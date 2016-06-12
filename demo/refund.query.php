@@ -2,7 +2,7 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = TEST_MODE ? TEST_SECRET : APP_SECRET;
+$appSecret = APP_SECRET;
 $data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);

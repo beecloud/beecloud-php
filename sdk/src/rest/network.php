@@ -1,5 +1,5 @@
 <?php
-namespace beecloud;
+namespace beecloud\rest;
 
 
 class network {

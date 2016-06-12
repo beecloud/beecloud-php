@@ -1,5 +1,5 @@
 <?php
-//test model,只提供下单和查询的Sandbox模式
+//Test Model,只提供下单和支付订单查询的Sandbox模式
 define('TEST_MODE', false);
 /*
  * bank_code(int 类型) for channel JD_B2B

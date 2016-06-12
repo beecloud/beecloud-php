@@ -75,8 +75,8 @@ try {
     $str = "<tr><th>ID</th><th>同意退款</th><th>预退款</th><th>是否支付</th><th>创建时间</th><th>总价(分)</th><th>渠道类型</th><th>订单号</th><th>订单标题</th></tr>";
     foreach($bills as $list) {
         $strParams = "?type=$type&refund_no=".$refund_no."&bill_no=".$list->bill_no."&refund_fee=".$list->total_fee;
-        $agree_refund = $list->spay_result&&!$list->refund_result ? "<a href='agree.refund.php".$strParams."' target='_blank'>退款</a>" : "";
-        $prep_refund = $list->spay_result&&!$list->refund_result ? "<a href='agree.refund.php".$strParams."&need_approval=true' target='_blank'>预退款</a>" : "";
+        $agree_refund = $list->spay_result&&!$list->refund_result&&$data["channel"] != "BC" ? "<a href='agree.refund.php".$strParams."' target='_blank'>退款</a>" : "";
+        $prep_refund = $list->spay_result&&!$list->refund_result&&$data["channel"] != "BC" ? "<a href='agree.refund.php".$strParams."&need_approval=true' target='_blank'>预退款</a>" : "";
         $spay_result = $list->spay_result ? ($list->refund_result ? '已退款' : '支付') : '未支付';
         $create_time = $list->create_time ? date ( 'Y-m-d H:i:s', $list->create_time / 1000 ) : '';
         $str .= "<tr><td>$list->id</td><td>$agree_refund</td><td>$prep_refund</td><td>$spay_result</td><td>$create_time</td><td>{$list->total_fee}</td><td>{$list->sub_channel}</td>
