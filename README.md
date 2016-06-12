@@ -21,9 +21,8 @@
 
 ## 流程
 
-下图为整个支付的流程:
-![pic](http://7xavqo.com1.z0.glb.clouddn.com/img-beecloud%20sdk.png)
-
+下图为整个支付的流程: 
+![Flow](http://7xavqo.com1.z0.glb.clouddn.com/img-beecloud%20sdk.png)
 
 步骤①：**（从网页服务器端）发送订单信息**  
 步骤②：**收到BeeCloud返回的渠道支付地址（比如支付宝的收银台）**  

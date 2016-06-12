@@ -77,8 +77,6 @@ class BCRESTUtil {
  * paypal pay
  */
 class BCRESTInternational {
-    const URI_BILL = "/1/rest/international/bill";
-    const URI_REFUND = "/1/rest/international/refund";
 
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
@@ -167,26 +165,11 @@ class BCRESTInternational {
             throw new Exception(NEED_PARAM . "title");
         }
 
-        return self::post(self::URI_BILL, $data, 30, false);
+        return self::post(URI_INTERNATIONAL_BILL, $data, 30, false);
     }
 }
 
 class BCRESTApi {
-    const URI_BILL = "/2/rest/bill";  			//支付
-    const URI_REFUND = "/2/rest/refund";		//退款 预退款批量审核 退款订单查询(制定id)
-    const URI_BILLS = "/2/rest/bills";			//订单查询
-    const URI_BILLS_COUNT = "/2/rest/bills/count";		//订单总数查询
-    const URI_REFUNDS = "/2/rest/refunds";			//退款查询
-    const URI_REFUNDS_COUNT = "/2/rest/refunds/count"; //退款总数查询
-    const URI_REFUND_STATUS = "/2/rest/refund/status"; //退款状态更新
-
-    const URI_TRANSFERS = "/2/rest/transfers"; //批量打款 - 支付宝
-    const URI_TRANSFER = "/2/rest/transfer";  //单笔打款 - 支付宝/微信
-    const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
-
-    const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
-    const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
-    const URI_OFFLINE_REFUND = '/2/rest/offline/refund'; //线下退款
 
     static final private function baseParamCheck(array $data) {
         if (!isset($data["app_id"])) {
@@ -250,7 +233,7 @@ class BCRESTApi {
                 case 'JD_WEB':
                 case 'JD_B2B':
                 case "BC_GATEWAY":
-                case "BC_EXPRESS":
+                //case "BC_EXPRESS":
                     if (!isset($data["return_url"])) {
                         throw new Exception(NEED_RETURN_URL);
                     }
@@ -327,10 +310,9 @@ class BCRESTApi {
                 }
                 $order_id = $data["id"];
                 unset($data["id"]);
-                return self::get(self::URI_BILL.'/'.$order_id, $data, 30, false);
+                return self::get(URI_BILL.'/'.$order_id, $data, 30, false);
                 break;
             case 'post': // 支付
-            default:
                 if (!isset($data["channel"])) {
                     throw new Exception(NEED_PARAM . "channel");
                 }
@@ -348,10 +330,12 @@ class BCRESTApi {
                 }
 
                 if (!isset($data["title"])) {
-                    //TODO: 字节数
                     throw new Exception(NEED_PARAM . "title");
                 }
-                return self::post(self::URI_BILL, $data, 30, false);
+                return self::post(URI_BILL, $data, 30, false);
+                break;
+            default :
+                exit('No this method');
                 break;
         }
     }
@@ -362,7 +346,7 @@ class BCRESTApi {
         self::channelCheck($data);
 
         //param validation
-        return self::get(self::URI_BILLS, $data, 30, false);
+        return self::get(URI_BILLS, $data, 30, false);
     }
 
 
@@ -373,7 +357,7 @@ class BCRESTApi {
         if (isset($data["bill_no"]) && !preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
             throw new Exception(NEED_VALID_PARAM . "bill_no");
         }
-        return self::get(self::URI_BILLS_COUNT, $data, 30, false);
+        return self::get(URI_BILLS_COUNT, $data, 30, false);
     }
 
     static final public function refund(array $data, $method = 'post') {
@@ -411,7 +395,7 @@ class BCRESTApi {
                 if (!isset($data["agree"])) {
                     throw new Exception(NEED_PARAM . "agree");
                 }
-                return self::put(self::URI_REFUND, $data, 30, false);
+                return self::put(URI_REFUND, $data, 30, false);
                 break;
             case 'get'://退款订单查询
                 if (!isset($data["id"])) {
@@ -419,7 +403,7 @@ class BCRESTApi {
                 }
                 $order_id = $data["id"];
                 unset($data["id"]);
-                return self::get(self::URI_REFUND.'/'.$order_id, $data, 30, false);
+                return self::get(URI_REFUND.'/'.$order_id, $data, 30, false);
                 break;
             case 'post': //退款
             default :
@@ -440,7 +424,7 @@ class BCRESTApi {
                 if(!is_int($data["refund_fee"]) || 1>$data["refund_fee"]) {
                     throw new Exception(NEED_VALID_PARAM . "refund_fee");
                 }
-                return self::post(self::URI_REFUND, $data, 30, false);
+                return self::post(URI_REFUND, $data, 30, false);
                 break;
         }
     }
@@ -451,7 +435,7 @@ class BCRESTApi {
         self::baseParamCheck($data);
         self::channelCheck($data);
         //param validation
-        return self::get(self::URI_REFUNDS, $data, 30, false);
+        return self::get(URI_REFUNDS, $data, 30, false);
     }
 
     static final public function refunds_count(array $data) {
@@ -459,7 +443,7 @@ class BCRESTApi {
         self::baseParamCheck($data);
         self::channelCheck($data);
         //param validation
-        return self::get(self::URI_REFUNDS_COUNT, $data, 30, false);
+        return self::get(URI_REFUNDS_COUNT, $data, 30, false);
     }
 
     static final public function refundStatus(array $data) {
@@ -481,7 +465,7 @@ class BCRESTApi {
             throw new Exception(NEED_PARAM . "refund_no");
         }
         //param validation
-        return self::get(self::URI_REFUND_STATUS, $data, 30, false);
+        return self::get(URI_REFUND_STATUS, $data, 30, false);
     }
 
     //单笔打款 - 支付宝/微信
@@ -524,7 +508,7 @@ class BCRESTApi {
             }
         }
 
-        return self::post(self::URI_TRANSFER, $data, 30, false);
+        return self::post(URI_TRANSFER, $data, 30, false);
     }
 
     //批量打款 - 支付宝
@@ -554,32 +538,36 @@ class BCRESTApi {
             throw new Exception(NEED_VALID_PARAM . "transfer_data(array)");
         }
 
-        return self::post(self::URI_TRANSFERS, $data, 30, false);
+        return self::post(URI_TRANSFERS, $data, 30, false);
     }
 
-    //打款 - 银行卡
+    //BC企业打款 - 支持bank
+    static final public function bc_transfer_banks($data) {
+        if (!isset($data["type"])) {
+            throw new Exception(NEED_PARAM . "type");
+        }
+
+        if(!in_array($data['type'], array('P_DE', 'P_CR', 'C'))) throw new Exception(NEED_VALID_PARAM . 'type(P_DE, P_CR, C)');
+
+        return self::get(URL_BC_TRANSFER_BANKS, $data, 30, false);
+    }
+
+    //BC企业打款 - 银行卡
     static final public function bc_transfer(array $data) {
         self::baseParamCheck($data);
         $params = array(
-            'total_fee', 'bill_no', 'title', 'trade_source', 'bank_code', 'bank_associated_code', 'bank_fullname',
+            'total_fee', 'bill_no', 'title', 'trade_source', 'bank_fullname',
             'card_type', 'account_type', 'account_no', 'account_name'
         );
-
         foreach ($params as $v) {
             if (!isset($data[$v])) {
                 throw new Exception(NEED_PARAM . $v);
-            }
-            if(empty($data[$v])){
-                if($v == 'bank_associated_code' && $data['total_fee'] < 5000000){
-                    continue;
-                }
-                throw new Exception($v.FIELD_VALUE_EMPTY);
             }
         }
         if(!in_array($data['card_type'], array('DE', 'CR'))) throw new Exception(NEED_VALID_PARAM . 'card_type(DE, CR)');
         if(!in_array($data['account_type'], array('P', 'C'))) throw new Exception(NEED_VALID_PARAM . 'account_type(P, C)');
 
-        return self::post(self::URI_BC_TRANSFER, $data, 30, false);
+        return self::post(URI_BC_TRANSFER, $data, 30, false);
     }
 
 
@@ -623,11 +611,11 @@ class BCRESTApi {
             if (!isset($data["title"])) {
                 throw new Exception(NEED_PARAM . "title");
             }
-            return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
+            return self::post(URI_OFFLINE_BILL, $data, 30, false);
         }
         $bill_no = $data["bill_no"];
         unset($data["bill_no"]);
-        return self::post(self::URI_OFFLINE_BILL.'/'.$bill_no, $data, 30, false);
+        return self::post(URI_OFFLINE_BILL.'/'.$bill_no, $data, 30, false);
     }
 
     static final public function offline_bill_status(array $data) {
@@ -652,7 +640,7 @@ class BCRESTApi {
         if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
             throw new Exception(NEED_VALID_PARAM . "bill_no");
         }
-        return self::post(self::URI_OFFLINE_BILL_STATUS, $data, 30, false);
+        return self::post(URI_OFFLINE_BILL_STATUS, $data, 30, false);
     }
 
     static final private function offline_refund(array $data){
@@ -688,7 +676,7 @@ class BCRESTApi {
             throw new Exception(NEED_VALID_PARAM . "refund_no");
         }
 
-        return self::post(self::URI_OFFLINE_BILL, $data, 30, false);
+        return self::post(URI_OFFLINE_BILL, $data, 30, false);
     }
 
 
@@ -704,6 +692,7 @@ class BCRESTApi {
                 case "UN":
                 case "UN_WEB":
                 case "UN_APP":
+                case "UN_WAP":
                 case "WX":
                 case "WX_JSAPI":
                 case "WX_NATIVE":

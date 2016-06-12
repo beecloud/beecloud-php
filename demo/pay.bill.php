@@ -2,7 +2,7 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = APP_SECRET;
+$appSecret = TEST_MODE ? TEST_SECRET : APP_SECRET;
 $data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
 $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
@@ -10,11 +10,11 @@ $data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
-$data["title"] = "PHP ".$_GET['type'].'支付测试';
+$data["title"] = 'PHP '.$_GET['type'].'支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
-$data["return_url"] = "http://beecloud.cn";
+$data["return_url"] = "https://beecloud.cn";
 //选填 optional
-$data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
+$data["optional"] = (object)array("tag"=>"msgtoreturn");
 //选填 订单失效时间bill_timeout
 //必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒
 //京东(JD*)不支持该参数。
@@ -38,6 +38,11 @@ switch($type){
         //1： 订单码-前置模式, 对应 iframe 宽度不能小于 300px, 高度不能小于 600px
         //3： 订单码-迷你前置模式, 对应 iframe 宽度不能小于 75px, 高度不能小于 75px
         $data["qr_pay_mode"] = "0";
+        break;
+    case 'ALI_OFFLINE_QRCODE' :
+        $data["channel"] = "ALI_OFFLINE_QRCODE";
+        require_once 'ali.offline.qrcode/index.php';
+        exit();
         break;
     case 'BD_WEB' :
         $data["channel"] = "BD_WEB";
@@ -71,6 +76,10 @@ switch($type){
         $data["channel"] = "UN_WEB";
         $title = "银联网页";
         break;
+    case 'UN_WAP' : //由于银联做了适配,需在移动端打开,PC端仍显示网页支付
+        $data["channel"] = "UN_WAP";
+        $title = "银联移动网页";
+        break;
     case 'WX_NATIVE':
         $data["channel"] = "WX_NATIVE";
         $title = "微信扫码";
@@ -91,6 +100,23 @@ switch($type){
         $data["channel"] = "YEE_WAP";
         $data["identity_id"] = "lengthlessthan50useruniqueid";
         $title = "易宝移动网页";
+        break;
+    case 'YEE_NOBANKCARD':
+        //total_fee(订单金额)必须和充值卡面额相同，否则会造成金额丢失(渠道方决定)
+        $data["total_fee"] = 10;
+        $data["channel"] = "YEE_NOBANKCARD";
+        //点卡卡号，每种卡的要求不一样
+        $data["cardno"] = "15078120125091678";
+        //点卡密码，简称卡密
+        $data["cardpwd"] = "121684730734269992";
+        /*
+         * frqid 点卡类型编码
+         * 骏网一卡通(JUNNET),盛大卡(SNDACARD),神州行(SZX),征途卡(ZHENGTU),Q币卡(QQCARD),联通卡(UNICOM),
+         * 久游卡(JIUYOU),易充卡(YICHONGCARD),网易卡(NETEASE),完美卡(WANMEI),搜狐卡(SOHU),电信卡(TELECOM),
+         * 纵游一卡通(ZONGYOU),天下一卡通(TIANXIA),天宏一卡通(TIANHONG),32 一卡通(THIRTYTWOCARD)
+         */
+        $data["frqid"] = "SZX";
+        $title = "易宝点卡支付";
         break;
     case 'KUAIQIAN_WEB' :
         $data["channel"] = "KUAIQIAN_WEB";
@@ -127,11 +153,6 @@ switch($type){
         $data["credit_card_id"] = '';
         $title = "Paypal快捷";
         break;
-    case 'ALI_OFFLINE_QRCODE' :
-        $data["channel"] = "ALI_OFFLINE_QRCODE";
-        require_once 'ali.offline.qrcode/index.php';
-        exit();
-        break;
     case 'BC_GATEWAY' :
         $data["channel"] = "BC_GATEWAY";
         /*
@@ -145,6 +166,7 @@ switch($type){
         $data["bank"] = "BOC";
         break;
     case 'BC_EXPRESS' :
+        $data["total_fee"] = 100;
         $data["channel"] = "BC_EXPRESS";
         //渠道类型BC_KUAIJIE, total_fee(int 类型) 单位分, 最小金额100分
         $data["total_fee"] = 100;
@@ -172,17 +194,18 @@ try {
         print_r($result);
         exit();
     }
-    if(isset($result->html)) {
-        echo $result->html;
-    }else if(isset($result->url)){
+    if(isset($result->url)){
         header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
     }else if(isset($result->credit_card_id)){
         echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
+    }else if(isset($result->id)){
+        echo $type.'支付成功: '.$result->id;
     }
 } catch (Exception $e) {
     echo $e->getMessage();
 }
 ?>
-
 </body>
 </html>

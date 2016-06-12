@@ -1,4 +1,5 @@
 <?php
+header("Content-type: text/html; charset=utf-8");
 /**
  * 微信用户的openid获取请参考官方demo sdk和文档
  * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
@@ -11,7 +12,7 @@ $jsApi = new JsApi_pub();
 if (!isset($_GET['code'])){
     //触发微信返回code码
     $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL);
-    Header("Location: $url");
+    header("Location: $url");
 } else {
     //获取code码，以获取openid
     $code = $_GET['code'];
@@ -54,9 +55,18 @@ try {
             'getBrandWCPayRequest',
             <?php echo json_encode($jsApiParam);?>,
             function(res){
-                WeixinJSBridge.log(res.err_msg);
-                //alert(res.err_msg);
-                //window.location.href = '';
+                /* 参考:https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_7&index=6
+                 * res.err_msg的返回值
+                 * 1.支付成功, get_brand_wcpay_request：ok
+                 * 2.支付过程中用户取消, get_brand_wcpay_request：cancel
+                 * 3.支付失败, get_brand_wcpay_request：fail
+                 */
+                alert(res.err_msg); //供调试使用
+                if(res.err_msg == "get_brand_wcpay_request：ok" ) {
+                    //用户自己的操作, eg: window.location.href = '用户自己的URL';
+                }else{
+                    //用户自己的操作, eg: window.location.href = '用户自己的URL';
+                }
             }
         );
     }
