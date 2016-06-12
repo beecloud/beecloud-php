@@ -16,6 +16,36 @@ class BCRESTUtil {
         return "https://" . $domainList[$random];
     }
 
+    static final public function post($api, $data, $timeout) {
+        $url = BCRESTUtil::getApiUrl() . $api;
+        $httpResultStr = BCRESTUtil::request($url, "post", $data, $timeout);
+        $result = json_decode($httpResultStr);
+        if (!$result) {
+            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
+        }
+        return $result;
+    }
+
+    static final public function get($api, $data, $timeout) {
+        $url = BCRESTUtil::getApiUrl() . $api;
+        $httpResultStr = BCRESTUtil::request($url, "get", $data, $timeout);
+        $result = json_decode($httpResultStr);
+        if (!$result) {
+            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
+        }
+        return $result;
+    }
+
+    static final public function put($api, $data, $timeout, $returnArray) {
+        $url = BCRESTUtil::getApiUrl() . $api;
+        $httpResultStr = BCRESTUtil::request($url, "put", $data, $timeout);
+        $result = json_decode($httpResultStr,!$returnArray ? false : true);
+        if (!$result) {
+            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
+        }
+        return $result;
+    }
+
     static final public function request($url, $method, array $data, $timeout) {
         try {
             $timeout = (isset($timeout) && is_int($timeout)) ? $timeout : 20;
@@ -96,36 +126,6 @@ class BCRESTInternational {
         }
     }
 
-    static final protected function post($api, $data, $timeout) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "post", $data, $timeout);
-        $result = json_decode($httpResultStr);
-        if (!$result) {
-            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
-        }
-        return $result;
-    }
-
-    static final protected function get($api, $data, $timeout) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "get", $data, $timeout);
-        $result = json_decode($httpResultStr);
-        if (!$result) {
-            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
-        }
-        return $result;
-    }
-
-    static final protected function put($api, $data, $timeout, $returnArray) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "put", $data, $timeout);
-        $result = json_decode($httpResultStr,!$returnArray ? false : true);
-        if (!$result) {
-            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
-        }
-        return $result;
-    }
-
     static final public function bill(array $data) {
         //param validation
         self::baseParamCheck($data);
@@ -165,7 +165,7 @@ class BCRESTInternational {
             throw new Exception(NEED_PARAM . "title");
         }
 
-        return self::post(URI_INTERNATIONAL_BILL, $data, 30, false);
+        return BCRESTUtil::post(URI_INTERNATIONAL_BILL, $data, 30, false);
     }
 }
 
@@ -183,36 +183,6 @@ class BCRESTApi {
         if (!isset($data["app_sign"])) {
             throw new Exception(NEED_PARAM . "app_sign");
         }
-    }
-
-    static final protected function post($api, $data, $timeout) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "post", $data, $timeout);
-        $result = json_decode($httpResultStr);
-        if (!$result) {
-            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
-        }
-        return $result;
-    }
-
-    static final protected function get($api, $data, $timeout) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "get", $data, $timeout);
-        $result = json_decode($httpResultStr);
-        if (!$result) {
-            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
-        }
-        return $result;
-    }
-
-    static final protected function put($api, $data, $timeout, $returnArray) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "put", $data, $timeout);
-        $result = json_decode($httpResultStr,!$returnArray ? false : true);
-        if (!$result) {
-            throw new Exception(UNEXPECTED_RESULT . $httpResultStr);
-        }
-        return $result;
     }
 
     /**
@@ -310,7 +280,7 @@ class BCRESTApi {
                 }
                 $order_id = $data["id"];
                 unset($data["id"]);
-                return self::get(URI_BILL.'/'.$order_id, $data, 30, false);
+                return BCRESTUtil::get(URI_BILL.'/'.$order_id, $data, 30, false);
                 break;
             case 'post': // 支付
                 if (!isset($data["channel"])) {
@@ -332,7 +302,7 @@ class BCRESTApi {
                 if (!isset($data["title"])) {
                     throw new Exception(NEED_PARAM . "title");
                 }
-                return self::post(URI_BILL, $data, 30, false);
+                return BCRESTUtil::post(URI_BILL, $data, 30, false);
                 break;
             default :
                 exit('No this method');
@@ -346,7 +316,7 @@ class BCRESTApi {
         self::channelCheck($data);
 
         //param validation
-        return self::get(URI_BILLS, $data, 30, false);
+        return BCRESTUtil::get(URI_BILLS, $data, 30, false);
     }
 
 
@@ -357,7 +327,7 @@ class BCRESTApi {
         if (isset($data["bill_no"]) && !preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
             throw new Exception(NEED_VALID_PARAM . "bill_no");
         }
-        return self::get(URI_BILLS_COUNT, $data, 30, false);
+        return BCRESTUtil::get(URI_BILLS_COUNT, $data, 30, false);
     }
 
     static final public function refund(array $data, $method = 'post') {
@@ -395,7 +365,7 @@ class BCRESTApi {
                 if (!isset($data["agree"])) {
                     throw new Exception(NEED_PARAM . "agree");
                 }
-                return self::put(URI_REFUND, $data, 30, false);
+                return BCRESTUtil::put(URI_REFUND, $data, 30, false);
                 break;
             case 'get'://退款订单查询
                 if (!isset($data["id"])) {
@@ -403,7 +373,7 @@ class BCRESTApi {
                 }
                 $order_id = $data["id"];
                 unset($data["id"]);
-                return self::get(URI_REFUND.'/'.$order_id, $data, 30, false);
+                return BCRESTUtil::get(URI_REFUND.'/'.$order_id, $data, 30, false);
                 break;
             case 'post': //退款
             default :
@@ -424,7 +394,7 @@ class BCRESTApi {
                 if(!is_int($data["refund_fee"]) || 1>$data["refund_fee"]) {
                     throw new Exception(NEED_VALID_PARAM . "refund_fee");
                 }
-                return self::post(URI_REFUND, $data, 30, false);
+                return BCRESTUtil::post(URI_REFUND, $data, 30, false);
                 break;
         }
     }
@@ -435,7 +405,7 @@ class BCRESTApi {
         self::baseParamCheck($data);
         self::channelCheck($data);
         //param validation
-        return self::get(URI_REFUNDS, $data, 30, false);
+        return BCRESTUtil::get(URI_REFUNDS, $data, 30, false);
     }
 
     static final public function refunds_count(array $data) {
@@ -443,7 +413,7 @@ class BCRESTApi {
         self::baseParamCheck($data);
         self::channelCheck($data);
         //param validation
-        return self::get(URI_REFUNDS_COUNT, $data, 30, false);
+        return BCRESTUtil::get(URI_REFUNDS_COUNT, $data, 30, false);
     }
 
     static final public function refundStatus(array $data) {
@@ -465,7 +435,7 @@ class BCRESTApi {
             throw new Exception(NEED_PARAM . "refund_no");
         }
         //param validation
-        return self::get(URI_REFUND_STATUS, $data, 30, false);
+        return BCRESTUtil::get(URI_REFUND_STATUS, $data, 30, false);
     }
 
     //单笔打款 - 支付宝/微信
@@ -508,7 +478,7 @@ class BCRESTApi {
             }
         }
 
-        return self::post(URI_TRANSFER, $data, 30, false);
+        return BCRESTUtil::post(URI_TRANSFER, $data, 30, false);
     }
 
     //批量打款 - 支付宝
@@ -538,7 +508,7 @@ class BCRESTApi {
             throw new Exception(NEED_VALID_PARAM . "transfer_data(array)");
         }
 
-        return self::post(URI_TRANSFERS, $data, 30, false);
+        return BCRESTUtil::post(URI_TRANSFERS, $data, 30, false);
     }
 
     //BC企业打款 - 支持bank
@@ -549,7 +519,7 @@ class BCRESTApi {
 
         if(!in_array($data['type'], array('P_DE', 'P_CR', 'C'))) throw new Exception(NEED_VALID_PARAM . 'type(P_DE, P_CR, C)');
 
-        return self::get(URL_BC_TRANSFER_BANKS, $data, 30, false);
+        return BCRESTUtil::get(URL_BC_TRANSFER_BANKS, $data, 30, false);
     }
 
     //BC企业打款 - 银行卡
@@ -567,7 +537,7 @@ class BCRESTApi {
         if(!in_array($data['card_type'], array('DE', 'CR'))) throw new Exception(NEED_VALID_PARAM . 'card_type(DE, CR)');
         if(!in_array($data['account_type'], array('P', 'C'))) throw new Exception(NEED_VALID_PARAM . 'account_type(P, C)');
 
-        return self::post(URI_BC_TRANSFER, $data, 30, false);
+        return BCRESTUtil::post(URI_BC_TRANSFER, $data, 30, false);
     }
 
 
@@ -611,11 +581,11 @@ class BCRESTApi {
             if (!isset($data["title"])) {
                 throw new Exception(NEED_PARAM . "title");
             }
-            return self::post(URI_OFFLINE_BILL, $data, 30, false);
+            return BCRESTUtil::post(URI_OFFLINE_BILL, $data, 30, false);
         }
         $bill_no = $data["bill_no"];
         unset($data["bill_no"]);
-        return self::post(URI_OFFLINE_BILL.'/'.$bill_no, $data, 30, false);
+        return BCRESTUtil::post(URI_OFFLINE_BILL.'/'.$bill_no, $data, 30, false);
     }
 
     static final public function offline_bill_status(array $data) {
@@ -640,7 +610,7 @@ class BCRESTApi {
         if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
             throw new Exception(NEED_VALID_PARAM . "bill_no");
         }
-        return self::post(URI_OFFLINE_BILL_STATUS, $data, 30, false);
+        return BCRESTUtil::post(URI_OFFLINE_BILL_STATUS, $data, 30, false);
     }
 
     static final private function offline_refund(array $data){
@@ -676,7 +646,7 @@ class BCRESTApi {
             throw new Exception(NEED_VALID_PARAM . "refund_no");
         }
 
-        return self::post(URI_OFFLINE_BILL, $data, 30, false);
+        return BCRESTUtil::post(URI_OFFLINE_BILL, $data, 30, false);
     }
 
 

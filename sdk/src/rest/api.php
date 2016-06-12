@@ -584,8 +584,8 @@ class international {
 	}
 
 	static final protected function post($api, $data, $timeout, $returnArray) {
-		$url = \beecloud\network::getApiUrl() . $api;
-		$httpResultStr = \beecloud\network::request($url, "post", $data, $timeout);
+		$url = \beecloud\rest\network::getApiUrl() . $api;
+		$httpResultStr = \beecloud\rest\network::request($url, "post", $data, $timeout);
 		$result = json_decode($httpResultStr, !$returnArray ? false : true);
 		if (!$result) {
 			throw new \Exception(UNEXPECTED_RESULT . $httpResultStr);
@@ -594,8 +594,8 @@ class international {
 	}
 
 	static final protected function get($api, $data, $timeout, $returnArray) {
-		$url = \beecloud\network::getApiUrl() . $api;
-		$httpResultStr = \beecloud\network::request($url, "get", $data, $timeout);
+		$url = \beecloud\rest\network::getApiUrl() . $api;
+		$httpResultStr = \beecloud\rest\network::request($url, "get", $data, $timeout);
 		$result = json_decode($httpResultStr,!$returnArray ? false : true);
 		if (!$result) {
 			throw new \Exception(UNEXPECTED_RESULT . $httpResultStr);
