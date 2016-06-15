@@ -478,7 +478,7 @@ class api {
         return self::post(URI_OFFLINE_BILL_STATUS, $data, 30, false);
     }
     
-    static final private function offline_refund(array $data){
+    static final public function offline_refund(array $data){
     	self::baseParamCheck($data);
         if (isset($data['channel'])) {
 	        switch ($data["channel"]) {
@@ -510,8 +510,7 @@ class api {
         if (!preg_match('/^\d{8}[0-9A-Za-z]{3,24}$/', $data["refund_no"]) || preg_match('/^\d{8}0{3}/', $data["refund_no"])) {
         	throw new \Exception(NEED_VALID_PARAM . "refund_no");
         }
-
-        return self::post(URI_OFFLINE_BILL, $data, 30, false);
+        return self::post(URI_OFFLINE_REFUND, $data, 30, false);
     }
     
     
@@ -584,8 +583,8 @@ class international {
 	}
 
 	static final protected function post($api, $data, $timeout, $returnArray) {
-		$url = \beecloud\network::getApiUrl() . $api;
-		$httpResultStr = \beecloud\network::request($url, "post", $data, $timeout);
+		$url = \beecloud\rest\network::getApiUrl() . $api;
+		$httpResultStr = \beecloud\rest\network::request($url, "post", $data, $timeout);
 		$result = json_decode($httpResultStr, !$returnArray ? false : true);
 		if (!$result) {
 			throw new \Exception(UNEXPECTED_RESULT . $httpResultStr);
@@ -594,8 +593,8 @@ class international {
 	}
 
 	static final protected function get($api, $data, $timeout, $returnArray) {
-		$url = \beecloud\network::getApiUrl() . $api;
-		$httpResultStr = \beecloud\network::request($url, "get", $data, $timeout);
+		$url = \beecloud\rest\network::getApiUrl() . $api;
+		$httpResultStr = \beecloud\rest\network::request($url, "get", $data, $timeout);
 		$result = json_decode($httpResultStr,!$returnArray ? false : true);
 		if (!$result) {
 			throw new \Exception(UNEXPECTED_RESULT . $httpResultStr);

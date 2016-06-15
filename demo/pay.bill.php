@@ -166,7 +166,6 @@ switch($type){
         $data["bank"] = "BOC";
         break;
     case 'BC_EXPRESS' :
-        $data["total_fee"] = 100;
         $data["channel"] = "BC_EXPRESS";
         //渠道类型BC_KUAIJIE, total_fee(int 类型) 单位分, 最小金额100分
         $data["total_fee"] = 100;
