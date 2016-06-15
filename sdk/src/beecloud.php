@@ -613,7 +613,7 @@ class BCRESTApi {
         return BCRESTUtil::post(URI_OFFLINE_BILL_STATUS, $data, 30, false);
     }
 
-    static final private function offline_refund(array $data){
+    static final public function offline_refund(array $data){
         self::baseParamCheck($data);
         if (isset($data['channel'])) {
             switch ($data["channel"]) {
@@ -646,7 +646,7 @@ class BCRESTApi {
             throw new Exception(NEED_VALID_PARAM . "refund_no");
         }
 
-        return BCRESTUtil::post(URI_OFFLINE_BILL, $data, 30, false);
+        return BCRESTUtil::post(URI_OFFLINE_REFUND, $data, 30, false);
     }
 
 

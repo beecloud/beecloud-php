@@ -12,13 +12,6 @@
 
 依赖: PHP 5.3+, PHP-curl
 
-## 准备
-
-1. BeeCloud[注册](http://beecloud.cn/register/)账号
-2. BeeCloud中创建应用，[填写支付渠道所需参数](http://beecloud.cn/doc/payapply)
-
-具体可参考[快速开始](https://beecloud.cn/apply/)
-
 ## 流程
 
 下图为整个支付的流程: 
@@ -39,6 +32,19 @@
 步骤⑤：**（在商户后端服务端）处理异步回调结果（[Webhook](https://beecloud.cn/doc/?index=webhook)）**
  
 付款完成之后，根据客户在BeeCloud后台的设置，BeeCloud会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
+
+## 初始化
+
+1. 注册开发者: BeeCloud平台[注册账号](http://beecloud.cn/register/)
+2. 创建应用: 使用注册的账号登陆,在控制台中创建应用,点击**"+添加应用"**创建新应用,具体可参考[快速开始](https://beecloud.cn/apply/)
+3. 获取参数: 在新创建的应用中即可获取APP ID,APP Secret,Master Secret,Test Secret
+4. 在SDK中sdk/src/rest/config.php代码中配置(请注意各个参数一一对应)：
+	```
+	const APP_ID = 'your app id';
+	const APP_SECRET = 'your app secret';
+	const TEST_SECRET = 'your test secret';
+	const MASTER_SECRET = 'your master isecret';
+	```
 
 ## 引入BeeCloud API
 

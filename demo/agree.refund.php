@@ -55,6 +55,13 @@ switch($type){
         $title = "PAYPAL";
         exit('开发中...');
         break;
+    case 'ALI_OFFLINE_QRCODE':
+    case 'ALI_SCAN':
+    case 'WX_SCAN':
+    case 'WX_NATIVE' : //非服务商WX_NATIVE 可通过/rest/refund/ 或 /rest/offline/refund/进行退款
+        $title = $type." 线下退款";
+        $data["channel"] = substr($type, 0, strpos($type, '_'));
+        break;
     default :
         exit("No this type.");
         break;
@@ -69,7 +76,11 @@ switch($type){
 <body>
 <?php
     try {
-        $result = $api->refund($data);
+        if(in_array($type, array('ALI_OFFLINE_QRCODE', 'ALI_SCAN', 'WX_SCAN', 'WX_NATIVE'))){
+            $result = $api->offline_refund($data);
+        }else{
+            $result = $api->refund($data);
+        }
         if ($result->result_code != 0 || $result->result_msg != "OK") {
             print_r($result);
             exit();
