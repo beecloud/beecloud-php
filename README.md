@@ -38,13 +38,14 @@
 1. 注册开发者: BeeCloud平台[注册账号](http://beecloud.cn/register/)
 2. 创建应用: 使用注册的账号登陆,在控制台中创建应用,点击**"+添加应用"**创建新应用,具体可参考[快速开始](https://beecloud.cn/apply/)
 3. 获取参数: 在新创建的应用中即可获取APP ID,APP Secret,Master Secret,Test Secret
-4. 在SDK中sdk/src/rest/config.php代码中配置(请注意各个参数一一对应)：
-	```
-	const APP_ID = 'your app id';
-	const APP_SECRET = 'your app secret';
-	const TEST_SECRET = 'your test secret';
-	const MASTER_SECRET = 'your master isecret';
-	```
+4. 在SDK中sdk/src/rest/config.php代码中配置(请注意各个参数一一对应):
+
+```
+const APP_ID = 'your app id';
+const APP_SECRET = 'your app secret';
+const TEST_SECRET = 'your test secret';
+const MASTER_SECRET = 'your master isecret';
+```
 
 ## 引入BeeCloud API
 
