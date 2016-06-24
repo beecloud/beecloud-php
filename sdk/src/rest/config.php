@@ -12,7 +12,7 @@ define('BANK_CODE', serialize(array(9102, 9103, 9104, 9105, 9107, 9108, 9109, 91
 
 /*
  * bank(string 类型) for channel BC_GATEWAY
-CMB	  招商银行    ICBC	工商银行   CCB   建设银行（暂时不支持）
+CMB	  招商银行    ICBC	工商银行   CCB   建设银行
 BOC	  中国银行    ABC    农业银行   BOCM	交通银行
 SPDB  浦发银行    GDB	广发银行   CITIC	中信银行
 CEB	  光大银行    CIB	兴业银行   SDB	平安银行

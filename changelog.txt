@@ -1,5 +1,12 @@
 BeeCloud PHP Changelog
 ========================================================
+v2.3.5 发布日期: 2016年6月24日
++ demo/wx/wx.jsapi.php中添加了对微信相关配置的描述
++ 支付渠道BC_EXPRESS添加银行卡号(card_no, 选填)字段的支持
++ READMD.md添加测试模式的描述
+
+BeeCloud PHP Changelog
+========================================================
 v2.3.4 发布日期: 2016年6月6日
 + 所有的请求URL在config.php中统一定义,不再在单个类中分别定义
 + 原有sdk/src/rest/international.php合并到api.php中
