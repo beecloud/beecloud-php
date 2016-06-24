@@ -47,7 +47,7 @@ const TEST_SECRET = 'your test secret';
 const MASTER_SECRET = 'your master isecret';
 ```
 
-5. LIVE/TEST模式
+5. LIVE模式和TEST模式
 
 在SDK的sdk/src/rest/config.php代码中设置参数TEST_MODE, 即:
 - TEST_MODE为false, 即LIVE模式
