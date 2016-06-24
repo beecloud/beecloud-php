@@ -1,10 +1,18 @@
 <?php
-header("Content-type: text/html; charset=utf-8");
 /**
  * 微信用户的openid获取请参考官方demo sdk和文档
  * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
  * 微信获取openid php代码, 运行环境是微信内置浏览器访问时
+ *
+ * 注意:
+ *      请修改lib/WxPayPubHelper/WxPay.pub.config.php配置文件中的参数:
+ *      1.APPID, APPSECRET请修改为商户自己的微信参数(MCHID, KEY在beecloud平台创建的应用中配置);
+ *      2.JS_API_CALL_URL针对当前的demo,应该是http(s)://<your domain>/<your path>/pay.bill.php?type=WX_JSAPI,
+ *        可根据具体情况进行配置调整;
+ *      3.请检查方法createOauthUrlForCode是否对回调链接地址(redirect_uri)进行urlencode处理,如果没有请自行添加
+ *      3.特别要强调的是JS_API_CALL_URL的访问域名必须与微信公众平台配置的授权回调页面域名一致.
  */
+header("Content-type: text/html; charset=utf-8");
 include_once('lib/WxPayPubHelper/WxPayPubHelper.php');
 $jsApi = new JsApi_pub();
 //网页授权获取用户openid============

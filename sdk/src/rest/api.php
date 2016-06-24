@@ -561,8 +561,6 @@ class api {
 }
 
 class international {
-	const URI_BILL = "/1/rest/international/bill";
-	const URI_REFUND = "/1/rest/international/refund";
 
 	static final private function baseParamCheck(array $data) {
 		if (!isset($data["app_id"])) {

@@ -128,11 +128,19 @@ switch($type){
         break;
     case 'PAYPAL_PAYPAL' :
         $data["channel"] = "PAYPAL_PAYPAL";
+        /*
+         * currency参数的对照表, 请参考:
+         * https://github.com/beecloud/beecloud-rest-api/tree/master/international
+         */
         $data["currency"] = "USD";
         $title = "Paypal网页";
         break;
     case 'PAYPAL_CREDITCARD' :
         $data["channel"] = "PAYPAL_CREDITCARD";
+        /*
+         * currency参数的对照表, 请参考:
+         * https://github.com/beecloud/beecloud-rest-api/tree/master/international
+         */
         $data["currency"] = "USD";
 
         $card_info = array(
@@ -149,6 +157,10 @@ switch($type){
         break;
     case 'PAYPAL_SAVED_CREDITCARD' :
         $data["channel"] = "PAYPAL_SAVED_CREDITCARD";
+        /*
+         * currency参数的对照表, 请参考:
+         * https://github.com/beecloud/beecloud-rest-api/tree/master/international
+         */
         $data["currency"] = "USD";
         $data["credit_card_id"] = '';
         $title = "Paypal快捷";
@@ -167,8 +179,10 @@ switch($type){
         break;
     case 'BC_EXPRESS' :
         $data["channel"] = "BC_EXPRESS";
-        //渠道类型BC_KUAIJIE, total_fee(int 类型) 单位分, 最小金额100分
+        //渠道类型BC_EXPRESS, total_fee(int 类型) 单位分, 最小金额100分
         $data["total_fee"] = 100;
+        //银行卡卡号, 选填
+        //$data["card_no"] = '622269192199384xxxx';
         break;
     default :
         exit("No this type.");
