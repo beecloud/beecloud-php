@@ -2,10 +2,10 @@
 require_once("../loader.php");
 
 $data = array();
-$appSecret = APP_SECRET;
+$masterSecret = MASTER_SECRET;
 $data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
-$data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
+$data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $masterSecret);
 $data["bill_no"] = $_GET["bill_no"];
 $data["refund_no"] = $_GET["refund_no"];
 $data["refund_fee"] = (int)$_GET["refund_fee"];

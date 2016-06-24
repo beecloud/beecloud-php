@@ -1,11 +1,14 @@
 <?php
+/*
+ * 批量审核接口仅支持预退款，批量审核分为批量驳回和批量同意。
+ */
 require_once("../loader.php");
 
 $data = array();
-$appSecret = APP_SECRET;
+$masterSecret = MASTER_SECRET;
 $data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
-$data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
+$data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $masterSecret);
 //agree, boolean: 批量驳回传false，批量同意传true
 $data["agree"] = true;
 //deny_reason选填, 驳回理由
