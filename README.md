@@ -44,7 +44,7 @@
 const APP_ID = 'your app id';
 const APP_SECRET = 'your app secret';
 const TEST_SECRET = 'your test secret';
-const MASTER_SECRET = 'your master isecret';
+const MASTER_SECRET = 'your master secret';
 ```
 
 5. LIVE模式和TEST模式
