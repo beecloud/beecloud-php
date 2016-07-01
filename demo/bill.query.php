@@ -85,10 +85,9 @@ try {
             $refund = false;
             $pre_refund = false;
         }
-
         $strParams = "agree.refund.php?type=$type&refund_no=".$refund_no."&bill_no=".$list->bill_no."&refund_fee=".$list->total_fee;
         $agree_refund = $list->spay_result&&!$list->refund_result&&$refund ? "<a href='".$strParams."' target='_blank'>退款</a>" : "";
-        $prep_refund = $list->spay_result&&!$list->refund_result&&$pre_refund ? "<a href='agree.refund.php".$strParams."&need_approval=true' target='_blank'>预退款</a>" : "";
+        $prep_refund = $list->spay_result&&!$list->refund_result&&$pre_refund ? "<a href='".$strParams."&need_approval=true' target='_blank'>预退款</a>" : "";
         $spay_result = $list->spay_result ? ($list->refund_result ? '已退款' : '支付') : '未支付';
         $create_time = $list->create_time ? date ( 'Y-m-d H:i:s', $list->create_time / 1000 ) : '';
         $str .= "<tr><td>$list->id</td><td>$agree_refund</td><td>$prep_refund</td><td>$spay_result</td><td>$create_time</td><td>{$list->total_fee}</td><td>{$list->sub_channel}</td>

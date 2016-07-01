@@ -23,7 +23,6 @@ class network {
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             /*重定向跟随*/
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_FAILONERROR, 1);
             curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
@@ -35,7 +34,7 @@ class network {
             curl_setopt($ch, CURLINFO_HEADER_OUT, false);
 
             //fail the request if the HTTP code returned is equal to or larger than 400
-            curl_setopt($ch, CURLOPT_FAILONERROR, true);
+            //curl_setopt($ch, CURLOPT_FAILONERROR, true);
             $header = array("Content-Type:application/json;charset=utf-8;", "Connection: keep-alive;");
             $methodIgnoredCase = strtolower($method);
             switch ($methodIgnoredCase) {

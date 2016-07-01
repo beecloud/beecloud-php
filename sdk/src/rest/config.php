@@ -5,20 +5,22 @@ define('TEST_MODE', false);
  * bank_code(int 类型) for channel JD_B2B
 9102    中国工商银行      9107    招商银行
 9103    中国农业银行      9108    光大银行
-9104    交通银行          9109    中国银行
+9104    交通银行         9109    中国银行
 9105    中国建设银行		9110 	 平安银行
 */
 define('BANK_CODE', serialize(array(9102, 9103, 9104, 9105, 9107, 9108, 9109, 9110)));
 
 /*
  * bank(string 类型) for channel BC_GATEWAY
-CMB	  招商银行    ICBC	工商银行   CCB   建设银行
-BOC	  中国银行    ABC    农业银行   BOCM	交通银行
-SPDB  浦发银行    GDB	广发银行   CITIC	中信银行
-CEB	  光大银行    CIB	兴业银行   SDB	平安银行
-CMBC  民生银行
+ * CMB	  招商银行    ICBC	工商银行   CCB   建设银行(暂不支持)
+ * BOC	  中国银行    ABC    农业银行   BOCM	交通银行
+ * SPDB   浦发银行    GDB	广发银行   CITIC	中信银行
+ * CEB	  光大银行    CIB	兴业银行   SDB	平安银行
+ * CMBC   民生银行    NBCB   宁波银行   BEA   东亚银行
+ * NJCB   南京银行    SRCB   上海农商行 BOB   北京银行
 */
-define('BANK', serialize(array('CMB', 'ICBC', 'CCB', 'BOC', 'ABC', 'BOCM', 'SPDB', 'GDB', 'CITIC', 'CEB', 'CIB', 'SDB', 'CMBC')));
+define('BANK', serialize(array('CMB', 'ICBC', 'CCB', 'BOC', 'ABC', 'BOCM', 'SPDB', 'GDB',
+	'CITIC', 'CEB', 'CIB', 'SDB', 'CMBC', 'NBCB', 'BEA', 'NJCB', 'SRCB', 'BOB')));
 
 
 define('URI_BILL', TEST_MODE ? "/2/rest/sandbox/bill" : "/2/rest/bill"); //支付;支付订单查询(指定id)
