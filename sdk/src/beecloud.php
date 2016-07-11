@@ -305,7 +305,7 @@ class BCRESTApi {
      */
     static final public function bill(array $data, $method = 'post') {
         $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
+        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
         //param validation
         self::baseParamCheck($data);
         self::channelCheck($data);
@@ -427,7 +427,7 @@ class BCRESTApi {
 
     static final public function bills(array $data) {
         $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
+        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
         //required param existence check
         self::baseParamCheck($data);
         self::channelCheck($data);
@@ -440,7 +440,7 @@ class BCRESTApi {
 
     static final public function bills_count(array $data){
         $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
+        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
         self::baseParamCheck($data);
         self::channelCheck($data);
 
