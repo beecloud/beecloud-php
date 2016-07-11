@@ -1,6 +1,6 @@
 BeeCloud PHP Changelog
 ========================================================
-v3.0.0 发布日期: 2016年7月5日
+v2.3.6 发布日期: 2016年7月5日
 + BeeCloud平台参数配置,原在sdk/src/rest/config.php设置常量,现更改为
   \beecloud\rest\api::registerApp('app id', 'app secret', 'master secret', 'test secret'),
   或者BCRESTApi::registerApp('app id', 'app secret', 'master secret', 'test secret')
