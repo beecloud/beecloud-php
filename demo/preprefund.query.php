@@ -1,11 +1,10 @@
 <?php
 require_once("../loader.php");
+require_once("config.php");
 
-$data = array();
-$appSecret = APP_SECRET;
-$data["app_id"] = APP_ID;
+//设置app id, app secret, master secret, test secret
+$api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
 $data["timestamp"] = time() * 1000;
-$data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 $data["need_approval"] = true;
 $data["limit"] = 10;
 
@@ -66,7 +65,7 @@ switch($type){
     2.当channel为ALI时，如果退款成功，返回参数中包含支付宝退款地址，需用户在支付宝平台上手动输入支付密码处理！
 </h3>
 <table border="1" align="center" cellspacing=0>
-<?php
+    <?php
     try {
         $result = $api->refunds($data);
         if ($result->result_code != 0 || $result->result_msg != "OK") {
@@ -97,7 +96,7 @@ switch($type){
     } catch (Exception $e) {
         echo $e->getMessage();
     }
-?>
+    ?>
 </table>
 
 <input onclick="approve_pre_refunds()" type="button" class="button_blue" value="同意预退款" />
