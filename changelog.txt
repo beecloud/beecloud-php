@@ -1,5 +1,22 @@
 BeeCloud PHP Changelog
 ========================================================
+v3.0.0 发布日期: 2016年7月5日
++ BeeCloud平台参数配置,原在sdk/src/rest/config.php设置常量,现更改为
+  \beecloud\rest\api::registerApp('app id', 'app secret', 'master secret', 'test secret'),
+  或者BCRESTApi::registerApp('app id', 'app secret', 'master secret', 'test secret')
+  (重点)
++ 原beecloud.php类BCRESTUtil中的方法request和sdk/src/rest/network.php中代码
+  curl_setopt($ch, CURLOPT_FAILONERROR, true)注释掉,以便获取返回http code大于400的结果
+  (重点)
++ Test Model,只提供下单和支付订单查询的Sandbox模式,不写setMode函数或者false即live模式,true即test模式
+  原在sdk/src/rest/config.php设置TEST_MODE常量,现更改为
+  \beecloud\rest\api::setMode(true),
+  或者BCRESTApi::setMode(true)
++ 原sdk/src/rest/config.php,更改为在类中定义各常量,以适用于采用composer包管理的用户
++ 修改READMD.md文件
+
+BeeCloud PHP Changelog
+========================================================
 v2.3.5 发布日期: 2016年6月24日
 + demo/wx/wx.jsapi.php中添加了对微信相关配置的描述
 + 支付渠道BC_EXPRESS添加银行卡号(card_no, 选填)字段的支持
