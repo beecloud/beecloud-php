@@ -38,24 +38,31 @@
 1. 注册开发者: BeeCloud平台[注册账号](http://beecloud.cn/register/)
 2. 创建应用: 使用注册的账号登陆,在控制台中创建应用,点击**"+添加应用"**创建新应用,具体可参考[快速开始](https://beecloud.cn/apply/)
 3. 获取参数: 在新创建的应用中即可获取APP ID,APP Secret,Master Secret,Test Secret
-4. 在SDK的sdk/src/rest/config.php代码中配置(请注意各个参数一一对应):
+4. 在代码中调用方法registerApp(请注意各个参数一一对应):
 
 ```
-const APP_ID = 'your app id';
-const APP_SECRET = 'your app secret';
-const TEST_SECRET = 'your test secret';
-const MASTER_SECRET = 'your master secret';
+/* registerApp fun four params
+ * @param(first) $app_id beecloud平台的APP ID
+ * @param(second) $app_secret  beecloud平台的APP SECRET
+ * @param(third) $master_secret  beecloud平台的MASTER SECRET
+ * @param(fouth) $test_secret  beecloud平台的TEST SECRET, for sandbox
+ */
+\beecloud\rest\api::registerApp('app id', 'app secret', 'master secret', 'test secret');
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+BCRESTApi::registerApp('app id', 'app secret', 'master secret', 'test secret')
 ```
 
 5. LIVE模式和TEST模式
 
-在SDK的sdk/src/rest/config.php代码中设置参数TEST_MODE, 即:
-- TEST_MODE为false, 即LIVE模式
-- TEST_MODE为true, 即TEST模式, 仅提供下单和支付订单查询的Sandbox模式
+在代码中调用方法setMode, 即:
+- setMode(false)或者不调用此方法, 即LIVE模式
+- setMode(true), 即TEST模式, 仅提供下单和支付订单查询的Sandbox模式
 
 开启测试模式,即:
 ```
-define('TEST_MODE', true);
+\beecloud\rest\api::setSandbox(true);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+BCRESTApi::setSandbox(true)
 ```
 
 ## 引入BeeCloud API

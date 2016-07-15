@@ -1,11 +1,22 @@
 <?php
 require_once("../loader.php");
+require_once("config.php");
+
+/* registerApp fun need four params:
+ * @param(first) $app_id beecloud平台的APP ID
+ * @param(second) $app_secret  beecloud平台的APP SECRET
+ * @param(third) $master_secret  beecloud平台的MASTER SECRET
+ * @param(fouth) $test_secret  beecloud平台的TEST SECRET, for sandbox
+ */
+$api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
+//Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
+$api->setSandbox(false);
+
+//\beecloud\rest\api::registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
+//\beecloud\rest\api::setSandbox(false);
 
 $data = array();
-$appSecret = TEST_MODE ? TEST_SECRET : APP_SECRET;
-$data["app_id"] = APP_ID;
 $data["timestamp"] = time() * 1000;
-$data["app_sign"] = md5($data["app_id"] . $data["timestamp"] . $appSecret);
 //total_fee(int 类型) 单位分
 $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
@@ -177,6 +188,7 @@ switch($type){
          * NJCB   南京银行    SRCB   上海农商行 BOB   北京银行
         */
         $data["bank"] = "BOC";
+        $title = "BC网关支付";
         break;
     case 'BC_EXPRESS' :
         $data["channel"] = "BC_EXPRESS";
@@ -184,6 +196,7 @@ switch($type){
         $data["total_fee"] = 100;
         //银行卡卡号, 选填
         //$data["card_no"] = '622269192199384xxxx';
+        $title = "BC快捷支付";
         break;
     default :
         exit("No this type.");
