@@ -60,9 +60,9 @@ BCRESTApi::registerApp('app id', 'app secret', 'master secret', 'test secret')
 
 开启测试模式,即:
 ```
-\beecloud\rest\api::setMode(true);
+\beecloud\rest\api::setSandbox(true);
 //不使用namespace的用户和2.2.0之前的v2版本用户请使用
-BCRESTApi::setMode(true)
+BCRESTApi::setSandbox(true)
 ```
 
 ## 引入BeeCloud API

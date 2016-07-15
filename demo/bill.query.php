@@ -4,8 +4,8 @@ require_once("config.php");
 
 //设置app id, app secret, master secret, test secret
 $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-//Test Model,只提供下单和支付订单查询的Sandbox模式,不写setMode函数或者false即live模式,true即test模式
-$api->setMode(false);
+//Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
+$api->setSandbox(true);
 
 $data["timestamp"] = time() * 1000;
 //只列出了支付成功的订单
@@ -84,7 +84,7 @@ switch($type){
                 $type = trim($list->sub_channel);
                 $pre_refund = false;
             }
-            if($type == 'BC' || $type == 'PAYPAL'){
+            if($type == 'BC' || $type == 'PAYPAL' || $api->getSandbox()){
                 $refund = false;
                 $pre_refund = false;
             }

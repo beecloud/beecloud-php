@@ -16,11 +16,11 @@ class api {
 	//Test Model,只提供下单和支付订单查询的Sandbox模式
 	public static $mode = false;
 
-	static function getMode(){
+	static function getSandbox(){
 		return self::$mode;
 	}
 
-	static function setMode($flag = false){
+	static function setSandbox($flag = false){
 		self::$mode = $flag;
 	}
 
@@ -180,7 +180,7 @@ class api {
 			}
 		}
 
-		$url = \beecloud\rest\api::getMode() ? \beecloud\rest\config::URI_TEST_BILL : \beecloud\rest\config::URI_BILL;
+		$url = \beecloud\rest\api::getSandbox() ? \beecloud\rest\config::URI_TEST_BILL : \beecloud\rest\config::URI_BILL;
 		switch ($method) {
 			case 'get'://支付订单查询
 				if (!isset($data["id"])) {
@@ -225,7 +225,7 @@ class api {
 		self::baseParamCheck($data);
 		self::channelCheck($data);
 
-		$url = \beecloud\rest\api::getMode() ? \beecloud\rest\config::URI_TEST_BILLS : \beecloud\rest\config::URI_BILLS;
+		$url = \beecloud\rest\api::getSandbox() ? \beecloud\rest\config::URI_TEST_BILLS : \beecloud\rest\config::URI_BILLS;
 		//param validation
 		return self::get($url, $data, 30, false);
 	}
@@ -241,7 +241,7 @@ class api {
 			throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "bill_no");
 		}
 
-		$url = \beecloud\rest\api::getMode() ? \beecloud\rest\config::URI_TEST_BILLS_COUNT : \beecloud\rest\config::URI_BILLS_COUNT;
+		$url = \beecloud\rest\api::getSandbox() ? \beecloud\rest\config::URI_TEST_BILLS_COUNT : \beecloud\rest\config::URI_BILLS_COUNT;
 		return self::get($url, $data, 30, false);
 	}
 

@@ -9,11 +9,11 @@ require_once("config.php");
  * @param(fouth) $test_secret  beecloud平台的TEST SECRET, for sandbox
  */
 $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-//Test Model,只提供下单和支付订单查询的Sandbox模式,不写setMode函数或者false即live模式,true即test模式
-$api->setMode(false);
+//Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
+$api->setSandbox(false);
 
 //\beecloud\rest\api::registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-//\beecloud\rest\api::setMode(false);
+//\beecloud\rest\api::setSandbox(false);
 
 $data = array();
 $data["timestamp"] = time() * 1000;

@@ -10,8 +10,8 @@ v2.3.6 发布日期: 2016年7月5日
   (重点)
 + Test Model,只提供下单和支付订单查询的Sandbox模式,不写setMode函数或者false即live模式,true即test模式
   原在sdk/src/rest/config.php设置TEST_MODE常量,现更改为
-  \beecloud\rest\api::setMode(true),
-  或者BCRESTApi::setMode(true)
+  \beecloud\rest\api::setSandbox(true),
+  或者BCRESTApi::setSandbox(true)
 + 原sdk/src/rest/config.php,更改为在类中定义各常量,以适用于采用composer包管理的用户
 + 修改READMD.md文件
 

@@ -253,11 +253,11 @@ class BCRESTApi {
     //Test Model,只提供下单和支付订单查询的Sandbox模式
     public static $mode = false;
 
-    static function getMode(){
+    static function getSandbox(){
         return self::$mode;
     }
 
-    static function setMode($flag = false){
+    static function setSandbox($flag = false){
         self::$mode = $flag;
     }
 
@@ -387,7 +387,7 @@ class BCRESTApi {
                     break;
             }
         }
-        $url = BCRESTApi::getMode() ? APIConfig::URI_TEST_BILL : APIConfig::URI_BILL;
+        $url = BCRESTApi::getSandbox() ? APIConfig::URI_TEST_BILL : APIConfig::URI_BILL;
         switch ($method) {
             case 'get'://支付订单查询
                 if (!isset($data["id"])) {
@@ -432,7 +432,7 @@ class BCRESTApi {
         self::baseParamCheck($data);
         self::channelCheck($data);
 
-        $url = BCRESTApi::getMode() ? APIConfig::URI_TEST_BILLS : APIConfig::URI_BILLS;
+        $url = BCRESTApi::getSandbox() ? APIConfig::URI_TEST_BILLS : APIConfig::URI_BILLS;
         //param validation
         return BCRESTUtil::get($url, $data, 30, false);
     }
@@ -447,7 +447,7 @@ class BCRESTApi {
         if (isset($data["bill_no"]) && !preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
             throw new Exception(APIConfig::NEED_VALID_PARAM . "bill_no");
         }
-        $url = BCRESTApi::getMode() ? APIConfig::URI_TEST_BILLS_COUNT : APIConfig::URI_BILLS_COUNT;
+        $url = BCRESTApi::getSandbox() ? APIConfig::URI_TEST_BILLS_COUNT : APIConfig::URI_BILLS_COUNT;
         return BCRESTUtil::get($url, $data, 30, false);
     }
 
