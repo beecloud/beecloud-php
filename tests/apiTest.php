@@ -15,7 +15,7 @@ class apiTest extends PHPUnit_Framework_TestCase
 		}
 		$this->timestamp = time() * 1000;
 		$this->api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-		$this->api->setMode(false);
+		$this->api->setSandbox(false);
 	}
 
 	public function testBill()
