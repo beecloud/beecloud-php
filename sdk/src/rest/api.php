@@ -736,7 +736,7 @@ class international extends api{
 	}
 }
 
-class Subscription extends api{
+class Subscriptions extends api{
 
 	/*
  	 * @desc 获取支持银行列表

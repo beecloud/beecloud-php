@@ -30,6 +30,12 @@ class APIConfig {
     const URI_INTERNATIONAL_BILL = "/2/rest/international/bill";
     const URI_INTERNATIONAL_REFUND = "/2/rest/international/refund";
 
+    //subscription
+    const URI_SUBSCRIPTION = "/2/subscription";
+    const URI_SUBSCRIPTION_PLAN = "/2/plan";
+    const URI_SUBSCRIPTION_BANKS = "/2/subscription_banks";
+    const URI_SUBSCRIPTION_SMS = "/2/sms";
+
 
     const UNEXPECTED_RESULT = "非预期的返回结果:";
     const NEED_PARAM = "需要必填字段:";
@@ -47,6 +53,8 @@ class APIConfig {
     const VALID_SIGN_PARAM = 'APP ID, timestamp,APP(Master) Secret参数值均不能为空,请设置';
     const VALID_MASTER_SECRET = 'Master Secret参数值不能为空,请设置';
     const VALID_APP_SECRET = 'APP Secret参数值不能为空,请设置';
+
+    const VALID_PARAM_RANGE = '参数 %s 不在限定的范围内, 请重新设置';
 
     /*
 	 * bank_code(int 类型) for channel JD_B2B
@@ -74,6 +82,14 @@ class APIConfig {
             'CEB', 'CIB', 'SDB', 'CMBC', 'NBCB', 'BEA', 'NJCB', 'SRCB', 'BOB'
         );
     }
+
+    /*
+	 * 结算频率interval(string),
+	 * 主要包含任一天，一周，一个月或一年。
+	 */
+    static function get_interval(){
+        return array('day', 'week', 'month', 'year');
+    }
 }
 
 class BCRESTUtil {
@@ -98,10 +114,10 @@ class BCRESTUtil {
         return $result;
     }
 
-    static final public function get($api, $data, $timeout) {
+    static final public function get($api, $data, $timeout, $returnArray, $type = true) {
         $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "get", $data, $timeout);
-        $result = json_decode($httpResultStr);
+        $httpResultStr = BCRESTUtil::request($url, $type ? 'get' : 'new_get', $data, $timeout);
+        $result = json_decode($httpResultStr,!$returnArray ? false : true);
         if (!$result) {
             throw new Exception(APIConfig::UNEXPECTED_RESULT . $httpResultStr);
         }
@@ -114,6 +130,16 @@ class BCRESTUtil {
         $result = json_decode($httpResultStr,!$returnArray ? false : true);
         if (!$result) {
             throw new Exception(APIConfig::UNEXPECTED_RESULT . $httpResultStr);
+        }
+        return $result;
+    }
+
+    static public function delete($api, $data, $timeout, $returnArray) {
+        $url = BCRESTUtil::getApiUrl() . $api;
+        $httpResultStr = BCRESTUtil::request($url, "delete", $data, $timeout);
+        $result = json_decode($httpResultStr,!$returnArray ? false : true);
+        if (!$result) {
+            throw new Exception(BCRESTUtil::UNEXPECTED_RESULT . $httpResultStr);
         }
         return $result;
     }
@@ -150,6 +176,9 @@ class BCRESTUtil {
                     break;
                 case "get":
                     curl_setopt($ch, CURLOPT_URL, $url."?para=".urlencode(json_encode($data)));
+                    break;
+                case "new_get":
+                    curl_setopt($ch, CURLOPT_URL, $url.'?'.http_build_query($data));
                     break;
                 case "put":
                     curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
@@ -288,18 +317,25 @@ class BCRESTApi {
         return md5($app_id.$timestamp.$secret);
     }
 
+    /*
+	 * 验证必填参数
+	 */
+    static public function verify_need_params($params, $data){
+        if(is_string($params)){
+            if(!isset($data[$params]) || empty($data[$params])){
+                throw new Exception(APIConfig::NEED_PARAM . $params);
+            }
+        }else if(is_array($params)){
+            foreach ($params as $field) {
+                if(!isset($data[$field]) || empty($data[$field])){
+                    throw new Exception(APIConfig::NEED_PARAM . $field);
+                }
+            }
+        }
+    }
+
     static final private function baseParamCheck(array $data) {
-        if (!isset($data["app_id"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_id");
-        }
-
-        if (!isset($data["timestamp"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "timestamp");
-        }
-
-        if (!isset($data["app_sign"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_sign");
-        }
+        self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
     }
 
     /*
@@ -889,7 +925,7 @@ class BCRESTApi {
 }
 
 
-class Subscription extends BCRESTApi{
+class Subscriptions extends BCRESTApi{
 
     /*
 	  * @desc 获取支持银行列表
@@ -906,7 +942,7 @@ class Subscription extends BCRESTApi{
 	 */
     static public function subscription_banks($data){
         $data = parent::get_common_params($data);
-        return parent::get(\beecloud\rest\config::URI_SUBSCRIPTION_BANKS, $data, 30, false, false);
+        return BCRESTUtil::get(APIConfig::URI_SUBSCRIPTION_BANKS, $data, 30, false, false);
     }
 
     /*
@@ -926,7 +962,7 @@ class Subscription extends BCRESTApi{
     static public function sms($data){
         $data = parent::get_common_params($data);
         parent::verify_need_params('phone', $data);
-        return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_SMS, $data, 30, false);
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION_SMS, $data, 30, false);
     }
 
     /*
@@ -944,14 +980,14 @@ class Subscription extends BCRESTApi{
 	 */
     static public function plan($data){
         $data = parent::get_common_params($data);
-        if(!in_array($data["interval"], \beecloud\rest\config::get_interval())){
-            throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, "interval"));
+        if(!in_array($data["interval"], APIConfig::get_interval())){
+            throw new Exception(sprintf(APIConfig::VALID_PARAM_RANGE, "interval"));
         }
         parent::verify_need_params(array('fee', 'name'), $data);
         if(!is_int($data["fee"])){
-            throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM);
+            throw new Exception(APIConfig::NEED_VALID_PARAM);
         }
-        return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN, $data, 30, false);
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION_PLAN, $data, 30, false);
     }
 
     /*
@@ -973,12 +1009,12 @@ class Subscription extends BCRESTApi{
         if(isset($data['objectid']) && $data['objectid']){
             $objectid = $data['objectid'];
             unset($data['objectid']);
-            $url = \beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid;
+            $url = APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid;
         }else{
-            $url = \beecloud\rest\config::URI_SUBSCRIPTION_PLAN;
+            $url = APIConfig::URI_SUBSCRIPTION_PLAN;
         }
         $data = parent::get_common_params($data);
-        return parent::get($url, $data, 30, false, false);
+        return BCRESTUtil::get($url, $data, 30, false, false);
     }
 
     /*
@@ -994,7 +1030,7 @@ class Subscription extends BCRESTApi{
         $objectid = $data['objectid'];
         unset($data['objectid']);
         $data = parent::get_common_params($data);
-        return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
     }
 
     /*
@@ -1007,7 +1043,7 @@ class Subscription extends BCRESTApi{
         $objectid = $data['objectid'];
         unset($data['objectid']);
         $data = parent::get_common_params($data);
-        return parent::delete(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
+        return BCRESTUtil::delete(APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
     }
 
     /*
@@ -1040,7 +1076,7 @@ class Subscription extends BCRESTApi{
         }else{
             parent::verify_need_params(array('bank_name', 'card_no', 'id_name', 'id_no', 'mobile'), $data);
         }
-        return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION, $data, 30, false);
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION, $data, 30, false);
     }
 
     /*
@@ -1060,12 +1096,12 @@ class Subscription extends BCRESTApi{
         if(isset($data['objectid']) && $data['objectid']){
             $objectid = $data['objectid'];
             unset($data['objectid']);
-            $url = \beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid;
+            $url = APIConfig::URI_SUBSCRIPTION.'/'.$objectid;
         }else{
-            $url = \beecloud\rest\config::URI_SUBSCRIPTION;
+            $url = APIConfig::URI_SUBSCRIPTION;
         }
         $data = parent::get_common_params($data);
-        return parent::get($url, $data, 30, false, false);
+        return BCRESTUtil::get($url, $data, 30, false, false);
     }
 
 
@@ -1088,7 +1124,7 @@ class Subscription extends BCRESTApi{
         $objectid = $data['objectid'];
         unset($data['objectid']);
         $data = parent::get_common_params($data);
-        return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
     }
 
     /*
@@ -1102,6 +1138,6 @@ class Subscription extends BCRESTApi{
         $objectid = $data['objectid'];
         unset($data['objectid']);
         $data = parent::get_common_params($data);
-        return parent::delete(\beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
+        return BCRESTUtil::delete(APIConfig::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
     }
 }

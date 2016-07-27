@@ -13,27 +13,27 @@ $app_secret = '8aaad136-b899-4793-9564-0ebc72ae86f2';
 $master_secret = '688dbe68-a7e9-4f16-850a-21270949afe8';
 $test_secret = '6e4cba42-2901-43eb-a6f0-74e2bb18515a';
 
-\beecloud\rest\Subscription::registerApp($app_id, $app_secret, $master_secret, $test_secret);
+\beecloud\rest\Subscriptions::registerApp($app_id, $app_secret, $master_secret, $test_secret);
 
 //获取银行列表
 $data = array(
 	'timestamp' => time()*1000
 );
-//$banks = \beecloud\rest\Subscription::subscription_banks($data);
+//$banks = \beecloud\rest\Subscriptions::subscription_banks($data);
 if ($banks->result_code != 0) {
 	print_r($banks);
 	exit();
 }
-//echo '<pre>';
-//print_r($banks->common_banks);
-//print_r($banks->banks);die;
+echo '<pre>';
+print_r($banks->common_banks);
+print_r($banks->banks);die;
 
 //获取手机验证码
 $data = array(
 	'timestamp' => time()*1000,
 	'phone' => '15962143194'
 );
-//$sms = \beecloud\rest\Subscription::sms($data);
+//$sms = \beecloud\rest\Subscriptions::sms($data);
 if ($sms->result_code != 0) {
 	print_r($sms);
 	exit();
@@ -53,7 +53,7 @@ $data = array(
 	'trial_days' => 0,
 	'optional' => array('desc' => 'create plan for delete')
 );
-//$plan = \beecloud\rest\Subscription::plan($data);
+//$plan = \beecloud\rest\Subscriptions::plan($data);
 if ($plan->result_code != 0) {
 	print_r($plan);
 	exit();
@@ -68,7 +68,7 @@ $data = array(
 	'name' => 'jason\'s plan test',
 	'optional' => array('desc' => 'create plan', 'time' => date('Y-m-d H:i:s'))
 );
-//$plan = \beecloud\rest\Subscription::update_plan($data);
+//$plan = \beecloud\rest\Subscriptions::update_plan($data);
 if ($plan->result_code != 0) {
 	print_r($plan);
 	exit();
@@ -84,7 +84,7 @@ $data = array(
 //	'interval_count' => 1,
 //	'trial_days' => 0,
 );
-//$plan = \beecloud\rest\Subscription::query_plan($data);
+//$plan = \beecloud\rest\Subscriptions::query_plan($data);
 if ($plan->result_code != 0) {
 	print_r($plan);
 	exit();
@@ -97,7 +97,7 @@ $data = array(
 	'timestamp' => time()*1000,
 	'objectid' => '83b3da78-b76c-4740-b250-25e240a6957b'
 );
-//$plan = \beecloud\rest\Subscription::query_plan($data);
+//$plan = \beecloud\rest\Subscriptions::query_plan($data);
 if ($plan->result_code != 0) {
 	print_r($plan);
 	exit();
@@ -110,7 +110,7 @@ $data = array(
 	'timestamp' => time()*1000,
 	'objectid' => 'de9bf708-842f-4e8f-a12b-c492f22609e4'
 );
-//$plan = \beecloud\rest\Subscription::del_plan($data);
+//$plan = \beecloud\rest\Subscriptions::del_plan($data);
 if ($plan->result_code != 0) {
 	print_r($plan);
 	exit();
@@ -146,7 +146,7 @@ $data = array(
 	'cancel_at_period_end' => false,
 	'optional' => array('desc' => 'create subscription')
 );
-//$subscription = \beecloud\rest\Subscription::subscription($data);
+//$subscription = \beecloud\rest\Subscriptions::subscription($data);
 if ($subscription->result_code != 0) {
 	print_r($subscription);
 	exit();
@@ -161,7 +161,7 @@ $data = array(
 //	'plan_id' => 'e39f8d8d-3769-4076-bad6-272251854f17',
 //	'card_id' => '75021eb5-0d2f-4b1c-9194-8280d89dfb9f'
 );
-//$subscription = \beecloud\rest\Subscription::query_subscription($data);
+//$subscription = \beecloud\rest\Subscriptions::query_subscription($data);
 if ($subscription->result_code != 0) {
 	print_r($subscription);
 	exit();
@@ -174,7 +174,7 @@ $data = array(
 	'timestamp' => time()*1000,
 	'objectid' => '95fdfc39-62da-4ad5-ae3d-981c74b63ed8'
 );
-//$subscription = \beecloud\rest\Subscription::query_subscription($data);
+//$subscription = \beecloud\rest\Subscriptions::query_subscription($data);
 if ($subscription->result_code != 0) {
 	print_r($subscription);
 	exit();
@@ -188,7 +188,7 @@ $data = array(
 	'objectid' => 'a41ed2d0-df0d-4a2e-a629-b5e5acf5b0dd',
 	'valid' => true
 );
-$subscription = \beecloud\rest\Subscription::update_subscription($data);
+//$subscription = \beecloud\rest\Subscriptions::update_subscription($data);
 if ($subscription->result_code != 0) {
 	print_r($subscription);
 	exit();
@@ -202,7 +202,7 @@ $data = array(
 	'timestamp' => time()*1000,
 	'objectid' => 'a41ed2d0-df0d-4a2e-a629-b5e5acf5b0dd'
 );
-//$subscription = \beecloud\rest\Subscription::cancel_subscription($data);
+//$subscription = \beecloud\rest\Subscriptions::cancel_subscription($data);
 if ($subscription->result_code != 0) {
 	print_r($subscription);
 	exit();
