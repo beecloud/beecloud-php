@@ -811,25 +811,7 @@ class BCRESTApi {
  */
 class BCRESTInternational extends BCRESTApi{
 
-    static function baseParamCheck(array $data) {
-        if (!isset($data["app_id"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_id");
-        }
-
-        if (!isset($data["timestamp"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "timestamp");
-        }
-
-        if (!isset($data["app_sign"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_sign");
-        }
-
-        if (!isset($data["currency"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "currency");
-        }
-    }
-
-    static public function bill(array $data) {
+    static public function bill($data, $method = 'post') {
         $data = parent::get_common_params($data, '0');
         parent::verify_need_params('currency', $data);
         switch ($data["channel"]) {
@@ -852,7 +834,6 @@ class BCRESTInternational extends BCRESTApi{
         if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
             throw new Exception(APIConfig::NEED_VALID_PARAM . "total_fee");
         }
-
         return BCRESTUtil::post(APIConfig::URI_INTERNATIONAL_BILL, $data, 30, false);
     }
 }
