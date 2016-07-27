@@ -654,7 +654,7 @@ class international extends api{
 	 */
 	static public function bill(array $data, $method = 'post') {
 		$data = self::get_common_params($data, '0');
-
+		parent::verify_need_params('currency', $data);
 		switch ($data["channel"]) {
 			case "PAYPAL_PAYPAL":
 				self::verify_need_params('return_url', $data);

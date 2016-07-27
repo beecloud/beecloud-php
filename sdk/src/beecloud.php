@@ -207,74 +207,6 @@ class BCRESTUtil {
     }
 }
 
-/**
- * paypal pay
- */
-class BCRESTInternational {
-
-    static final private function baseParamCheck(array $data) {
-        if (!isset($data["app_id"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_id");
-        }
-
-        if (!isset($data["timestamp"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "timestamp");
-        }
-
-        if (!isset($data["app_sign"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_sign");
-        }
-
-        if (!isset($data["currency"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "currency");
-        }
-    }
-
-    static final public function bill(array $data) {
-        $data["app_id"] = BCRESTApi::$app_id;
-        $data["app_sign"] = BCRESTApi::get_sign($data["app_id"], $data["timestamp"], BCRESTApi::$app_secret);
-        //param validation
-        self::baseParamCheck($data);
-
-        switch ($data["channel"]) {
-            case "PAYPAL_PAYPAL":
-                if (!isset($data["return_url"])) {
-                    throw new Exception(APIConfig::NEED_PARAM . "return_url");
-                }
-                break;
-            case "PAYPAL_CREDITCARD":
-                if (!isset($data["credit_card_info"])) {
-                    throw new Exception(APIConfig::NEED_PARAM . "credit_card_info");
-                }
-                break;
-            case "PAYPAL_SAVED_CREDITCARD":
-                if (!isset($data["credit_card_id"])) {
-                    throw new Exception(APIConfig::NEED_PARAM . "credit_card_id");
-                }
-                break;
-            default:
-                throw new Exception(APIConfig::NEED_VALID_PARAM . "channel");
-                break;
-        }
-
-        if (!isset($data["total_fee"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "total_fee");
-        } else if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
-            throw new Exception(APIConfig::NEED_VALID_PARAM . "total_fee");
-        }
-
-        if (!isset($data["bill_no"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "bill_no");
-        }
-
-        if (!isset($data["title"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "title");
-        }
-
-        return BCRESTUtil::post(APIConfig::URI_INTERNATIONAL_BILL, $data, 30, false);
-    }
-}
-
 class BCRESTApi {
 
     //BeeCloud main pay params
@@ -334,10 +266,6 @@ class BCRESTApi {
         }
     }
 
-    static final private function baseParamCheck(array $data) {
-        self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
-    }
-
     /*
 	 * @desc 获取共同的必填参数app_id, app_sign, timestamp
 	 * @param $data array
@@ -365,7 +293,7 @@ class BCRESTApi {
         }
         $data["app_id"] = self::$app_id;
         $data["app_sign"] = self::get_sign(self::$app_id, $data["timestamp"], $secret);
-        self::baseParamCheck($data);
+        self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
         return $data;
     }
 
@@ -374,11 +302,8 @@ class BCRESTApi {
      * @return mixed
      * @throws Exception
      */
-    static final public function bill(array $data, $method = 'post') {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-        //param validation
-        self::baseParamCheck($data);
+    static public function bill(array $data, $method = 'post') {
+        $data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
         self::channelCheck($data);
         if (isset($data["channel"])) {
             switch($data["channel"]){
@@ -497,10 +422,7 @@ class BCRESTApi {
     }
 
     static final public function bills(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-        //required param existence check
-        self::baseParamCheck($data);
+        $data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
         self::channelCheck($data);
 
         $url = BCRESTApi::getSandbox() ? APIConfig::URI_TEST_BILLS : APIConfig::URI_BILLS;
@@ -510,9 +432,7 @@ class BCRESTApi {
 
 
     static final public function bills_count(array $data){
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-        self::baseParamCheck($data);
+        $data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
         self::channelCheck($data);
 
         if (isset($data["bill_no"]) && !preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
@@ -523,13 +443,7 @@ class BCRESTApi {
     }
 
     static final public function refund(array $data, $method = 'post') {
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], $method == 'get' ? self::$app_secret : self::$master_secret);
-        //param validation
-        self::baseParamCheck($data);
+        $data = $method == 'get' ? self::get_common_params($data, '0') : self::get_common_params($data, '1');
 
         if (isset($data["channel"])) {
             switch ($data["channel"]) {
@@ -598,30 +512,21 @@ class BCRESTApi {
 
 
     static final public function refunds(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        //required param existence check
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
         self::channelCheck($data);
         //param validation
         return BCRESTUtil::get(APIConfig::URI_REFUNDS, $data, 30, false);
     }
 
     static final public function refunds_count(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        //required param existence check
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
         self::channelCheck($data);
         //param validation
         return BCRESTUtil::get(APIConfig::URI_REFUNDS_COUNT, $data, 30, false);
     }
 
     static final public function refundStatus(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        //required param existence check
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
 
         switch ($data["channel"]) {
             case "WX":
@@ -643,12 +548,7 @@ class BCRESTApi {
 
     //单笔打款 - 支付宝/微信
     static final public function transfer(array $data) {
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '1');
         switch ($data["channel"]) {
             case "WX_REDPACK":
                 if (!isset($data['redpack_info'])) {
@@ -691,12 +591,7 @@ class BCRESTApi {
 
     //批量打款 - 支付宝
     static final public function transfers(array $data) {
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '1');
         switch ($data["channel"]) {
             case "ALI":
                 break;
@@ -737,12 +632,7 @@ class BCRESTApi {
 
     //BC企业打款 - 银行卡
     static final public function bc_transfer(array $data) {
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '1');
         $params = array(
             'total_fee', 'bill_no', 'title', 'trade_source', 'bank_fullname',
             'card_type', 'account_type', 'account_no', 'account_name'
@@ -760,9 +650,7 @@ class BCRESTApi {
 
 
     static final public function offline_bill(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
         if (isset($data["channel"])) {
             switch ($data["channel"]) {
                 case "WX_SCAN":
@@ -809,9 +697,7 @@ class BCRESTApi {
     }
 
     static final public function offline_bill_status(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
 
         if (isset($data["channel"])) {
             switch ($data["channel"]) {
@@ -836,12 +722,7 @@ class BCRESTApi {
     }
 
     static final public function offline_refund(array $data){
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '1');
         if (isset($data['channel'])) {
             switch ($data["channel"]) {
                 case "ALI":
@@ -921,6 +802,58 @@ class BCRESTApi {
                     break;
             }
         }
+    }
+}
+
+
+/**
+ * paypal pay
+ */
+class BCRESTInternational extends BCRESTApi{
+
+    static function baseParamCheck(array $data) {
+        if (!isset($data["app_id"])) {
+            throw new Exception(APIConfig::NEED_PARAM . "app_id");
+        }
+
+        if (!isset($data["timestamp"])) {
+            throw new Exception(APIConfig::NEED_PARAM . "timestamp");
+        }
+
+        if (!isset($data["app_sign"])) {
+            throw new Exception(APIConfig::NEED_PARAM . "app_sign");
+        }
+
+        if (!isset($data["currency"])) {
+            throw new Exception(APIConfig::NEED_PARAM . "currency");
+        }
+    }
+
+    static public function bill(array $data) {
+        $data = parent::get_common_params($data, '0');
+        parent::verify_need_params('currency', $data);
+        switch ($data["channel"]) {
+            case "PAYPAL_PAYPAL":
+                parent::verify_need_params('return_url', $data);
+                break;
+            case "PAYPAL_CREDITCARD":
+                self::verify_need_params('credit_card_info', $data);
+                break;
+            case "PAYPAL_SAVED_CREDITCARD":
+                self::verify_need_params('credit_card_id', $data);
+                break;
+            default:
+                throw new Exception(APIConfig::NEED_VALID_PARAM . "channel");
+                break;
+        }
+
+        self::verify_need_params(array('total_fee', 'bill_no', 'title'), $data);
+
+        if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
+            throw new Exception(APIConfig::NEED_VALID_PARAM . "total_fee");
+        }
+
+        return BCRESTUtil::post(APIConfig::URI_INTERNATIONAL_BILL, $data, 30, false);
     }
 }
 
