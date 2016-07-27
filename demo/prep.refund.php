@@ -5,8 +5,6 @@
 require_once("../loader.php");
 require_once("config.php");
 
-//设置app id, app secret, master secret, test secret
-$api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
 $data["timestamp"] = time() * 1000;
 //agree, boolean: 批量驳回传false，批量同意传true
 $data["agree"] = true;
@@ -70,6 +68,9 @@ switch($type){
 <body>
 <?php
 try {
+    //设置app id, app secret, master secret, test secret
+    $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
+
     $result = $api->refund($data, 'put');
     if ($result->result_code != 0 || $result->result_msg != "OK") {
         print_r($result);

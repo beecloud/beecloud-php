@@ -14,7 +14,7 @@
         }
         $code_url = $result->code_url;
     } catch (Exception $e) {
-        echo $e->getMessage();
+        die($e->getMessage());
     }
 ?>
 <div align="center" id="qrcode" ></div>

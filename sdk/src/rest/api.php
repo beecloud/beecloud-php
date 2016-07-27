@@ -64,10 +64,6 @@ class api {
 		}
 	}
 
-	static public function baseParamCheck($data) {
-		self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
-	}
-
 	/*
 	 * @desc 获取共同的必填参数app_id, app_sign, timestamp
 	 * @param $data array
@@ -95,7 +91,7 @@ class api {
 		}
 		$data["app_id"] = self::$app_id;
 		$data["app_sign"] = self::get_sign(self::$app_id, $data["timestamp"], $secret);
-		self::baseParamCheck($data);
+		self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
 		return $data;
 	}
 
@@ -151,10 +147,7 @@ class api {
 	 * @throws \Exception
 	 */
 	static public function bill(array $data, $method = 'post') {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-		//param validation
-		self::baseParamCheck($data);
+		$data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
 		self::channelCheck($data);
 		if (isset($data["channel"])) {
 			switch($data["channel"]){
@@ -271,10 +264,7 @@ class api {
 	}
 
 	static final public function bills(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-		//required param existence check
-		self::baseParamCheck($data);
+		$data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
 		self::channelCheck($data);
 
 		$url = \beecloud\rest\api::getSandbox() ? \beecloud\rest\config::URI_TEST_BILLS : \beecloud\rest\config::URI_BILLS;
@@ -284,9 +274,7 @@ class api {
 
 
 	static final public function bills_count(array $data){
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-		self::baseParamCheck($data);
+		$data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
 		self::channelCheck($data);
 
 		if (isset($data["bill_no"]) && !preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
@@ -298,14 +286,7 @@ class api {
 	}
 
 	static final public function refund(array $data, $method = 'post') {
-		if(empty(self::$master_secret)){
-			throw new \Exception(\beecloud\rest\config::VALID_MASTER_SECRET);
-		}
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], $method == 'get' ? self::$app_secret : self::$master_secret);
-		//param validation
-		self::baseParamCheck($data);
-
+		$data = $method == 'get' ? self::get_common_params($data, '0') : self::get_common_params($data, '1');
 		if (isset($data["channel"])) {
 			switch ($data["channel"]) {
 				case "ALI":
@@ -373,20 +354,14 @@ class api {
 
 
 	static final public function refunds(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		//required param existence check
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '0');
 		self::channelCheck($data);
 		//param validation
 		return self::get(\beecloud\rest\config::URI_REFUNDS, $data, 30, false);
 	}
 
 	static final public function refunds_count(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		//required param existence check
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '0');
 		self::channelCheck($data);
 		//param validation
 		return self::get(\beecloud\rest\config::URI_REFUNDS_COUNT, $data, 30, false);
@@ -394,11 +369,7 @@ class api {
 
 
 	static final public function refundStatus(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		//required param existence check
-		self::baseParamCheck($data);
-
+		$data = self::get_common_params($data, '0');
 		switch ($data["channel"]) {
 			case "WX":
 			case "YEE":
@@ -419,9 +390,7 @@ class api {
 
 	//单笔打款 - 支付宝/微信红包
 	static final public function transfer(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '1');
 		switch ($data["channel"]) {
 			case "WX_REDPACK":
 				if (!isset($data['redpack_info'])) {
@@ -464,12 +433,7 @@ class api {
 
 	//批量打款 - 支付宝
 	static final public function transfers(array $data) {
-		if(empty(self::$master_secret)){
-			throw new \Exception(\beecloud\rest\config::VALID_MASTER_SECRET);
-		}
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '1');
 		switch ($data["channel"]) {
 			case "ALI":
 				break;
@@ -510,12 +474,7 @@ class api {
 
 	//BC企业打款 - 银行卡
 	static final public function bc_transfer(array $data) {
-		if(empty(self::$master_secret)){
-			throw new \Exception(\beecloud\rest\config::VALID_MASTER_SECRET);
-		}
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '1');
 		$params = array(
 			'total_fee', 'bill_no', 'title', 'trade_source', 'bank_fullname',
 			'card_type', 'account_type', 'account_no', 'account_name'
@@ -533,9 +492,7 @@ class api {
 
 
 	static final public function offline_bill(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '0');
 		if (isset($data["channel"])) {
 			switch ($data["channel"]) {
 				case "WX_SCAN":
@@ -582,9 +539,7 @@ class api {
 	}
 
 	static final public function offline_bill_status(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '0');
 
 		if (isset($data["channel"])) {
 			switch ($data["channel"]) {
@@ -609,12 +564,7 @@ class api {
 	}
 
 	static final public function offline_refund(array $data){
-		if(empty(self::$master_secret)){
-			throw new \Exception(\beecloud\rest\config::VALID_MASTER_SECRET);
-		}
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '1');
 		if (isset($data['channel'])) {
 			switch ($data["channel"]) {
 				case "ALI":
@@ -697,20 +647,13 @@ class api {
 
 class international extends api{
 
-	static public function baseParamCheck($data) {
-		self::verify_need_params(array('app_id', 'timestamp', 'app_sign', 'currency'), $data);
-	}
-
 	/**
 	 * @param array $data
 	 * @return mixed
 	 * @throws \Exception
 	 */
 	static public function bill(array $data, $method = 'post') {
-		$data["app_id"] = parent::$app_id;
-		$data["app_sign"] = parent::get_sign($data["app_id"], $data["timestamp"], parent::$app_secret);
-		//param validation
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '0');
 
 		switch ($data["channel"]) {
 			case "PAYPAL_PAYPAL":

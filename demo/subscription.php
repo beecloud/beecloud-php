@@ -1,6 +1,6 @@
 <?php
 /**
- * @desc: subscription
+ * @desc: plan/subscription
  *
  * @author: jason
  * @since: 16/7/26
@@ -24,9 +24,9 @@ if ($banks->result_code != 0) {
 	print_r($banks);
 	exit();
 }
-echo '<pre>';
-print_r($banks->common_banks);
-print_r($banks->banks);die;
+//echo '<pre>';
+//print_r($banks->common_banks);
+//print_r($banks->banks);die;
 
 //获取手机验证码
 $data = array(

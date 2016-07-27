@@ -2,8 +2,6 @@
 require_once("../loader.php");
 require_once("config.php");
 
-//设置app id, app secret, master secret, test secret
-$api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
 $data["timestamp"] = time() * 1000;
 $data["limit"] = 10;
 
@@ -60,8 +58,11 @@ switch($type){
 <body>
 <h3>注意:退款状态更新接口提供查询退款状态以更新退款状态的功能，用于对退款后不发送回调的渠道（WX、YEE、KUAIQIAN、BD）退款后的状态更新。</h3>
 <table border="1" align="center" cellspacing=0>
-    <?php
+<?php
     try {
+        //设置app id, app secret, master secret, test secret
+        $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
+
         $result = $api->refunds($data);
         if ($result->result_code != 0 || $result->result_msg != "OK") {
             print_r($result);
@@ -94,7 +95,7 @@ switch($type){
     } catch (Exception $e) {
         echo $e->getMessage();
     }
-    ?>
+?>
 </table>
 </body>
 </html>
