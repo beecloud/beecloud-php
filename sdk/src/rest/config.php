@@ -5,7 +5,7 @@
 namespace beecloud\rest;
 
 class config {
-
+	//online
 	const URI_BILL = '/2/rest/bill'; //支付;支付订单查询(指定id)
 	const URI_TEST_BILL = '/2/rest/sandbox/bill';
 	const URI_BILLS = '/2/rest/bills'; //订单查询
@@ -23,12 +23,20 @@ class config {
 	const URI_BC_TRANSFER_BANKS = '/2/rest/bc_transfer/banks'; //BC企业打款 - 支持银行
 	const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
 
+	//offline
 	const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
 	const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
 	const URI_OFFLINE_REFUND = '/2/rest/offline/refund'; //线下退款
 
-	const URI_INTERNATIONAL_BILL = "/1/rest/international/bill";
-	const URI_INTERNATIONAL_REFUND = "/1/rest/international/refund";
+	//international
+	const URI_INTERNATIONAL_BILL = "/2/rest/international/bill";
+	const URI_INTERNATIONAL_REFUND = "/2/rest/international/refund";
+
+	//subscription
+	const URI_SUBSCRIPTION = "/2/subscription";
+	const URI_SUBSCRIPTION_PLAN = "/2/plan";
+	const URI_SUBSCRIPTION_BANKS = "/2/subscription_banks";
+	const URI_SUBSCRIPTION_SMS = "/2/sms";
 
 
 	const UNEXPECTED_RESULT = "非预期的返回结果:";
@@ -47,6 +55,8 @@ class config {
 	const VALID_SIGN_PARAM = 'APP ID, timestamp,APP(Master) Secret参数值均不能为空,请设置';
 	const VALID_MASTER_SECRET = 'Master Secret参数值不能为空,请设置';
 	const VALID_APP_SECRET = 'APP Secret参数值不能为空,请设置';
+
+	const VALID_PARAM_RANGE = '参数 %s 不在限定的范围内, 请重新设置';
 
 	/*
 	 * bank_code(int 类型) for channel JD_B2B
@@ -73,5 +83,13 @@ class config {
 			'CMB', 'ICBC', 'CCB', 'BOC', 'ABC', 'BOCM', 'SPDB', 'GDB', 'CITIC',
 			'CEB', 'CIB', 'SDB', 'CMBC', 'NBCB', 'BEA', 'NJCB', 'SRCB', 'BOB'
 		);
+	}
+
+	/*
+	 * 结算频率interval(string),
+	 * 主要包含任一天，一周，一个月或一年。
+	 */
+	static function get_interval(){
+		return array('day', 'week', 'month', 'year');
 	}
 }

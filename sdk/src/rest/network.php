@@ -11,6 +11,7 @@ class network {
         //apihz.beecloud.cn	杭州
 
         $random = rand(0, 3);
+        //return 'http://123.56.82.71:8080';
         return "https://" . $domainList[$random];
     }
 
@@ -47,11 +48,18 @@ class network {
                 case "get":
                     curl_setopt($ch, CURLOPT_URL, $url."?para=".urlencode(json_encode($data)));
                     break;
+                case "new_get":
+                    curl_setopt($ch, CURLOPT_URL, $url.'?'.http_build_query($data));
+                    break;
                 case "put":
                     curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); //POST数据
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                     curl_setopt($ch, CURLOPT_URL, $url);
+                    break;
+                case "delete":
+                    curl_setopt($ch, CURLOPT_URL, $url.'?'.http_build_query($data));
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
                     break;
                 default:
                     throw new \Exception('不支持的HTTP方式');
