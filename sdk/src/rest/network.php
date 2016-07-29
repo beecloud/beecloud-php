@@ -11,8 +11,6 @@ class network {
         //apihz.beecloud.cn	杭州
 
         $random = rand(0, 3);
-//        return 'http://192.168.1.107:8080';
-        return 'http://123.56.82.71:8080';
         return "https://" . $domainList[$random];
     }
 
