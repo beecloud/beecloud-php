@@ -221,7 +221,12 @@ Class SubscriptionDemo{
 	function update_subscription(){
 		$data = array(
 			'timestamp' => time() * 1000,
-			'valid' => true
+			'optional' => array('desc' => 'update subscription'),
+			//'buyer_id' => '',
+			//'plan_id' => '',
+			//'card_id' => '',
+			//'amount' => 10,
+			//'trial_end' => strtotime('2016-10-08') * 1000
 		);
 		$objectid = 'a41ed2d0-df0d-4a2e-a629-b5e5acf5b0dd';
 		$subscription = \beecloud\rest\Subscriptions::update_subscription($data, $objectid);
