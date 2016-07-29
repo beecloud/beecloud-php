@@ -906,8 +906,8 @@ class Subscriptions extends BCRESTApi{
 
     /*
 	 * @desc 通过ID查询订阅计划
+	 * @param $objectid string 订阅记录的唯一标识(必填)
 	 * @param $data array()
-	 * 	objectid string 订阅记录的唯一标识(必填)
 	 *  timestamp long 时间戳(必填)
 	 *
 	 * @desc 按条件查询订阅计划
@@ -919,10 +919,8 @@ class Subscriptions extends BCRESTApi{
 	 *	trial_days 	int 指定试用期天数（整数）,默认是0
 	 *  timestamp long 时间戳(必填)
 	 */
-    static function query_plan($data){
-        if(isset($data['objectid']) && $data['objectid']){
-            $objectid = $data['objectid'];
-            unset($data['objectid']);
+    static function query_plan($data, $objectid = ''){
+        if(!empty($objectid)){
             $url = APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid;
         }else{
             $url = APIConfig::URI_SUBSCRIPTION_PLAN;
@@ -933,16 +931,17 @@ class Subscriptions extends BCRESTApi{
 
     /*
 	 * @desc 更新订阅计划
+     * @param $objectid string 订阅记录的唯一标识(必填)
 	 * @param $data array()
-	 * 	objectid string 订阅记录的唯一标识(必填)
 	 *  timestamp long 时间戳(必填)
 	 *
 	 *  name string 订阅计划的名称
 	 *  optional json
 	 */
-    static function update_plan($data){
-        $objectid = $data['objectid'];
-        unset($data['objectid']);
+    static function update_plan($data, $objectid){
+        if(empty($objectid)){
+            throw new Exception('请设置plan的唯一标识objectid');
+        };
         $data = parent::get_common_params($data);
         return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
     }
@@ -953,9 +952,10 @@ class Subscriptions extends BCRESTApi{
 	 * 	objectid string 订阅计划的唯一标识
 	 *  timestamp long 时间戳
 	 */
-    static function del_plan($data){
-        $objectid = $data['objectid'];
-        unset($data['objectid']);
+    static function del_plan($data, $objectid){
+        if(empty($objectid)){
+            throw new Exception('请设置plan的唯一标识objectid');
+        };
         $data = parent::get_common_params($data);
         return BCRESTUtil::delete(APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
     }
@@ -995,8 +995,8 @@ class Subscriptions extends BCRESTApi{
 
     /*
 	 * @desc 通过ID查询订阅记录
+     * @param $objectid string 订阅记录的唯一标识(必填)
 	 * @param $data array()
-	 * 	objectid string 订阅记录的唯一标识(必填)
 	 *  timestamp long 时间戳(必填)
 	 *
 	 * @desc 按条件查询订阅
@@ -1006,10 +1006,8 @@ class Subscriptions extends BCRESTApi{
 	 *  card_id string  用于该订阅记录的的card
 	 *  timestamp long 时间戳(必填)
 	 */
-    static function query_subscription($data){
-        if(isset($data['objectid']) && $data['objectid']){
-            $objectid = $data['objectid'];
-            unset($data['objectid']);
+    static function query_subscription($data, $objectid = ''){
+        if(!empty($objectid)){
             $url = APIConfig::URI_SUBSCRIPTION.'/'.$objectid;
         }else{
             $url = APIConfig::URI_SUBSCRIPTION;
@@ -1021,8 +1019,8 @@ class Subscriptions extends BCRESTApi{
 
     /*
 	 * @desc 更新订阅
+     * @param $objectid string 订阅记录的唯一标识(必填)
 	 * @param $data array()
-	 * 	objectid string 订阅记录的唯一标识(必填)
 	 *  timestamp long 时间戳(必填)
 	 *
 	 *  buyer_id string 订阅的buyer ID，可以是用户email，也可以是商户系统中的用户ID
@@ -1034,23 +1032,25 @@ class Subscriptions extends BCRESTApi{
 	 * 		如果设置trial_end将覆盖客户预订了计划的默认试用期。特殊值现在可以提供立即停止客户的试用期。
 	 *  optional json
 	 */
-    static function update_subscription($data){
-        $objectid = $data['objectid'];
-        unset($data['objectid']);
+    static function update_subscription($data, $objectid){
+        if(empty($objectid)){
+            throw new Exception('请设置subscription的唯一标识objectid');
+        };
         $data = parent::get_common_params($data);
         return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
     }
 
     /*
 	 * @desc 取消订阅
+     * @param $objectid string 订阅记录的唯一标识
 	 * @param $data array()
-	 * 	objectid string 订阅记录的唯一标识
 	 *  timestamp long 时间戳
 	 *  at_period_end boolean 默认false,设置为true将推迟预订的取消，直到当前周期结束。
 	 */
-    static function cancel_subscription($data){
-        $objectid = $data['objectid'];
-        unset($data['objectid']);
+    static function cancel_subscription($data, $objectid){
+		if(empty($objectid)){
+			throw new Exception('请设置subscription的唯一标识objectid');
+		};
         $data = parent::get_common_params($data);
         return BCRESTUtil::delete(APIConfig::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
     }

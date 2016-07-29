@@ -37,6 +37,7 @@ class config {
 	const URI_SUBSCRIPTION_PLAN = "/2/plan";
 	const URI_SUBSCRIPTION_BANKS = "/2/subscription_banks";
 	const URI_SUBSCRIPTION_SMS = "/2/sms";
+	const URI_SUBSCRIPTION_AUTH = "/2/auth";
 
 
 	const UNEXPECTED_RESULT = "非预期的返回结果:";

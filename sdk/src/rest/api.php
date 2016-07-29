@@ -682,6 +682,24 @@ class international extends api{
 class Subscriptions extends api{
 
 	/*
+	 * @desc 三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
+	 * @param array $data, 主要包含以下三个参数:
+	 * 	name string 身份证姓名(必填)
+	 *  id_no string 身份证号(必填)
+	 *  card_no string 用户银行卡卡号(必填)
+	 *  mobile string 手机号
+	 * @return json
+	 *  "card_id": "xxx"
+	 *  "auth_result": true, 要素认证是否成功
+	 *  "auth_msg": "xxx不匹配", 返回给用户的直接让用户能看懂的鉴权结果消息
+	 */
+	static public function auth($data){
+		$data = parent::get_common_params($data);
+		parent::verify_need_params(array('name', 'id_no', 'card_no'), $data);
+		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_AUTH, $data, 30, false);
+	}
+
+	/*
  	 * @desc 获取支持银行列表
 	 * @param array $data, 主要包含以下三个参数:
 	 * 	app_id string APP ID
@@ -746,8 +764,8 @@ class Subscriptions extends api{
 
 	/*
 	 * @desc 通过ID查询订阅计划
+	 * @param $objectid string 订阅记录的唯一标识(必填)
 	 * @param $data array()
-	 * 	objectid string 订阅记录的唯一标识(必填)
 	 *  timestamp long 时间戳(必填)
 	 *
 	 * @desc 按条件查询订阅计划
@@ -759,10 +777,8 @@ class Subscriptions extends api{
 	 *	trial_days 	int 指定试用期天数（整数）,默认是0
 	 *  timestamp long 时间戳(必填)
 	 */
-	static function query_plan($data){
-		if(isset($data['objectid']) && $data['objectid']){
-			$objectid = $data['objectid'];
-			unset($data['objectid']);
+	static function query_plan($data, $objectid = ''){
+		if(!empty($objectid)){
 			$url = \beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid;
 		}else{
 			$url = \beecloud\rest\config::URI_SUBSCRIPTION_PLAN;
@@ -773,29 +789,31 @@ class Subscriptions extends api{
 
 	/*
 	 * @desc 更新订阅计划
+	 * @param $objectid string 订阅plan的唯一标识(必填)
 	 * @param $data array()
-	 * 	objectid string 订阅记录的唯一标识(必填)
 	 *  timestamp long 时间戳(必填)
 	 *
 	 *  name string 订阅计划的名称
 	 *  optional json
 	 */
-	static function update_plan($data){
-		$objectid = $data['objectid'];
-		unset($data['objectid']);
+	static function update_plan($data, $objectid){
+		if(empty($objectid)){
+			throw new \Exception('请设置plan的唯一标识objectid');
+		};
 		$data = parent::get_common_params($data);
 		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
 	}
 
 	/*
 	 * @desc 删除订阅计划
+	 * @param $objectid string 订阅计划的唯一标识
 	 * @param $data array()
-	 * 	objectid string 订阅计划的唯一标识
 	 *  timestamp long 时间戳
 	 */
-	static function del_plan($data){
-		$objectid = $data['objectid'];
-		unset($data['objectid']);
+	static function del_plan($data, $objectid){
+		if(empty($objectid)){
+			throw new \Exception('请设置plan的唯一标识objectid');
+		};
 		$data = parent::get_common_params($data);
 		return parent::delete(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
 	}
@@ -835,8 +853,8 @@ class Subscriptions extends api{
 
 	/*
 	 * @desc 通过ID查询订阅记录
+	 * @param $objectid string 订阅记录的唯一标识(必填)
 	 * @param $data array()
-	 * 	objectid string 订阅记录的唯一标识(必填)
 	 *  timestamp long 时间戳(必填)
 	 *
 	 * @desc 按条件查询订阅
@@ -846,10 +864,8 @@ class Subscriptions extends api{
 	 *  card_id string  用于该订阅记录的的card
 	 *  timestamp long 时间戳(必填)
 	 */
-	static function query_subscription($data){
-		if(isset($data['objectid']) && $data['objectid']){
-			$objectid = $data['objectid'];
-			unset($data['objectid']);
+	static function query_subscription($data, $objectid = ''){
+		if(!empty($objectid)){
 			$url = \beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid;
 		}else{
 			$url = \beecloud\rest\config::URI_SUBSCRIPTION;
@@ -861,8 +877,8 @@ class Subscriptions extends api{
 
 	/*
 	 * @desc 更新订阅
+	 * @param $objectid string 订阅记录的唯一标识(必填)
 	 * @param $data array()
-	 * 	objectid string 订阅记录的唯一标识(必填)
 	 *  timestamp long 时间戳(必填)
 	 *
 	 *  buyer_id string 订阅的buyer ID，可以是用户email，也可以是商户系统中的用户ID
@@ -874,9 +890,10 @@ class Subscriptions extends api{
 	 * 		如果设置trial_end将覆盖客户预订了计划的默认试用期。特殊值现在可以提供立即停止客户的试用期。
 	 *  optional json
 	 */
-	static function update_subscription($data){
-		$objectid = $data['objectid'];
-		unset($data['objectid']);
+	static function update_subscription($data, $objectid){
+		if(empty($objectid)){
+			throw new \Exception('请设置subscription的唯一标识objectid');
+		};
 		$data = parent::get_common_params($data);
 		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
 	}
@@ -888,9 +905,10 @@ class Subscriptions extends api{
 	 *  timestamp long 时间戳
 	 *  at_period_end boolean 默认false,设置为true将推迟预订的取消，直到当前周期结束。
 	 */
-	static function cancel_subscription($data){
-		$objectid = $data['objectid'];
-		unset($data['objectid']);
+	static function cancel_subscription($data, $objectid){
+		if(empty($objectid)){
+			throw new \Exception('请设置subscription的唯一标识objectid');
+		};
 		$data = parent::get_common_params($data);
 		return parent::delete(\beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
 	}
