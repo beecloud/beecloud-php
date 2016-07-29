@@ -14,26 +14,6 @@ Class SubscriptionDemo{
 		\beecloud\rest\Subscriptions::registerApp($app_id, $app_secret, $master_secret, $test_secret);
 	}
 
-	//三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
-	function auth(){
-		//三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
-		$data = array(
-			'timestamp' => time() * 1000,
-			'name' => '胡中有',
-			'card_no' => '6217906101007378888',
-			'id_no' => '413026199011207580',
-			'mobile' => '15962143194'
-		);
-		$auth = \beecloud\rest\Subscriptions::auth($data);
-		if ($auth->result_code != 0) {
-			print_r($auth);
-			exit();
-		}
-		echo '<pre>';
-		print_r($auth);die;
-	}
-
-
 	//获取银行列表
 	function banks(){
 		$data = array(
@@ -264,11 +244,9 @@ try {
 	$demo = new SubscriptionDemo($app_id, $app_secret, $master_secret, $test_secret);
 
 	//获取银行列表
-	$demo->banks();
+	//$demo->banks();
 	//获取手机验证码
-	$demo->sms();
-	//三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
-	$demo->auth();
+	//$demo->sms();
 	//创建plan
 	$demo->create_plan();
 	//更新plan的,主要修改的是[name/option]字段

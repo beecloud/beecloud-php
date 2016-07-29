@@ -35,6 +35,7 @@ class APIConfig {
     const URI_SUBSCRIPTION_PLAN = "/2/plan";
     const URI_SUBSCRIPTION_BANKS = "/2/subscription_banks";
     const URI_SUBSCRIPTION_SMS = "/2/sms";
+    const URI_AUTH = "/2/auth";
 
 
     const UNEXPECTED_RESULT = "非预期的返回结果:";
@@ -1053,5 +1054,26 @@ class Subscriptions extends BCRESTApi{
 		};
         $data = parent::get_common_params($data);
         return BCRESTUtil::delete(APIConfig::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
+    }
+}
+
+
+class Auth extends BCRESTApi{
+    /*
+	 * @desc 三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
+	 * @param array $data, 主要包含以下三个参数:
+	 * 	name string 身份证姓名(必填)
+	 *  id_no string 身份证号(必填)
+	 *  card_no string 用户银行卡卡号(必填)
+	 *  mobile string 手机号
+	 * @return json
+	 *  "card_id": "xxx", 要素认证成功返回card_id(即该记录的唯一标识)
+	 *  "auth_result": true, 要素认证是否成功
+	 *  "auth_msg": "xxx不匹配", 返回给用户的直接让用户能看懂的鉴权结果消息
+	 */
+    static public function auth($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('name', 'id_no', 'card_no'), $data);
+        return parent::post(APIConfig::URI_AUTH, $data, 30, false);
     }
 }

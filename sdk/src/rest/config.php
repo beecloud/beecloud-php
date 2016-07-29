@@ -31,14 +31,13 @@ class config {
 	//international
 	const URI_INTERNATIONAL_BILL = "/2/rest/international/bill";
 	const URI_INTERNATIONAL_REFUND = "/2/rest/international/refund";
-
+	//auth
+	const URI_AUTH = "/2/auth";
 	//subscription
 	const URI_SUBSCRIPTION = "/2/subscription";
 	const URI_SUBSCRIPTION_PLAN = "/2/plan";
 	const URI_SUBSCRIPTION_BANKS = "/2/subscription_banks";
 	const URI_SUBSCRIPTION_SMS = "/2/sms";
-	const URI_SUBSCRIPTION_AUTH = "/2/auth";
-
 
 	const UNEXPECTED_RESULT = "非预期的返回结果:";
 	const NEED_PARAM = "需要必填字段:";
