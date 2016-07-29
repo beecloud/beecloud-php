@@ -38,23 +38,23 @@ $data["openid"] = $openid;
     <title>BeeCloud微信安全支付</title>
 </head>
 <?php
-try {
-    $result = $api->bill($data);
-    if ($result->result_code != 0) {
-        print_r($result);
-        exit();
+    try {
+        $result = $api->bill($data);
+        if ($result->result_code != 0) {
+            print_r($result);
+            exit();
+        }
+        $jsApiParam = array(
+            "appId" => $result->app_id,
+            "timeStamp" => $result->timestamp,
+            "nonceStr" => $result->nonce_str,
+            "package" => $result->package,
+            "signType" => $result->sign_type,
+            "paySign" => $result->pay_sign
+        );
+    } catch (Exception $e) {
+        die($e->getMessage());
     }
-    $jsApiParam = array(
-        "appId" => $result->app_id,
-        "timeStamp" => $result->timestamp,
-        "nonceStr" => $result->nonce_str,
-        "package" => $result->package,
-        "signType" => $result->sign_type,
-        "paySign" => $result->pay_sign
-    );
-} catch (Exception $e) {
-    echo $e->getMessage();exit();
-}
 ?>
 <script type="text/javascript">
     //调用微信JS api 支付

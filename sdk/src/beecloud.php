@@ -27,8 +27,15 @@ class APIConfig {
     const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
     const URI_OFFLINE_REFUND = '/2/rest/offline/refund'; //线下退款
 
-    const URI_INTERNATIONAL_BILL = "/1/rest/international/bill";
-    const URI_INTERNATIONAL_REFUND = "/1/rest/international/refund";
+    const URI_INTERNATIONAL_BILL = "/2/rest/international/bill";
+    const URI_INTERNATIONAL_REFUND = "/2/rest/international/refund";
+
+    //subscription
+    const URI_SUBSCRIPTION = "/2/subscription";
+    const URI_SUBSCRIPTION_PLAN = "/2/plan";
+    const URI_SUBSCRIPTION_BANKS = "/2/subscription_banks";
+    const URI_SUBSCRIPTION_SMS = "/2/sms";
+    const URI_AUTH = "/2/auth";
 
 
     const UNEXPECTED_RESULT = "非预期的返回结果:";
@@ -43,10 +50,12 @@ class APIConfig {
     const NEED_CARDPWD = '当channel参数为 YEE_NOBANKCARD时 cardpwd为必填';
     const NEED_FRQID = '当channel参数为 YEE_NOBANKCARD时 frqid为必填';
     const NEED_TOTAL_FEE = '当channel参数为 BC_EXPRESS时 total_fee单位分,最小金额100分';
-    const VALID_BC_PARAM = 'APP ID,APP Secret,Master Secret参数值均不能为空,请重新设置';
+    const VALID_BC_PARAM = 'APP ID,APP Secret参数值均不能为空,请重新设置';
     const VALID_SIGN_PARAM = 'APP ID, timestamp,APP(Master) Secret参数值均不能为空,请设置';
     const VALID_MASTER_SECRET = 'Master Secret参数值不能为空,请设置';
     const VALID_APP_SECRET = 'APP Secret参数值不能为空,请设置';
+
+    const VALID_PARAM_RANGE = '参数 %s 不在限定的范围内, 请重新设置';
 
     /*
 	 * bank_code(int 类型) for channel JD_B2B
@@ -74,6 +83,14 @@ class APIConfig {
             'CEB', 'CIB', 'SDB', 'CMBC', 'NBCB', 'BEA', 'NJCB', 'SRCB', 'BOB'
         );
     }
+
+    /*
+	 * 结算频率interval(string),
+	 * 主要包含任一天，一周，一个月或一年。
+	 */
+    static function get_interval(){
+        return array('day', 'week', 'month', 'year');
+    }
 }
 
 class BCRESTUtil {
@@ -98,10 +115,10 @@ class BCRESTUtil {
         return $result;
     }
 
-    static final public function get($api, $data, $timeout) {
+    static final public function get($api, $data, $timeout, $returnArray, $type = true) {
         $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "get", $data, $timeout);
-        $result = json_decode($httpResultStr);
+        $httpResultStr = BCRESTUtil::request($url, $type ? 'get' : 'new_get', $data, $timeout);
+        $result = json_decode($httpResultStr,!$returnArray ? false : true);
         if (!$result) {
             throw new Exception(APIConfig::UNEXPECTED_RESULT . $httpResultStr);
         }
@@ -114,6 +131,16 @@ class BCRESTUtil {
         $result = json_decode($httpResultStr,!$returnArray ? false : true);
         if (!$result) {
             throw new Exception(APIConfig::UNEXPECTED_RESULT . $httpResultStr);
+        }
+        return $result;
+    }
+
+    static public function delete($api, $data, $timeout, $returnArray) {
+        $url = BCRESTUtil::getApiUrl() . $api;
+        $httpResultStr = BCRESTUtil::request($url, "delete", $data, $timeout);
+        $result = json_decode($httpResultStr,!$returnArray ? false : true);
+        if (!$result) {
+            throw new Exception(BCRESTUtil::UNEXPECTED_RESULT . $httpResultStr);
         }
         return $result;
     }
@@ -151,11 +178,18 @@ class BCRESTUtil {
                 case "get":
                     curl_setopt($ch, CURLOPT_URL, $url."?para=".urlencode(json_encode($data)));
                     break;
+                case "new_get":
+                    curl_setopt($ch, CURLOPT_URL, $url.'?'.http_build_query($data));
+                    break;
                 case "put":
                     curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); //POST数据
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                     curl_setopt($ch, CURLOPT_URL, $url);
+                    break;
+                case "delete":
+                    curl_setopt($ch, CURLOPT_URL, $url.'?'.http_build_query($data));
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
                     break;
                 default:
                     throw new Exception('不支持的HTTP方式');
@@ -171,74 +205,6 @@ class BCRESTUtil {
         } catch (Exception $e) {
             return "CURL EXCEPTION: ".$e->getMessage();
         }
-    }
-}
-
-/**
- * paypal pay
- */
-class BCRESTInternational {
-
-    static final private function baseParamCheck(array $data) {
-        if (!isset($data["app_id"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_id");
-        }
-
-        if (!isset($data["timestamp"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "timestamp");
-        }
-
-        if (!isset($data["app_sign"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_sign");
-        }
-
-        if (!isset($data["currency"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "currency");
-        }
-    }
-
-    static final public function bill(array $data) {
-        $data["app_id"] = BCRESTApi::$app_id;
-        $data["app_sign"] = BCRESTApi::get_sign($data["app_id"], $data["timestamp"], BCRESTApi::$app_secret);
-        //param validation
-        self::baseParamCheck($data);
-
-        switch ($data["channel"]) {
-            case "PAYPAL_PAYPAL":
-                if (!isset($data["return_url"])) {
-                    throw new Exception(APIConfig::NEED_PARAM . "return_url");
-                }
-                break;
-            case "PAYPAL_CREDITCARD":
-                if (!isset($data["credit_card_info"])) {
-                    throw new Exception(APIConfig::NEED_PARAM . "credit_card_info");
-                }
-                break;
-            case "PAYPAL_SAVED_CREDITCARD":
-                if (!isset($data["credit_card_id"])) {
-                    throw new Exception(APIConfig::NEED_PARAM . "credit_card_id");
-                }
-                break;
-            default:
-                throw new Exception(APIConfig::NEED_VALID_PARAM . "channel");
-                break;
-        }
-
-        if (!isset($data["total_fee"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "total_fee");
-        } else if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
-            throw new Exception(APIConfig::NEED_VALID_PARAM . "total_fee");
-        }
-
-        if (!isset($data["bill_no"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "bill_no");
-        }
-
-        if (!isset($data["title"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "title");
-        }
-
-        return BCRESTUtil::post(APIConfig::URI_INTERNATIONAL_BILL, $data, 30, false);
     }
 }
 
@@ -268,7 +234,7 @@ class BCRESTApi {
 	 * @param $test_secret  beecloud平台的TEST SECRET
 	 */
     static function registerApp($app_id, $app_secret, $master_secret = '', $test_secret = ''){
-        if(empty($app_id) || empty($app_secret) || empty($master_secret)){
+        if(empty($app_id) || empty($app_secret)){
             throw new Exception(APIConfig::VALID_BC_PARAM);
         }
         self::$app_id = $app_id;
@@ -284,18 +250,52 @@ class BCRESTApi {
         return md5($app_id.$timestamp.$secret);
     }
 
-    static final private function baseParamCheck(array $data) {
-        if (!isset($data["app_id"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_id");
+    /*
+	 * 验证必填参数
+	 */
+    static public function verify_need_params($params, $data){
+        if(is_string($params)){
+            if(!isset($data[$params]) || empty($data[$params])){
+                throw new Exception(APIConfig::NEED_PARAM . $params);
+            }
+        }else if(is_array($params)){
+            foreach ($params as $field) {
+                if(!isset($data[$field]) || empty($data[$field])){
+                    throw new Exception(APIConfig::NEED_PARAM . $field);
+                }
+            }
         }
+    }
 
-        if (!isset($data["timestamp"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "timestamp");
+    /*
+	 * @desc 获取共同的必填参数app_id, app_sign, timestamp
+	 * @param $data array
+	 * @param $secret_type string
+	 *  0: app_secret
+	 * 	1: master_secret
+	 *  2: test_secret
+	 */
+    static function get_common_params($data, $secret_type = '0'){
+        $secret = '';
+        switch($secret_type){
+            case '1':
+                $secret = self::$master_secret;
+                break;
+            case '2':
+                $secret = self::$test_secret;
+                break;
+            case '0':
+            default:
+                $secret = self::$app_secret;
+                break;
         }
-
-        if (!isset($data["app_sign"])) {
-            throw new Exception(APIConfig::NEED_PARAM . "app_sign");
+        if(empty($secret)){
+            throw new Exception(APIConfig::NEED_PARAM. 'APP(Master/Test) Secret, 请检查!');
         }
+        $data["app_id"] = self::$app_id;
+        $data["app_sign"] = self::get_sign(self::$app_id, $data["timestamp"], $secret);
+        self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
+        return $data;
     }
 
     /**
@@ -303,11 +303,8 @@ class BCRESTApi {
      * @return mixed
      * @throws Exception
      */
-    static final public function bill(array $data, $method = 'post') {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-        //param validation
-        self::baseParamCheck($data);
+    static public function bill(array $data, $method = 'post') {
+        $data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
         self::channelCheck($data);
         if (isset($data["channel"])) {
             switch($data["channel"]){
@@ -426,10 +423,7 @@ class BCRESTApi {
     }
 
     static final public function bills(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-        //required param existence check
-        self::baseParamCheck($data);
+        $data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
         self::channelCheck($data);
 
         $url = BCRESTApi::getSandbox() ? APIConfig::URI_TEST_BILLS : APIConfig::URI_BILLS;
@@ -439,9 +433,7 @@ class BCRESTApi {
 
 
     static final public function bills_count(array $data){
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-        self::baseParamCheck($data);
+        $data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
         self::channelCheck($data);
 
         if (isset($data["bill_no"]) && !preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
@@ -452,13 +444,7 @@ class BCRESTApi {
     }
 
     static final public function refund(array $data, $method = 'post') {
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], $method == 'get' ? self::$app_secret : self::$master_secret);
-        //param validation
-        self::baseParamCheck($data);
+        $data = $method == 'get' ? self::get_common_params($data, '0') : self::get_common_params($data, '1');
 
         if (isset($data["channel"])) {
             switch ($data["channel"]) {
@@ -527,30 +513,21 @@ class BCRESTApi {
 
 
     static final public function refunds(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        //required param existence check
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
         self::channelCheck($data);
         //param validation
         return BCRESTUtil::get(APIConfig::URI_REFUNDS, $data, 30, false);
     }
 
     static final public function refunds_count(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        //required param existence check
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
         self::channelCheck($data);
         //param validation
         return BCRESTUtil::get(APIConfig::URI_REFUNDS_COUNT, $data, 30, false);
     }
 
     static final public function refundStatus(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        //required param existence check
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
 
         switch ($data["channel"]) {
             case "WX":
@@ -572,12 +549,7 @@ class BCRESTApi {
 
     //单笔打款 - 支付宝/微信
     static final public function transfer(array $data) {
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '1');
         switch ($data["channel"]) {
             case "WX_REDPACK":
                 if (!isset($data['redpack_info'])) {
@@ -620,12 +592,7 @@ class BCRESTApi {
 
     //批量打款 - 支付宝
     static final public function transfers(array $data) {
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '1');
         switch ($data["channel"]) {
             case "ALI":
                 break;
@@ -666,12 +633,7 @@ class BCRESTApi {
 
     //BC企业打款 - 银行卡
     static final public function bc_transfer(array $data) {
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '1');
         $params = array(
             'total_fee', 'bill_no', 'title', 'trade_source', 'bank_fullname',
             'card_type', 'account_type', 'account_no', 'account_name'
@@ -689,9 +651,7 @@ class BCRESTApi {
 
 
     static final public function offline_bill(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
         if (isset($data["channel"])) {
             switch ($data["channel"]) {
                 case "WX_SCAN":
@@ -738,9 +698,7 @@ class BCRESTApi {
     }
 
     static final public function offline_bill_status(array $data) {
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '0');
 
         if (isset($data["channel"])) {
             switch ($data["channel"]) {
@@ -765,12 +723,7 @@ class BCRESTApi {
     }
 
     static final public function offline_refund(array $data){
-        if(empty(self::$master_secret)){
-            throw new Exception(APIConfig::VALID_MASTER_SECRET);
-        }
-        $data["app_id"] = self::$app_id;
-        $data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-        self::baseParamCheck($data);
+        $data = self::get_common_params($data, '1');
         if (isset($data['channel'])) {
             switch ($data["channel"]) {
                 case "ALI":
@@ -850,5 +803,277 @@ class BCRESTApi {
                     break;
             }
         }
+    }
+}
+
+
+/**
+ * paypal pay
+ */
+class BCRESTInternational extends BCRESTApi{
+
+    static public function bill($data, $method = 'post') {
+        $data = parent::get_common_params($data, '0');
+        parent::verify_need_params('currency', $data);
+        switch ($data["channel"]) {
+            case "PAYPAL_PAYPAL":
+                parent::verify_need_params('return_url', $data);
+                break;
+            case "PAYPAL_CREDITCARD":
+                self::verify_need_params('credit_card_info', $data);
+                break;
+            case "PAYPAL_SAVED_CREDITCARD":
+                self::verify_need_params('credit_card_id', $data);
+                break;
+            default:
+                throw new Exception(APIConfig::NEED_VALID_PARAM . "channel");
+                break;
+        }
+
+        self::verify_need_params(array('total_fee', 'bill_no', 'title'), $data);
+
+        if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
+            throw new Exception(APIConfig::NEED_VALID_PARAM . "total_fee");
+        }
+        return BCRESTUtil::post(APIConfig::URI_INTERNATIONAL_BILL, $data, 30, false);
+    }
+}
+
+
+class Subscriptions extends BCRESTApi{
+
+    /*
+	  * @desc 获取支持银行列表
+	 * @param array $data, 主要包含以下三个参数:
+	 * 	app_id string APP ID
+	 * 	timestamp long 时间戳
+	 * 	app_sign string 签名验证
+	 * @return json:
+	 * 	result_code string
+	 *  result_msg string
+	 *  err_detail string
+	 *  banks list
+	 *  common_banks list
+	 */
+    static public function subscription_banks($data){
+        $data = parent::get_common_params($data);
+        return BCRESTUtil::get(APIConfig::URI_SUBSCRIPTION_BANKS, $data, 30, false, false);
+    }
+
+    /*
+	  * @desc 发送短信验证码
+	 * @param array $data, 主要包含以下四个参数:
+	 *  app_id string APP ID
+	 *  timestamp long 时间戳
+	 *  app_sign string 签名验证
+	 *  phone string 手机号
+	 * @return json:
+	 * 	result_code string
+	 *  result_msg string
+	 *  err_detail string
+	 *  sms_id string
+	 *  code string
+	 */
+    static public function sms($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params('phone', $data);
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION_SMS, $data, 30, false);
+    }
+
+    /*
+	  * @desc 创建订阅计划plan
+	 * @param array $data,主要包含参数:
+	 *  fee int 单位分(必填), fee必须不小于 150分, 不大于5000000分
+	 *  interval string 结算频率(必填), 主要包含任一天(day)/一周(week)/一个月(month)/一年(year)
+	 *  name string 订阅计划的名称(必填)
+	 *	currency string, 对照表请参考:https://github.com/beecloud/beecloud-rest-api/tree/master/international
+	 *	interval_count 	int 每个订阅结算之间的时间间隔数。默认值1
+	 * 		eg: 时间间隔=月，interval_count=3即每3个月。允许一年一次（1年，12个月或52周）的最大值。
+	 *	trial_days 	int 指定试用期天数（整数）,默认是0
+	 *  optional json格式
+	 * @return json
+	 */
+    static public function plan($data){
+        $data = parent::get_common_params($data);
+        if(!in_array($data["interval"], APIConfig::get_interval())){
+            throw new Exception(sprintf(APIConfig::VALID_PARAM_RANGE, "interval"));
+        }
+        parent::verify_need_params(array('fee', 'name'), $data);
+        if(!is_int($data["fee"])){
+            throw new Exception(APIConfig::NEED_VALID_PARAM);
+        }
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION_PLAN, $data, 30, false);
+    }
+
+    /*
+	 * @desc 通过ID查询订阅计划
+	 * @param $objectid string 订阅记录的唯一标识(必填)
+	 * @param $data array()
+	 *  timestamp long 时间戳(必填)
+	 *
+	 * @desc 按条件查询订阅计划
+	 * @param $data array()
+	 *  name_with_substring string 按照订阅计划的名称模糊查询
+	 *  interval string 结算频率, 主要包含任一天(day)/一周(week)/一个月(month)/一年(year)
+	 *	interval_count 	int 每个订阅结算之间的时间间隔数。默认值1
+	 * 		eg: 时间间隔=月，interval_count=3即每3个月。允许一年一次（1年，12个月或52周）的最大值。
+	 *	trial_days 	int 指定试用期天数（整数）,默认是0
+	 *  timestamp long 时间戳(必填)
+	 */
+    static function query_plan($data, $objectid = ''){
+        if(!empty($objectid)){
+            $url = APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid;
+        }else{
+            $url = APIConfig::URI_SUBSCRIPTION_PLAN;
+        }
+        $data = parent::get_common_params($data);
+        return BCRESTUtil::get($url, $data, 30, false, false);
+    }
+
+    /*
+	 * @desc 更新订阅计划
+     * @param $objectid string 订阅记录的唯一标识(必填)
+	 * @param $data array()
+	 *  timestamp long 时间戳(必填)
+	 *
+	 *  name string 订阅计划的名称
+	 *  optional json
+	 */
+    static function update_plan($data, $objectid){
+        if(empty($objectid)){
+            throw new Exception('请设置plan的唯一标识objectid');
+        };
+        $data = parent::get_common_params($data);
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
+    }
+
+    /*
+	 * @desc 删除订阅计划
+	 * @param $data array()
+	 * 	objectid string 订阅计划的唯一标识
+	 *  timestamp long 时间戳
+	 */
+    static function del_plan($data, $objectid){
+        if(empty($objectid)){
+            throw new Exception('请设置plan的唯一标识objectid');
+        };
+        $data = parent::get_common_params($data);
+        return BCRESTUtil::delete(APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
+    }
+
+    /*
+	  * @desc 创建订阅记录subscription
+	 * @param array $data, 主要包含参数:
+	 *  buyer_id string 订阅的buyer ID(必填)，可以是用户email，也可以是商户系统中的用户ID
+	 *  plan_id string  订阅计划的唯一标识(必填)
+	 *  card_id string  用于该订阅记录的的card
+	 *	bank_name string 订阅用户银行名称（支持列表可参考API获取支持银行列表,即获取方法subscription_banks)
+	 *	card_no string 	订阅用户银行卡号
+	 *	id_name string 	订阅用户身份证姓名
+	 *	id_no 	string 	订阅用户身份证号
+	 *	mobile 	string 	订阅用户银行预留手机号
+	 *  amount double 	金额用于正在创建的订阅,默认值1.0
+	 *  coupon_id string 应用到该订阅的优惠券ID
+	 *  trial_end long Unix时间戳表示试用期，客户将被指控的第一次之前拿到的结束。
+	 * 		如果设置trial_end将覆盖客户预订了计划的默认试用期。特殊值现在可以提供立即停止客户的试用期。
+	 *  optional json
+	 * @remark:
+	 *  1.card_id 与 {bank_name, card_no, id_name, id_no, mobile} 二者必填其一
+	 *  2.card_id 为订阅成功时webhook返回里带有的字段，商户可保存下来下次直接使用
+	 *  3.bank_name可参考下述API获取支持银行列表，选择传入
+	 * @return json
+	 */
+    static public function subscription($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('buyer_id', 'plan_id'), $data);
+        if(isset($data['card_id']) && !empty($data['card_id'])){
+
+        }else{
+            parent::verify_need_params(array('bank_name', 'card_no', 'id_name', 'id_no', 'mobile'), $data);
+        }
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION, $data, 30, false);
+    }
+
+    /*
+	 * @desc 通过ID查询订阅记录
+     * @param $objectid string 订阅记录的唯一标识(必填)
+	 * @param $data array()
+	 *  timestamp long 时间戳(必填)
+	 *
+	 * @desc 按条件查询订阅
+	 * @param $data array()
+	 *  buyer_id string 订阅的buyer ID，可以是用户email，也可以是商户系统中的用户ID
+	 *  plan_id string  订阅计划的唯一标识(必填)
+	 *  card_id string  用于该订阅记录的的card
+	 *  timestamp long 时间戳(必填)
+	 */
+    static function query_subscription($data, $objectid = ''){
+        if(!empty($objectid)){
+            $url = APIConfig::URI_SUBSCRIPTION.'/'.$objectid;
+        }else{
+            $url = APIConfig::URI_SUBSCRIPTION;
+        }
+        $data = parent::get_common_params($data);
+        return BCRESTUtil::get($url, $data, 30, false, false);
+    }
+
+
+    /*
+	 * @desc 更新订阅
+     * @param $objectid string 订阅记录的唯一标识(必填)
+	 * @param $data array()
+	 *  timestamp long 时间戳(必填)
+	 *
+	 *  buyer_id string 订阅的buyer ID，可以是用户email，也可以是商户系统中的用户ID
+	 *  plan_id string  订阅计划的唯一标识
+	 *  card_id string  用于该订阅记录的的card
+	 *  amount double 	金额用于正在创建的订阅,默认值1.0
+	 *  coupon_id string 应用到该订阅的优惠券ID
+	 *  trial_end long Unix时间戳表示试用期，客户将被指控的第一次之前拿到的结束。
+	 * 		如果设置trial_end将覆盖客户预订了计划的默认试用期。特殊值现在可以提供立即停止客户的试用期。
+	 *  optional json
+	 */
+    static function update_subscription($data, $objectid){
+        if(empty($objectid)){
+            throw new Exception('请设置subscription的唯一标识objectid');
+        };
+        $data = parent::get_common_params($data);
+        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
+    }
+
+    /*
+	 * @desc 取消订阅
+     * @param $objectid string 订阅记录的唯一标识
+	 * @param $data array()
+	 *  timestamp long 时间戳
+	 *  at_period_end boolean 默认false,设置为true将推迟预订的取消，直到当前周期结束。
+	 */
+    static function cancel_subscription($data, $objectid){
+		if(empty($objectid)){
+			throw new Exception('请设置subscription的唯一标识objectid');
+		};
+        $data = parent::get_common_params($data);
+        return BCRESTUtil::delete(APIConfig::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
+    }
+}
+
+
+class Auth extends BCRESTApi{
+    /*
+	 * @desc 三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
+	 * @param array $data, 主要包含以下三个参数:
+	 * 	name string 身份证姓名(必填)
+	 *  id_no string 身份证号(必填)
+	 *  card_no string 用户银行卡卡号(必填)
+	 *  mobile string 手机号
+	 * @return json
+	 *  "card_id": "xxx", 要素认证成功返回card_id(即该记录的唯一标识)
+	 *  "auth_result": true, 要素认证是否成功
+	 *  "auth_msg": "xxx不匹配", 返回给用户的直接让用户能看懂的鉴权结果消息
+	 */
+    static public function auth($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('name', 'id_no', 'card_no'), $data);
+        return parent::post(APIConfig::URI_AUTH, $data, 30, false);
     }
 }

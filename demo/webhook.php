@@ -59,6 +59,12 @@ if($msg->transaction_type == "PAY") { //支付的结果
             break;
         case "PAYPAL":
             break;
+        case "BC":
+            //BC订阅支付
+            if($msg->sub_channel_type == 'BC_SUBSCRIPTION'){
+
+            }
+            break;
     }
 } else if ($msg->transaction_type == "REFUND") { //退款的结果
 

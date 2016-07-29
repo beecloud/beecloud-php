@@ -2,11 +2,6 @@
 require_once("../loader.php");
 require_once("config.php");
 
-//设置app id, app secret, master secret, test secret
-$api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-//Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
-$api->setSandbox(true);
-
 $data["timestamp"] = time() * 1000;
 //只列出了支付成功的订单
 $data["spay_result"] = true;
@@ -67,8 +62,13 @@ switch($type){
 </head>
 <body>
 <table border="1" align="center" cellspacing=0>
-    <?php
+<?php
     try {
+        //设置app id, app secret, master secret, test secret
+        $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
+        //Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
+        $api->setSandbox(false);
+
         $result = $api->bills($data);
         if ($result->result_code != 0 || $result->result_msg != "OK") {
             print_r($result);

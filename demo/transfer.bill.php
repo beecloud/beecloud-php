@@ -2,9 +2,6 @@
 require_once("../loader.php");
 require_once("config.php");
 
-//设置app id, app secret, master secret, test secret
-$api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-
 $data["timestamp"] = time() * 1000;
 $data["total_fee"] = 1;
 $data["desc"] = "transfer test";
@@ -100,31 +97,33 @@ switch($type) {
 </head>
 <body>
 <?php
-try {
-    switch($type){
-        case 'ALI_TRANSFERS':
-            $result = $api->transfers($data);
-            break;
-        case 'BC_TRANSFER':
-            $result = $api->bc_transfer($data);
-            break;
-        default :
-            $result = $api->transfer($data);
-            break;
+    try {
+        //设置app id, app secret, master secret, test secret
+        $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
 
+        switch($type){
+            case 'ALI_TRANSFERS':
+                $result = $api->transfers($data);
+                break;
+            case 'BC_TRANSFER':
+                $result = $api->bc_transfer($data);
+                break;
+            default :
+                $result = $api->transfer($data);
+                break;
+        }
+        if ($result->result_code != 0) {
+            print_r($result);
+            exit();
+        }
+        if(isset($result->url)){
+            header("Location:$result->url");
+        }else{
+            echo '下发成功!';
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
     }
-    if ($result->result_code != 0) {
-        print_r($result);
-        exit();
-    }
-    if(isset($result->url)){
-        header("Location:$result->url");
-    }else{
-        echo '下发成功!';
-    }
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 ?>
 </body>
 </table>

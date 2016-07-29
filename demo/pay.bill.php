@@ -2,18 +2,22 @@
 require_once("../loader.php");
 require_once("config.php");
 
-/* registerApp fun need four params:
- * @param(first) $app_id beecloud平台的APP ID
- * @param(second) $app_secret  beecloud平台的APP SECRET
- * @param(third) $master_secret  beecloud平台的MASTER SECRET
- * @param(fouth) $test_secret  beecloud平台的TEST SECRET, for sandbox
- */
-$api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-//Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
-$api->setSandbox(false);
+try {
+    /* registerApp fun need four params:
+     * @param(first) $app_id beecloud平台的APP ID
+     * @param(second) $app_secret  beecloud平台的APP SECRET
+     * @param(third) $master_secret  beecloud平台的MASTER SECRET
+     * @param(fouth) $test_secret  beecloud平台的TEST SECRET, for sandbox
+     */
+    $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
+    //Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
+    $api->setSandbox(false);
 
-//\beecloud\rest\api::registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-//\beecloud\rest\api::setSandbox(false);
+    //\beecloud\rest\api::registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
+    //\beecloud\rest\api::setSandbox(false);
+}catch(Exception $e){
+    die($e->getMessage());
+}
 
 $data = array();
 $data["timestamp"] = time() * 1000;
@@ -40,6 +44,8 @@ switch($type){
     case 'ALI_WAP' :
         $title = "支付宝移动网页";
         $data["channel"] = "ALI_WAP";
+        //非必填参数,boolean型,是否使用APP支付,true使用,否则不使用
+        //$data["use_app"] = true;
         break;
     case 'ALI_QRCODE' :
         $title = "支付宝扫码支付";

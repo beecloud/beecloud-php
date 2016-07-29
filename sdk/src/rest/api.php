@@ -30,8 +30,8 @@ class api {
 	 * @param $master_secret  beecloud平台的MASTER SECRET
 	 * @param $test_secret  beecloud平台的TEST SECRET
 	 */
-	static function registerApp($app_id, $app_secret, $master_secret, $test_secret = ''){
-		if(empty($app_id) || empty($app_secret) || empty($master_secret)){
+	static function registerApp($app_id, $app_secret, $master_secret = '', $test_secret = ''){
+		if(empty($app_id) || empty($app_secret)){
 			throw new \Exception(\beecloud\rest\config::VALID_BC_PARAM);
 		}
 		self::$app_id = $app_id;
@@ -47,22 +47,55 @@ class api {
 		return md5($app_id.$timestamp.$secret);
 	}
 
-
-	static final private function baseParamCheck(array $data) {
-		if (!isset($data["app_id"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "app_id");
-		}
-
-		if (!isset($data["timestamp"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "timestamp");
-		}
-
-		if (!isset($data["app_sign"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "app_sign");
+	/*
+	 * 验证必填参数
+	 */
+	static public function verify_need_params($params, $data){
+		if(is_string($params)){
+			if(!isset($data[$params]) || empty($data[$params])){
+				throw new \Exception(\beecloud\rest\config::NEED_PARAM . $params);
+			}
+		}else if(is_array($params)){
+			foreach ($params as $field) {
+				if(!isset($data[$field]) || empty($data[$field])){
+					throw new \Exception(\beecloud\rest\config::NEED_PARAM . $field);
+				}
+			}
 		}
 	}
 
-	static final public function post($api, $data, $timeout, $returnArray) {
+	/*
+	 * @desc 获取共同的必填参数app_id, app_sign, timestamp
+	 * @param $data array
+	 * @param $secret_type string
+	 *  0: app_secret
+	 * 	1: master_secret
+	 *  2: test_secret
+	 */
+	static function get_common_params($data, $secret_type = '0'){
+		$secret = '';
+		switch($secret_type){
+			case '1':
+				$secret = self::$master_secret;
+				break;
+			case '2':
+				$secret = self::$test_secret;
+				break;
+			case '0':
+			default:
+				$secret = self::$app_secret;
+				break;
+		}
+		if(empty($secret)){
+			throw new \Exception(\beecloud\rest\config::NEED_PARAM. 'APP(Master/Test) Secret, 请检查!');
+		}
+		$data["app_id"] = self::$app_id;
+		$data["app_sign"] = self::get_sign(self::$app_id, $data["timestamp"], $secret);
+		self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
+		return $data;
+	}
+
+	static public function post($api, $data, $timeout, $returnArray) {
 		$url = \beecloud\rest\network::getApiUrl() . $api;
 		$httpResultStr = \beecloud\rest\network::request($url, "post", $data, $timeout);
 		$result = json_decode($httpResultStr, !$returnArray ? false : true);
@@ -72,9 +105,14 @@ class api {
 		return $result;
 	}
 
-	static final public function get($api, $data, $timeout, $returnArray) {
+	/*
+	 * @param $type boolean
+	 * 	默认true, 即: url?para=json串,处理即urlencode(json_encode($data)
+	 *  设置false, 即: url?key=value&key1=value1,处理即http_build_query($data)
+	 */
+	static public function get($api, $data, $timeout, $returnArray, $type = true) {
 		$url = \beecloud\rest\network::getApiUrl() . $api;
-		$httpResultStr = \beecloud\rest\network::request($url, "get", $data, $timeout);
+		$httpResultStr = \beecloud\rest\network::request($url, $type ? "get" : 'new_get', $data, $timeout);
 		$result = json_decode($httpResultStr,!$returnArray ? false : true);
 		if (!$result) {
 			throw new \Exception(\beecloud\rest\config::UNEXPECTED_RESULT . $httpResultStr);
@@ -82,9 +120,19 @@ class api {
 		return $result;
 	}
 
-	static final public function put($api, $data, $timeout, $returnArray) {
+	static public function put($api, $data, $timeout, $returnArray) {
 		$url = \beecloud\rest\network::getApiUrl() . $api;
 		$httpResultStr = \beecloud\rest\network::request($url, "put", $data, $timeout);
+		$result = json_decode($httpResultStr,!$returnArray ? false : true);
+		if (!$result) {
+			throw new \Exception(\beecloud\rest\config::UNEXPECTED_RESULT . $httpResultStr);
+		}
+		return $result;
+	}
+
+	static public function delete($api, $data, $timeout, $returnArray) {
+		$url = \beecloud\rest\network::getApiUrl() . $api;
+		$httpResultStr = \beecloud\rest\network::request($url, "delete", $data, $timeout);
 		$result = json_decode($httpResultStr,!$returnArray ? false : true);
 		if (!$result) {
 			throw new \Exception(\beecloud\rest\config::UNEXPECTED_RESULT . $httpResultStr);
@@ -98,11 +146,8 @@ class api {
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	static final public function bill(array $data, $method = 'post') {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-		//param validation
-		self::baseParamCheck($data);
+	static public function bill(array $data, $method = 'post') {
+		$data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
 		self::channelCheck($data);
 		if (isset($data["channel"])) {
 			switch($data["channel"]){
@@ -133,7 +178,7 @@ class api {
 					break;
 				case "JD_B2B":
 					if (!in_array($data["bank_code"], \beecloud\rest\config::get_bank_code())) {
-						throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM.'bank_code');
+						throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'bank_code'));
 					}
 					break;
 				case "YEE_WAP":
@@ -169,7 +214,7 @@ class api {
 						throw new \Exception(\beecloud\rest\config::NEED_PARAM.'bank');
 					}
 					if (!in_array($data["bank"], \beecloud\rest\config::get_bank())) {
-						throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM.'bank');
+						throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'bank'));
 					}
 					break;
 				case "BC_EXPRESS" :
@@ -219,10 +264,7 @@ class api {
 	}
 
 	static final public function bills(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-		//required param existence check
-		self::baseParamCheck($data);
+		$data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
 		self::channelCheck($data);
 
 		$url = \beecloud\rest\api::getSandbox() ? \beecloud\rest\config::URI_TEST_BILLS : \beecloud\rest\config::URI_BILLS;
@@ -232,9 +274,7 @@ class api {
 
 
 	static final public function bills_count(array $data){
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$mode ? self::$test_secret : self::$app_secret);
-		self::baseParamCheck($data);
+		$data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
 		self::channelCheck($data);
 
 		if (isset($data["bill_no"]) && !preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
@@ -246,14 +286,7 @@ class api {
 	}
 
 	static final public function refund(array $data, $method = 'post') {
-		if(empty(self::$master_secret)){
-			throw new \Exception(\beecloud\rest\config::VALID_MASTER_SECRET);
-		}
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], $method == 'get' ? self::$app_secret : self::$master_secret);
-		//param validation
-		self::baseParamCheck($data);
-
+		$data = $method == 'get' ? self::get_common_params($data, '0') : self::get_common_params($data, '1');
 		if (isset($data["channel"])) {
 			switch ($data["channel"]) {
 				case "ALI":
@@ -321,20 +354,14 @@ class api {
 
 
 	static final public function refunds(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		//required param existence check
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '0');
 		self::channelCheck($data);
 		//param validation
 		return self::get(\beecloud\rest\config::URI_REFUNDS, $data, 30, false);
 	}
 
 	static final public function refunds_count(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		//required param existence check
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '0');
 		self::channelCheck($data);
 		//param validation
 		return self::get(\beecloud\rest\config::URI_REFUNDS_COUNT, $data, 30, false);
@@ -342,11 +369,7 @@ class api {
 
 
 	static final public function refundStatus(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		//required param existence check
-		self::baseParamCheck($data);
-
+		$data = self::get_common_params($data, '0');
 		switch ($data["channel"]) {
 			case "WX":
 			case "YEE":
@@ -367,9 +390,7 @@ class api {
 
 	//单笔打款 - 支付宝/微信红包
 	static final public function transfer(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '1');
 		switch ($data["channel"]) {
 			case "WX_REDPACK":
 				if (!isset($data['redpack_info'])) {
@@ -412,12 +433,7 @@ class api {
 
 	//批量打款 - 支付宝
 	static final public function transfers(array $data) {
-		if(empty(self::$master_secret)){
-			throw new \Exception(\beecloud\rest\config::VALID_MASTER_SECRET);
-		}
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '1');
 		switch ($data["channel"]) {
 			case "ALI":
 				break;
@@ -458,12 +474,7 @@ class api {
 
 	//BC企业打款 - 银行卡
 	static final public function bc_transfer(array $data) {
-		if(empty(self::$master_secret)){
-			throw new \Exception(\beecloud\rest\config::VALID_MASTER_SECRET);
-		}
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '1');
 		$params = array(
 			'total_fee', 'bill_no', 'title', 'trade_source', 'bank_fullname',
 			'card_type', 'account_type', 'account_no', 'account_name'
@@ -481,9 +492,7 @@ class api {
 
 
 	static final public function offline_bill(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '0');
 		if (isset($data["channel"])) {
 			switch ($data["channel"]) {
 				case "WX_SCAN":
@@ -530,9 +539,7 @@ class api {
 	}
 
 	static final public function offline_bill_status(array $data) {
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$app_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '0');
 
 		if (isset($data["channel"])) {
 			switch ($data["channel"]) {
@@ -557,12 +564,7 @@ class api {
 	}
 
 	static final public function offline_refund(array $data){
-		if(empty(self::$master_secret)){
-			throw new \Exception(\beecloud\rest\config::VALID_MASTER_SECRET);
-		}
-		$data["app_id"] = self::$app_id;
-		$data["app_sign"] = self::get_sign($data["app_id"], $data["timestamp"], self::$master_secret);
-		self::baseParamCheck($data);
+		$data = self::get_common_params($data, '1');
 		if (isset($data['channel'])) {
 			switch ($data["channel"]) {
 				case "ALI":
@@ -595,7 +597,6 @@ class api {
 		}
 		return self::post(\beecloud\rest\config::URI_OFFLINE_REFUND, $data, 30, false);
 	}
-
 
 	static final private function channelCheck($data){
 		if (isset($data["channel"])) {
@@ -644,71 +645,273 @@ class api {
 	}
 }
 
-class international {
-
-	static final private function baseParamCheck(array $data) {
-		if (!isset($data["app_id"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "app_id");
-		}
-
-		if (!isset($data["timestamp"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "timestamp");
-		}
-
-		if (!isset($data["app_sign"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "app_sign");
-		}
-
-		if (!isset($data["currency"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "currency");
-		}
-	}
+class international extends api{
 
 	/**
 	 * @param array $data
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	static final public function bill(array $data) {
-		$data["app_id"] = \beecloud\rest\api::$app_id;
-		$data["app_sign"] = \beecloud\rest\api::get_sign($data["app_id"], $data["timestamp"], \beecloud\rest\api::$app_secret);
-		//param validation
-		self::baseParamCheck($data);
-
+	static public function bill(array $data, $method = 'post') {
+		$data = self::get_common_params($data, '0');
+		parent::verify_need_params('currency', $data);
 		switch ($data["channel"]) {
 			case "PAYPAL_PAYPAL":
-				if (!isset($data["return_url"])) {
-					throw new \Exception(\beecloud\rest\config::NEED_PARAM . "return_url");
-				}
+				self::verify_need_params('return_url', $data);
 				break;
 			case "PAYPAL_CREDITCARD":
-				if (!isset($data["credit_card_info"])) {
-					throw new \Exception(\beecloud\rest\config::NEED_PARAM . "credit_card_info");
-				}
+				self::verify_need_params('credit_card_info', $data);
 				break;
 			case "PAYPAL_SAVED_CREDITCARD":
-				if (!isset($data["credit_card_id"])) {
-					throw new \Exception(\beecloud\rest\config::NEED_PARAM . "credit_card_id");
-				}
+				self::verify_need_params('credit_card_id', $data);
 				break;
 			default:
 				throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");
 				break;
 		}
 
-		if (!isset($data["total_fee"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "total_fee");
-		} else if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
+		self::verify_need_params(array('total_fee', 'bill_no', 'title'), $data);
+
+		if(!is_int($data["total_fee"]) || $data["total_fee"] < 1) {
 			throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "total_fee");
 		}
+		return parent::post(\beecloud\rest\config::URI_INTERNATIONAL_BILL, $data, 30, false);
+	}
+}
 
-		if (!isset($data["bill_no"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "bill_no");
-		}
+class Subscriptions extends api{
 
-		if (!isset($data["title"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "title");
+	/*
+ 	 * @desc 获取支持银行列表
+	 * @param array $data, 主要包含以下三个参数:
+	 * 	app_id string APP ID
+	 * 	timestamp long 时间戳
+	 * 	app_sign string 签名验证
+	 * @return json:
+	 * 	result_code string
+	 *  result_msg string
+	 *  err_detail string
+	 *  banks list
+	 *  common_banks list
+	 */
+	static public function subscription_banks($data){
+		$data = parent::get_common_params($data);
+		return parent::get(\beecloud\rest\config::URI_SUBSCRIPTION_BANKS, $data, 30, false, false);
+	}
+
+	/*
+ 	 * @desc 发送短信验证码
+	 * @param array $data, 主要包含以下四个参数:
+	 *  app_id string APP ID
+	 *  timestamp long 时间戳
+	 *  app_sign string 签名验证
+	 *  phone string 手机号
+	 * @return json:
+	 * 	result_code string
+	 *  result_msg string
+	 *  err_detail string
+	 *  sms_id string
+	 *  code string
+	 */
+	static public function sms($data){
+		$data = parent::get_common_params($data);
+		parent::verify_need_params('phone', $data);
+		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_SMS, $data, 30, false);
+	}
+
+	/*
+ 	 * @desc 创建订阅计划plan
+	 * @param array $data,主要包含参数:
+	 *  fee int 单位分(必填), fee必须不小于 150分, 不大于5000000分
+	 *  interval string 结算频率(必填), 主要包含任一天(day)/一周(week)/一个月(month)/一年(year)
+	 *  name string 订阅计划的名称(必填)
+	 *	currency string, 对照表请参考:https://github.com/beecloud/beecloud-rest-api/tree/master/international
+	 *	interval_count 	int 每个订阅结算之间的时间间隔数。默认值1
+	 * 		eg: 时间间隔=月，interval_count=3即每3个月。允许一年一次（1年，12个月或52周）的最大值。
+	 *	trial_days 	int 指定试用期天数（整数）,默认是0
+	 *  optional json格式
+	 * @return json
+	 */
+	static public function plan($data){
+		$data = parent::get_common_params($data);
+		if(!in_array($data["interval"], \beecloud\rest\config::get_interval())){
+			throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, "interval"));
 		}
-		return \beecloud\rest\api::post(\beecloud\rest\config::URI_INTERNATIONAL_BILL, $data, 30, false);
+		parent::verify_need_params(array('fee', 'name'), $data);
+		if(!is_int($data["fee"])){
+			throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM);
+		}
+		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN, $data, 30, false);
+	}
+
+	/*
+	 * @desc 通过ID查询订阅计划
+	 * @param $objectid string 订阅记录的唯一标识(必填)
+	 * @param $data array()
+	 *  timestamp long 时间戳(必填)
+	 *
+	 * @desc 按条件查询订阅计划
+	 * @param $data array()
+	 *  name_with_substring string 按照订阅计划的名称模糊查询
+	 *  interval string 结算频率, 主要包含任一天(day)/一周(week)/一个月(month)/一年(year)
+	 *	interval_count 	int 每个订阅结算之间的时间间隔数。默认值1
+	 * 		eg: 时间间隔=月，interval_count=3即每3个月。允许一年一次（1年，12个月或52周）的最大值。
+	 *	trial_days 	int 指定试用期天数（整数）,默认是0
+	 *  timestamp long 时间戳(必填)
+	 */
+	static function query_plan($data, $objectid = ''){
+		if(!empty($objectid)){
+			$url = \beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid;
+		}else{
+			$url = \beecloud\rest\config::URI_SUBSCRIPTION_PLAN;
+		}
+		$data = parent::get_common_params($data);
+		return parent::get($url, $data, 30, false, false);
+	}
+
+	/*
+	 * @desc 更新订阅计划
+	 * @param $objectid string 订阅plan的唯一标识(必填)
+	 * @param $data array()
+	 *  timestamp long 时间戳(必填)
+	 *
+	 *  name string 订阅计划的名称
+	 *  optional json
+	 */
+	static function update_plan($data, $objectid){
+		if(empty($objectid)){
+			throw new \Exception('请设置plan的唯一标识objectid');
+		};
+		$data = parent::get_common_params($data);
+		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
+	}
+
+	/*
+	 * @desc 删除订阅计划
+	 * @param $objectid string 订阅计划的唯一标识
+	 * @param $data array()
+	 *  timestamp long 时间戳
+	 */
+	static function del_plan($data, $objectid){
+		if(empty($objectid)){
+			throw new \Exception('请设置plan的唯一标识objectid');
+		};
+		$data = parent::get_common_params($data);
+		return parent::delete(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
+	}
+
+	/*
+ 	 * @desc 创建订阅记录subscription
+	 * @param array $data, 主要包含参数:
+	 *  buyer_id string 订阅的buyer ID(必填)，可以是用户email，也可以是商户系统中的用户ID
+	 *  plan_id string  订阅计划的唯一标识(必填)
+	 *  card_id string  用于该订阅记录的的card
+	 *	bank_name string 订阅用户银行名称（支持列表可参考API获取支持银行列表,即获取方法subscription_banks)
+	 *	card_no string 	订阅用户银行卡号
+	 *	id_name string 	订阅用户身份证姓名
+	 *	id_no 	string 	订阅用户身份证号
+	 *	mobile 	string 	订阅用户银行预留手机号
+	 *  amount double 	金额用于正在创建的订阅,默认值1.0
+	 *  coupon_id string 应用到该订阅的优惠券ID
+	 *  trial_end long Unix时间戳表示试用期，客户将被指控的第一次之前拿到的结束。
+	 * 		如果设置trial_end将覆盖客户预订了计划的默认试用期。特殊值现在可以提供立即停止客户的试用期。
+	 *  optional json
+	 * @remark:
+     *  1.card_id 与 {bank_name, card_no, id_name, id_no, mobile} 二者必填其一
+     *  2.card_id 为订阅成功时webhook返回里带有的字段，商户可保存下来下次直接使用
+     *  3.bank_name可参考下述API获取支持银行列表，选择传入
+	 * @return json
+	 */
+	static public function subscription($data){
+		$data = parent::get_common_params($data);
+		parent::verify_need_params(array('buyer_id', 'plan_id'), $data);
+		if(isset($data['card_id']) && !empty($data['card_id'])){
+
+		}else{
+			parent::verify_need_params(array('bank_name', 'card_no', 'id_name', 'id_no', 'mobile'), $data);
+		}
+		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION, $data, 30, false);
+	}
+
+	/*
+	 * @desc 通过ID查询订阅记录
+	 * @param $objectid string 订阅记录的唯一标识(必填)
+	 * @param $data array()
+	 *  timestamp long 时间戳(必填)
+	 *
+	 * @desc 按条件查询订阅
+	 * @param $data array()
+	 *  buyer_id string 订阅的buyer ID，可以是用户email，也可以是商户系统中的用户ID
+	 *  plan_id string  订阅计划的唯一标识(必填)
+	 *  card_id string  用于该订阅记录的的card
+	 *  timestamp long 时间戳(必填)
+	 */
+	static function query_subscription($data, $objectid = ''){
+		if(!empty($objectid)){
+			$url = \beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid;
+		}else{
+			$url = \beecloud\rest\config::URI_SUBSCRIPTION;
+		}
+		$data = parent::get_common_params($data);
+		return parent::get($url, $data, 30, false, false);
+	}
+
+
+	/*
+	 * @desc 更新订阅
+	 * @param $objectid string 订阅记录的唯一标识(必填)
+	 * @param $data array()
+	 *  timestamp long 时间戳(必填)
+	 *
+	 *  buyer_id string 订阅的buyer ID，可以是用户email，也可以是商户系统中的用户ID
+	 *  plan_id string  订阅计划的唯一标识
+	 *  card_id string  用于该订阅记录的的card
+	 *  amount double 	金额用于正在创建的订阅,默认值1.0
+	 *  coupon_id string 应用到该订阅的优惠券ID
+	 *  trial_end long Unix时间戳表示试用期，客户将被指控的第一次之前拿到的结束。
+	 * 		如果设置trial_end将覆盖客户预订了计划的默认试用期。特殊值现在可以提供立即停止客户的试用期。
+	 *  optional json
+	 */
+	static function update_subscription($data, $objectid){
+		if(empty($objectid)){
+			throw new \Exception('请设置subscription的唯一标识objectid');
+		};
+		$data = parent::get_common_params($data);
+		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
+	}
+
+	/*
+	 * @desc 取消订阅
+	 * @param $data array()
+	 * 	objectid string 订阅记录的唯一标识
+	 *  timestamp long 时间戳
+	 *  at_period_end boolean 默认false,设置为true将推迟预订的取消，直到当前周期结束。
+	 */
+	static function cancel_subscription($data, $objectid){
+		if(empty($objectid)){
+			throw new \Exception('请设置subscription的唯一标识objectid');
+		};
+		$data = parent::get_common_params($data);
+		return parent::delete(\beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
+	}
+}
+
+Class Auth extends api{
+	/*
+	 * @desc 三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
+	 * @param array $data, 主要包含以下三个参数:
+	 * 	name string 身份证姓名(必填)
+	 *  id_no string 身份证号(必填)
+	 *  card_no string 用户银行卡卡号(必填)
+	 *  mobile string 手机号
+	 * @return json
+	 *  "card_id": "xxx", 要素认证成功返回
+	 *  "auth_result": true, 要素认证是否成功
+	 *  "auth_msg": "xxx不匹配", 返回给用户的直接让用户能看懂的鉴权结果消息
+	 */
+	static public function auth($data){
+		$data = parent::get_common_params($data);
+		parent::verify_need_params(array('name', 'id_no', 'card_no'), $data);
+		return parent::post(\beecloud\rest\config::URI_AUTH, $data, 30, false);
 	}
 }

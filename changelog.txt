@@ -1,5 +1,12 @@
 BeeCloud PHP Changelog
 ========================================================
+v2.3.7 发布日期: 2016年7月29日
++ 订阅计划/订阅记录plan/subscription, 具体请参考api.php中的类Subscriptions
++ 鉴权, , 具体请参考api.php中的类Auth
+  调用方式:\beecloud\rest\Auth::auth($data)
+
+BeeCloud PHP Changelog
+========================================================
 v2.3.6 发布日期: 2016年7月5日
 + BeeCloud平台参数配置,原在sdk/src/rest/config.php设置常量,现更改为
   \beecloud\rest\api::registerApp('app id', 'app secret', 'master secret', 'test secret'),

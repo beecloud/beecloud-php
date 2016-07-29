@@ -11,11 +11,6 @@
     require_once("../loader.php");
     require_once("config.php");
 
-    //设置app id, app secret, master secret, test secret
-    $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-    //Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
-    $api->setSandbox(false);
-
     $data["timestamp"] = time() * 1000;
     $data["id"] = $_GET['id'];
     $type = $_GET['type'];
@@ -24,6 +19,11 @@
         exit(json_encode(array('result_code' => 1, 'err_detail' => '请输入id')));
     }
     try {
+        //设置app id, app secret, master secret, test secret
+        $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
+        //Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
+        $api->setSandbox(false);
+
         switch($type){
             case 'bill':
                 $result = $api->bill($data, 'get');
