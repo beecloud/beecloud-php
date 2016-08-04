@@ -19,7 +19,7 @@ Class SubscriptionDemo{
 		$data = array(
 			'timestamp' => time() * 1000
 		);
-		$banks = \beecloud\rest\Subscriptions::subscription_banks($data);
+		$banks = \beecloud\rest\Subscriptions::banks($data);
 		if ($banks->result_code != 0) {
 			print_r($banks);
 			exit();
@@ -29,7 +29,8 @@ Class SubscriptionDemo{
 		print_r($banks->banks);die;
 	}
 
-	//获取手机验证码
+	//获取手机验证码,
+	//返回验证码记录的唯一标识,并且手机端接收到验证码,二者供创建subscription使用
 	function sms(){
 		$data = array(
 			'timestamp' => time() * 1000,
@@ -48,7 +49,7 @@ Class SubscriptionDemo{
 	function create_plan(){
 		$data = array(
 			'timestamp' => time() * 1000,
-			'name' => 'jason\'s plan for delete',
+			'name' => 'jason\'s plan',
 			'fee' => 150,  //fee必须不小于 150分, 不大于5000000分
 			'interval' => 'month',
 			'currency' => 'CNY',
@@ -145,10 +146,10 @@ Class SubscriptionDemo{
 			'sms_code' => '3035',
 			//'card_id' => '',
 			'bank_name' => '中国银行',
-			'card_no' => '6217906101007378888',
+			'card_no' => '621790610100737xxxx',
 			'id_name' => 'jason',
-			'id_no' => '413026199011207580',
-			'mobile' => '15962143194',
+			'id_no' => '41302619901120xxxx',
+			'mobile' => '1596214xxxx',
 			'amount' => 10,
 			'trial_end' => strtotime('2016-10-08') * 1000,
 			'valid' => true,
@@ -244,12 +245,13 @@ try {
 	$demo = new SubscriptionDemo($app_id, $app_secret, $master_secret, $test_secret);
 
 	//获取银行列表
-	//$demo->banks();
+	$demo->banks();
 	//获取手机验证码
-	//$demo->sms();
+	$demo->sms();
+
 	//创建plan
 	$demo->create_plan();
-	//更新plan的,主要修改的是[name/option]字段
+	//更新plan
 	$demo->update_plan();
 	//删除plan
 	$demo->del_plan();
@@ -257,12 +259,8 @@ try {
 	$demo->query_plan_bycondition();
 	//按照ID查询plan
 	$demo->query_plan_byid();
-	/*
-	 * 创建subscription
-	 * 1.card_id 与 {bank_name, card_no, id_name, id_no, mobile} 二者必填其一
-	 * 2.card_id 为订阅成功时webhook返回里带有的字段，商户可保存下来下次直接使用
-	 * 3.bank_name可参考下述API获取支持银行列表，选择传入
-	 */
+
+	//创建subscription
 	$demo->create_subscription();
 	//更新subscription
 	$demo->update_subscription();

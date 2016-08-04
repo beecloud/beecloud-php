@@ -35,10 +35,10 @@ if ($sign != $msg->sign) {
 if($msg->transaction_type == "PAY") { //支付的结果
     //付款信息
     //支付状态是否变为支付成功,true代表成功
-    $result = $msg->trade_success;
+    $status = $msg->trade_success;
 
     //message_detail 参考文档
-    //channel_type 微信/支付宝/银联/快钱/京东/百度/易宝/PAYPAL
+    //channel_type 微信/支付宝/银联/快钱/京东/百度/易宝/PAYPAL/BC
     switch ($msg->channel_type) {
         case "WX":
             /**
@@ -60,7 +60,7 @@ if($msg->transaction_type == "PAY") { //支付的结果
         case "PAYPAL":
             break;
         case "BC":
-            //BC订阅支付
+            //BC订阅收费
             if($msg->sub_channel_type == 'BC_SUBSCRIPTION'){
 
             }
@@ -68,6 +68,26 @@ if($msg->transaction_type == "PAY") { //支付的结果
     }
 } else if ($msg->transaction_type == "REFUND") { //退款的结果
 
+}
+
+/*
+ * 推送订阅结果的
+ * transaction_id就是创建订阅时返回的订阅id，transaction_type为SUBSCRIPTION，sub_channel_type为BC_SUBSCRIPTION，
+ * message_detail中包含用户相关的注册信息，其中的card_id注意留存。
+ * 该id由{bank_name、card_no、id_name、id_no、mobile}共同决定，可以直接用于发起订阅
+ */
+if ($msg->transaction_type == "SUBSCRIPTION") {
+    //创建的订阅状态是否为成功,true代表成功
+    $status = $msg->trade_success;
+
+    //message_detail 参考文档
+    switch ($msg->channel_type) {
+        case "BC":
+            if($msg->sub_channel_type == 'BC_SUBSCRIPTION'){
+
+            }
+            break;
+    }
 }
 
 //打印所有字段

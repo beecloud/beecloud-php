@@ -303,7 +303,7 @@ class BCRESTApi {
      * @return mixed
      * @throws Exception
      */
-    static public function bill(array $data, $method = 'post') {
+    static public function bill($data, $method = 'post') {
         $data = self::$mode ? self::get_common_params($data, '2') : self::get_common_params($data, '0');
         self::channelCheck($data);
         if (isset($data["channel"])) {
@@ -855,13 +855,13 @@ class Subscriptions extends BCRESTApi{
 	 *  banks list
 	 *  common_banks list
 	 */
-    static public function subscription_banks($data){
+    static public function banks($data){
         $data = parent::get_common_params($data);
         return BCRESTUtil::get(APIConfig::URI_SUBSCRIPTION_BANKS, $data, 30, false, false);
     }
 
     /*
-	  * @desc 发送短信验证码
+	  * @desc 发送短信验证码,返回验证码记录的唯一标识,并且手机端接收到验证码,二者供创建subscription使用
 	 * @param array $data, 主要包含以下四个参数:
 	 *  app_id string APP ID
 	 *  timestamp long 时间戳
@@ -872,7 +872,6 @@ class Subscriptions extends BCRESTApi{
 	 *  result_msg string
 	 *  err_detail string
 	 *  sms_id string
-	 *  code string
 	 */
     static public function sms($data){
         $data = parent::get_common_params($data);
@@ -944,7 +943,7 @@ class Subscriptions extends BCRESTApi{
             throw new Exception('请设置plan的唯一标识objectid');
         };
         $data = parent::get_common_params($data);
-        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
+        return BCRESTUtil::put(APIConfig::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
     }
 
     /*
@@ -1038,7 +1037,7 @@ class Subscriptions extends BCRESTApi{
             throw new Exception('请设置subscription的唯一标识objectid');
         };
         $data = parent::get_common_params($data);
-        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
+        return BCRESTUtil::put(APIConfig::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
     }
 
     /*
@@ -1058,7 +1057,7 @@ class Subscriptions extends BCRESTApi{
 }
 
 
-class Auth extends BCRESTApi{
+class Auths extends BCRESTApi{
     /*
 	 * @desc 三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
 	 * @param array $data, 主要包含以下三个参数:
@@ -1074,6 +1073,6 @@ class Auth extends BCRESTApi{
     static public function auth($data){
         $data = parent::get_common_params($data);
         parent::verify_need_params(array('name', 'id_no', 'card_no'), $data);
-        return parent::post(APIConfig::URI_AUTH, $data, 30, false);
+        return BCRESTUtil::post(APIConfig::URI_AUTH, $data, 30, false);
     }
 }
