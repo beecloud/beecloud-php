@@ -33,7 +33,6 @@ class SubscriptionsTest extends PHPUnit_Framework_TestCase
 	{
 		$data["timestamp"] = $this->timestamp;
 		$result = $this->subscriptions->query_subscription($data);
-		print_r($result);
 		$this->assertTrue(isset($result->subscriptions));
 	}
 }
