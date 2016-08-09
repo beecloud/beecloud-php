@@ -1,9 +1,27 @@
 BeeCloud PHP Changelog
 ========================================================
 v2.3.7 发布日期: 2016年7月29日
-+ 订阅计划/订阅记录plan/subscription, 具体请参考api.php中的类Subscriptions
-+ 鉴权, , 具体请参考api.php中的类Auth
-  调用方式:\beecloud\rest\Auth::auth($data)
++ 鉴权, , 具体请参考api.php中的类Auths
+  调用方式:\beecloud\rest\Auths::auth($data)
+  请参考demo,即demo/auth.php
++ 获取银行列表,即: \beecloud\rest\Subscriptions::blanks($data)
++ 获取手机验证码,即: \beecloud\rest\Subscriptions::sms($data)
++ 订阅计划plan,具体请参考api.php中的类Subscriptions
+  	$data请求所需的参数, $objectid计划的唯一标识
+  创建plan,即: \beecloud\rest\Subscriptions::plan($data)
+  订阅计划的查询(按照ID查询),即: \beecloud\rest\Subscriptions::query_plan($data, $objectid)
+  订阅计划的查询(按照条件查询),即: \beecloud\rest\Subscriptions::plan($data)
+  订阅计划的修改,即: \beecloud\rest\Subscriptions::update_plan($data, $objectid)
+  订阅计划的删除,即: \beecloud\rest\Subscriptions::del_plan($data, $objectid)
+  请参考demo,即demo/subscription.php
++ 订阅记录subscription, 具体请参考api.php中的类Subscriptions
+  	$data请求所需的参数, $objectid订阅的唯一标识
+  创建subscription,即: \beecloud\rest\Subscriptions::subscription($data)
+  订阅的查询(按照ID查询),即: \beecloud\rest\Subscriptions::query_subscription($data, $objectid)
+  订阅的查询(按照条件查询),即: \beecloud\rest\Subscriptions::query_subscription($data)
+  订阅的修改,即: \beecloud\rest\Subscriptions::update_subscription($data, $objectid)
+  订阅的删除,即: \beecloud\rest\Subscriptions::cancel_subscription($data, $objectid)
+  请参考demo,即demo/subscription.php
 
 BeeCloud PHP Changelog
 ========================================================

@@ -348,6 +348,298 @@ BCRESTApi::transfer(array $data);
 注：具体的请求参数和返回参数，请参考[企业打款REST
 API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【微信企业打款/微信红包】**部分
 
+## 鉴权
+
+三要素{name(身份证姓名), id_no(身份证号), card_no(用户银行卡卡号)}，四要素{name(身份证姓名), id_no(身份证号), card_no(用户银行卡卡号), mobile(手机号)}鉴权，
+如果鉴权成功，会自动在全局的card表中创建一条card记录.
+
+### 初始化
+
+在代码中调用方法registerApp(请注意各个参数一一对应), 具体实现可参考demo/auth.php:
+
+```
+/* registerApp fun four params
+ * @param(first) $app_id beecloud平台的APP ID
+ * @param(second) $app_secret  beecloud平台的APP SECRET
+ * @param(third) $master_secret  beecloud平台的MASTER SECRET
+ * @param(fouth) $test_secret  beecloud平台的TEST SECRET, for sandbox
+ */
+\beecloud\rest\Auths::registerApp('app id', 'app secret', 'master secret', 'test secret');
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Auths::registerApp('app id', 'app secret', 'master secret', 'test secret')
+```
+### 鉴权接口
+
+
+调用方法:
+```
+\beecloud\rest\Auths::auth(array $data);
+```
+
+不使用namespace的用户和2.2.0之前的v2版本用户请使用
+```
+Auths::auth(array $data);
+```
+
+请求参数列表如下:
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+name | String | 身份证姓名 |-  | 王小明 | 是
+id_no | String | 身份证号 | - | 2308****32 | 是
+card_no   | String | 用户银行卡卡号   |-  | 6217xxxxx3402 | 是
+mobile | String | 手机号 | - | 133****3156 | 否
+
+请求返回结果,json格式:
+```
+{
+	"card_id": "xxx",
+	"auth_result": true,
+	"auth_msg": "xxx不匹配"   //auth_result为false时返回失败信息   
+}
+```
+
+
+## 订阅
+
+### 初始化
+
+在代码中调用方法registerApp(请注意各个参数一一对应), 具体实现可参考demo/subscription.php:
+
+```
+/* registerApp fun four params
+ * @param(first) $app_id beecloud平台的APP ID
+ * @param(second) $app_secret  beecloud平台的APP SECRET
+ * @param(third) $master_secret  beecloud平台的MASTER SECRET
+ * @param(fouth) $test_secret  beecloud平台的TEST SECRET, for sandbox
+ */
+\beecloud\rest\Subscriptions::registerApp('app id', 'app secret', 'master secret', 'test secret');
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::registerApp('app id', 'app secret', 'master secret', 'test secret')
+```	
+### 计划(plan)
+
+关于计划的说明, 具体的可参考[订阅系统说明文档](https://github.com/beecloud/beecloud-rest-api/blob/master/subscription/%E8%AE%A2%E9%98%85%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.md)
+
+- 一项计划由每期费用、周期、试用天数等参数构成。
+- 周期两个要素：周期间隔单位(interval, 可以是天、周、月、年)和间隔数量(interval_count),
+- 商户可以灵活组合“周期间隔单位”和“间隔数量”以满足周期性收费需求,eg:设置每三个月的扣费场景,即interval=month，interval_count=3,
+
+		interval为month, interval_count最大是12; 
+		interval为week, interval_count最大是52; 
+		interval为year, interval_count最大是1;
+		
+- 商户根据业务需求，设定每期费用(fee)
+- "试用天数(trial_days)"用于调整该项计划的首次扣费时间，默认值为0，如果设置了，表示某用户从注册订阅到开始被收费的间隔天数为trial_days。
+见如下计划的周期性扣费时间点的示例（按月计费，不考虑订阅中的trial_end）：
+      
+		无试用期，先付费后使用：trial_days设为0会从订阅成功的下一天开始扣费，以后按月扣费。
+		无试用期，先使用后付费：trial_days设为当月天数（假设为30），从订阅成功的第31天起按月扣费。
+		有试用期3天，先付费后使用：trial_days设为3，从订阅成功的第4天开始扣费，以后按月扣费。
+		有试用期3天，先使用后付费：trial_days需要设置为 3 + 月的天数(假设30)，从订阅成功的第34天扣费，以后按月扣费。
+
+#### 创建计划
+
+创建计划调用的方法:
+
+```
+$data = array(
+	'timestamp' => time() * 1000, 		//毫秒, 必填, 用于验签
+	'name' => 'jason\'s plan',		//必填, 计划名称
+	'fee' => 150,  				//必填, 单位分, fee必须不小于 150分, 不大于5000000分
+	'currency' => 'CNY', 			//默认为CNY，表示人民币，目前仅支持CNY
+	'interval' => 'month', 			//收费周期单位，只能是day、week、month、year
+	'interval_count' => 1, 			//间隔数量, 和interval共同定义收费周期,默认1
+	'trial_days' => 0,			//试用天数,默认为0
+	'optional' => array('desc' => 'create plan')
+);
+\beecloud\rest\Subscriptions::plan($data);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::plan($data)
+```
+
+#### 查询计划
+
+按照ID查询
+
+```
+$data = array(
+	'timestamp' => time() * 1000 //毫秒, 必填, 用于验签
+);
+$objectid = '83b3da78-b76c-4740-b250-25e240a6xxxx'; //必填, 该计划的唯一标识
+\beecloud\rest\Subscriptions::query_plan($data, $objectid);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::query_plan($data, $objectid)
+```
+
+按照条件查询
+
+```
+$data = array(
+	'timestamp' => time() * 1000 	//毫秒, 必填, 用于验签
+	'name_with_substring' => 'xxx', //按照计划名称模糊查询
+	'interval' => 'day',		//按照收费周期单位查询
+	'interval_count' => 2,		//按照间隔数量查询
+	'trial_days' => 10		//按试用天数查询
+);
+\beecloud\rest\Subscriptions::query_plan($data);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::query_plan($data)
+```
+#### 修改计划
+
+```
+$data = array(
+	'timestamp' => time() * 1000,		//毫秒, 必填, 用于验签
+	'name' => 'jason\'s plan update',	//修改计划名称
+	'optional' => array('desc' => 'update plan')
+);
+$objectid = '83b3da78-b76c-4740-b250-25e240a6xxxx'; //必填, 该计划的唯一标识
+\beecloud\rest\Subscriptions::update_plan($data, $objectid);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::update_plan($data, $objectid)
+```
+
+#### 删除计划
+
+```
+$data = array(
+	'timestamp' => time() * 1000 //毫秒, 必填, 用于验签
+);
+$objectid = '83b3da78-b76c-4740-b250-25e240a6xxxx'; //必填, 该计划的唯一标识
+\beecloud\rest\Subscriptions::del_plan($data, $objectid);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::del_plan($data, $objectid)
+```
+
+### 订阅(subscription)
+
+关于订阅的说明, 具体的可参考[订阅系统说明文档](https://github.com/beecloud/beecloud-rest-api/blob/master/subscription/%E8%AE%A2%E9%98%85%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.md)
+
+- 订阅需要传入buyer_id，可以是用户email，也可以是商户系统中的用户ID，由商户系统决定该id的唯一性。
+- 当前的订阅允许同一个用户多次订阅同一个计划，当多次发起订阅请求的时候请务必确认这不是错误操作，因为每一次成功的订阅都会收取用户的费用。
+- 对于类似收取电费的场景，计划的收费金额fee应当是电费的单价，用户每月使用的度数在订阅中的amount设置，在每次扣款时间点之前，商户的系统需要更新每个注册用户对应订阅的amount数值。
+- 商户根据需要设定“试用截止时间点(trial_end, 默认值null)”，此时收费时间请参阅计划中trial_days的说明。如果设置了，计划中的“试用天数(trial_days)”将被忽略，当前订阅直接从trial_end的下一天进行第一次扣费，之后按照计划中设定的时间间隔，周期性扣费。该参量可以用来统一订阅用户的收费时间。
+- 用户第一次注册成功的情况下，webhook会返回card_id，该id由{bank_name、card_no、id_name、id_no、mobile}共同决定，可以直接用于发起订阅。
+
+#### 获取银行列表
+
+获取银行列表, 成功后会返回banks和common_banks两种, 可查看银行的名称,用于创建订阅使用
+
+```
+$data = array(
+	'timestamp' => time() * 1000 //毫秒, 必填, 用于验签
+);
+\beecloud\rest\Subscriptions::banks($data);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::banks($data, $objectid)
+```
+
+#### 获取短信验证码
+
+获取短信验证码, 成功后会返回sms_id(验证码记录的唯一标识),并且手机端可接收到验证码,二者供创建subscription使用
+
+```
+$data = array(
+	'timestamp' => time() * 1000,	//毫秒, 必填, 用于验签,
+	'phone' => '159621431xx' 	//手机号, 必填, 用于接收验证码
+);
+\beecloud\rest\Subscriptions::sms($data);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::sms($data)
+```
+
+#### 创建订阅
+
+对于首次创建订阅的用户,需要用户输入账户要素{bank_name(银行名称), card_no(银行卡号), id_name(身份证姓名), id_no(身份证号), mobile(银行预留手机号)},
+其中银行名称,可通过上述获取**获取银行列表**接口获取。另外还需参数sms_id(可通过上述获取**获取短信验证码**接口获取)和sms_code(发送到手机验证码)
+
+创建订阅需要注意:
+- 1.card_id 与 {bank_name, card_no, id_name, id_no, mobile} 二者必填其一
+- 2.card_id 为订阅成功时webhook返回里带有的字段，商户可保存下来下次直接使用
+```
+$data = array(
+	'timestamp' => time() * 1000,
+	'buyer_id' => 'jasonhzy@beecloud.cn',
+	'plan_id' => '4a009b37-c36a-49d3-b011-d13d4353xxxx',
+	'sms_id' => 'e76232c5-9f94-475f-a3dc-cba92289xxxx',
+	'sms_code' => 'xxxx',
+	//'card_id' => '',
+	'bank_name' => '中国银行',
+	'card_no' => '621790610100737xxxx',
+	'id_name' => 'jason',
+	'id_no' => '41302619901120xxxx',
+	'mobile' => '1596214xxxx',
+	'amount' => 10,
+	'trial_end' => strtotime('2016-10-08') * 1000,
+	'valid' => true,
+	'cancel_at_period_end' => false,
+	'optional' => array('desc' => 'create subscription')
+);
+\beecloud\rest\Subscriptions::subscription($data);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::subscription($data)
+```
+#### 查询订阅
+
+按照ID查询
+
+```
+$data = array(
+	'timestamp' => time() * 1000 //毫秒, 必填, 用于验签
+);
+$objectid = '95fdfc39-62da-4ad5-ae3d-981c74b6xxxx'; //必填, 该订阅的唯一标识
+\beecloud\rest\Subscriptions::query_subscription($data, $objectid);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::query_subscription($data, $objectid)
+```
+
+按照条件查询
+
+```
+$data = array(
+	'timestamp' => time() * 1000			//毫秒, 必填, 用于验签
+	'buyer_id' => 'xxxx',				//按照订阅的buyer ID查询
+	'plan_id' => 'e39f8d8d-3769-4076-bad6-27225185xxxx',  //按照计划ID查询
+	'card_id' => '75021eb5-0d2f-4b1c-9194-8280d89dxxxx'   //按照card ID查询
+);
+\beecloud\rest\Subscriptions::query_subscription($data);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::query_subscription($data)
+```
+
+#### 修改订阅
+
+```
+$data = array(
+	'timestamp' => time() * 1000,
+	'optional' => array('desc' => 'update subscription'),
+	'buyer_id' => '',
+	'plan_id' => '',
+	'card_id' => '',
+	'amount' => 10,
+	'trial_end' => strtotime('2016-10-08') * 1000
+);
+$objectid = '95fdfc39-62da-4ad5-ae3d-981c74b6xxxx'; //必填, 该订阅的唯一标识
+\beecloud\rest\Subscriptions::update_subscription($data, $objectid);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::update_subscription($data, $objectid);
+```
+
+#### 取消订阅
+
+```
+$data = array(
+	'timestamp' => time() * 1000
+);
+$objectid = '95fdfc39-62da-4ad5-ae3d-981c74b6xxxx'; //必填, 该订阅的唯一标识
+\beecloud\rest\Subscriptions::cancel_subscription($data, $objectid);
+//不使用namespace的用户和2.2.0之前的v2版本用户请使用
+Subscriptions::cancel_subscription($data, $objectid);
+```
 
 ## Demo
 
@@ -356,6 +648,10 @@ API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【�
 - 微信没有return_url，如果用户需要支付完成做类似同步跳转的形式，需根据微信支付提供的jsapi完成。
 - 关于支付宝支付、银联在线支付、百度钱包支付、京东支付、PayPal等支付方式的return_url,需要用户自己设定
 - 关于weekhook的接收 请参考demo中的webhook.php, 文档请阅读 [webhook](https://github.com/beecloud/beecloud-webhook)
+- 关于订阅接收webhook推送,有两个推送:
+
+		1.订阅结果的推送,transaction_id就是创建订阅时返回的订阅id，transaction_type为SUBSCRIPTION，sub_channel_type为BC_SUBSCRIPTION，message_detail中包含用户相关的注册信息，其中的card_id注意留存, 可供创建订阅使用;
+		2.订阅收费结果的推送，transaction_id为收费订单记录的订单号bill_no，transaction_type为PAY，sub_channel_type为BC_SUBSCRIPTION，transaction_fee为本次收费金额，message_detail中包含用户相关的注册信息
 
 ## 测试
 

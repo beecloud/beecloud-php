@@ -11,7 +11,7 @@ require_once("../loader.php");
 Class AuthDemo{
 
 	function __construct($app_id, $app_secret, $master_secret, $test_secret) {
-		\beecloud\rest\Auth::registerApp($app_id, $app_secret, $master_secret, $test_secret);
+		\beecloud\rest\Auths::registerApp($app_id, $app_secret, $master_secret, $test_secret);
 	}
 
 	//三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
@@ -23,7 +23,7 @@ Class AuthDemo{
 			'id_no' => '23082619860124xxxx',
 			'mobile' => '1555551xxxx'
 		);
-		return \beecloud\rest\Auth::auth($data);
+		return \beecloud\rest\Auths::auth($data);
 	}
 }
 

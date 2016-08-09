@@ -694,13 +694,13 @@ class Subscriptions extends api{
 	 *  banks list
 	 *  common_banks list
 	 */
-	static public function subscription_banks($data){
+	static public function banks($data){
 		$data = parent::get_common_params($data);
 		return parent::get(\beecloud\rest\config::URI_SUBSCRIPTION_BANKS, $data, 30, false, false);
 	}
 
 	/*
- 	 * @desc 发送短信验证码
+ 	 * @desc 发送短信验证码,返回验证码记录的唯一标识,并且手机端接收到验证码,二者供创建subscription使用
 	 * @param array $data, 主要包含以下四个参数:
 	 *  app_id string APP ID
 	 *  timestamp long 时间戳
@@ -711,7 +711,6 @@ class Subscriptions extends api{
 	 *  result_msg string
 	 *  err_detail string
 	 *  sms_id string
-	 *  code string
 	 */
 	static public function sms($data){
 		$data = parent::get_common_params($data);
@@ -725,7 +724,7 @@ class Subscriptions extends api{
 	 *  fee int 单位分(必填), fee必须不小于 150分, 不大于5000000分
 	 *  interval string 结算频率(必填), 主要包含任一天(day)/一周(week)/一个月(month)/一年(year)
 	 *  name string 订阅计划的名称(必填)
-	 *	currency string, 对照表请参考:https://github.com/beecloud/beecloud-rest-api/tree/master/international
+	 *	currency string, 目前仅支持人民币,即CNY
 	 *	interval_count 	int 每个订阅结算之间的时间间隔数。默认值1
 	 * 		eg: 时间间隔=月，interval_count=3即每3个月。允许一年一次（1年，12个月或52周）的最大值。
 	 *	trial_days 	int 指定试用期天数（整数）,默认是0
@@ -783,7 +782,7 @@ class Subscriptions extends api{
 			throw new \Exception('请设置plan的唯一标识objectid');
 		};
 		$data = parent::get_common_params($data);
-		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
+		return parent::put(\beecloud\rest\config::URI_SUBSCRIPTION_PLAN.'/'.$objectid, $data, 30, false);
 	}
 
 	/*
@@ -877,7 +876,7 @@ class Subscriptions extends api{
 			throw new \Exception('请设置subscription的唯一标识objectid');
 		};
 		$data = parent::get_common_params($data);
-		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
+		return parent::put(\beecloud\rest\config::URI_SUBSCRIPTION.'/'.$objectid, $data, 30, false);
 	}
 
 	/*
@@ -896,7 +895,7 @@ class Subscriptions extends api{
 	}
 }
 
-Class Auth extends api{
+Class Auths extends api{
 	/*
 	 * @desc 三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
 	 * @param array $data, 主要包含以下三个参数:
