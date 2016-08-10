@@ -204,6 +204,11 @@ switch($type){
         //$data["card_no"] = '622269192199384xxxx';
         $title = "BC快捷支付";
         break;
+    case 'BC_NATIVE' :
+        $data["channel"] = "BC_NATIVE";
+        $data["total_fee"] = 1;
+        $title = "BC微信扫码";
+        break;
     default :
         exit("No this type.");
         break;

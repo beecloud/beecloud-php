@@ -636,6 +636,7 @@ class api {
 				case "BC_GATEWAY" :
 				case "BC_EXPRESS" :
 				case "BC_APP" :
+				case "BC_NATIVE" :
 					break;
 				default:
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");
