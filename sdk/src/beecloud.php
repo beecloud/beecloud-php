@@ -797,6 +797,7 @@ class BCRESTApi {
                 case "BC_GATEWAY" :
                 case "BC_EXPRESS" :
                 case "BC_APP" :
+                case "BC_NATIVE" :
                     break;
                 default:
                     throw new Exception(APIConfig::NEED_VALID_PARAM . "channel");

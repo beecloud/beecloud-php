@@ -32,7 +32,10 @@ if ($sign != $msg->sign) {
 //}
 
 //第四步:处理业务逻辑和返回
-if($msg->transaction_type == "PAY") { //支付的结果
+/*
+ * 推送支付的结果
+ */
+if($msg->transaction_type == "PAY") {
     //付款信息
     //支付状态是否变为支付成功,true代表成功
     $status = $msg->trade_success;
