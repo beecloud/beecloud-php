@@ -39,7 +39,7 @@
         element.appendChild(canvas);
     }
     $('#query').click(function(){
-        $.getJSON('wx/wx.native.query.php', {'billNo' : '<?php echo $data["bill_no"]; ?>'}, function(res){
+        $.getJSON('wx/wx.native.query.php', {'billNo' : '<?php echo $data["bill_no"]; ?>', 'channel' : '<?php echo $data["channel"]; ?>'}, function(res){
             var str = '';
             if (res && res.result_msg == "OK" && res.count > 0) {
                 str = res.bills[0].spay_result?"支付成功":"未支付";

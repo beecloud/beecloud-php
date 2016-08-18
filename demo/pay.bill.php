@@ -208,6 +208,8 @@ switch($type){
         $data["channel"] = "BC_NATIVE";
         $data["total_fee"] = 1;
         $title = "BC微信扫码";
+        require_once 'wx/wx.native.php';
+        exit();
         break;
     default :
         exit("No this type.");
