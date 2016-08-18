@@ -9,7 +9,7 @@ try{
 	$data["timestamp"] = time() * 1000;
 	$data["bill_no"] = $_GET["billNo"];
 	//选填 channel
-	$data["channel"] = "WX_NATIVE";
+	$data["channel"] = $_GET['channel'];
 
 	$result = $api->bills($data);
 	print json_encode($result);
