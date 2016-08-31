@@ -69,7 +69,7 @@ $data["openid"] = $openid;
                  * 2.支付过程中用户取消, get_brand_wcpay_request：cancel
                  * 3.支付失败, get_brand_wcpay_request：fail
                  */
-                alert(res.err_msg); //供调试使用
+                alert(JSON.stringify(res)) //供调试使用
                 if(res.err_msg == "get_brand_wcpay_request：ok" ) {
                     //用户自己的操作, eg: window.location.href = '用户自己的URL';
                 }else{

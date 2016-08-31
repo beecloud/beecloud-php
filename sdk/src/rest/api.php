@@ -140,6 +140,27 @@ class api {
 		return $result;
 	}
 
+
+    /*
+      * @desc 发送短信验证码,返回验证码记录的唯一标识,并且手机端接收到验证码,二者供创建subscription使用
+     * @param array $data, 主要包含以下四个参数:
+     *  app_id string APP ID
+     *  timestamp long 时间戳
+     *  app_sign string 签名验证
+     *  phone string 手机号
+     * @return json:
+     * 	result_code string
+     *  result_msg string
+     *  err_detail string
+     *  sms_id string
+     */
+    static public function sms($data){
+        $data = self::get_common_params($data);
+        self::verify_need_params('phone', $data);
+        return self::post(\beecloud\rest\config::URI_SMS, $data, 30, false);
+    }
+
+
 	/**
 	 * @param array $data
 	 * @param $method post(default),get
@@ -598,6 +619,13 @@ class api {
 		return self::post(\beecloud\rest\config::URI_OFFLINE_REFUND, $data, 30, false);
 	}
 
+	//签约API
+    static public function card_charge_sign($data){
+        $data = self::get_common_params($data);
+        self::verify_need_params(array('mobile', 'bank', 'id_no', 'name', 'card_no', 'sms_id', 'sms_code'), $data);
+        return self::post(\beecloud\rest\config::URI_CARD_CHARGE_SIGN, $data, 30, false);
+    }
+
 	static final private function channelCheck($data){
 		if (isset($data["channel"])) {
 			switch ($data["channel"]) {
@@ -637,6 +665,9 @@ class api {
 				case "BC_EXPRESS" :
 				case "BC_APP" :
 				case "BC_NATIVE" :
+				case "BC_WX_WAP" :
+				case "BC_WX_JSAPI" :
+				case "BC_CARD_CHARGE" :
 					break;
 				default:
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");

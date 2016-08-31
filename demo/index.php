@@ -98,9 +98,17 @@
                 <input type="radio" name="paytype" value="BC_EXPRESS">
                 <img src="http://beeclouddoc.qiniudn.com/icon_BcExpress.png" alt="BC EXPRESS" >
             </li>
+            <!--<li onclick="paySwitch(this)">
+                <input type="radio" name="paytype" value="BC_WX_JSAPI">
+                <img src="http://beeclouddoc.qiniudn.com/icon-bcwx.png" alt="BC WX JSAPI" >
+            </li>-->
+            <li onclick="paySwitch(this)">
+                <input type="radio" name="paytype" value="BC_WX_WAP">
+                <img src="http://beeclouddoc.qiniudn.com/icon-bcwxwap.png" alt="BC WX WAP" >
+            </li>
             <li onclick="paySwitch(this)">
                 <input type="radio" name="paytype" value="BC_NATIVE">
-                <img src="http://beeclouddoc.qiniudn.com/icon-bcwx.png" alt="BC NATIVE" >
+                <img src="http://beeclouddoc.qiniudn.com/icon-bcwxsm.png" alt="BC NATIVE" >
             </li>
         </ul>
     </div>
@@ -108,6 +116,27 @@
         <input type="button" id="btn_pay" class="button" value="确认付款">
     </div>
 </form>
+<hr/>
+
+<div>
+    <h2>代扣： ¥1.5</h2>
+    <p>请选择支付方式</p>
+</div>
+
+<form action="" method="POST" target="_blank">
+    <div>
+        <ul class="clear" style="margin-top:20px">
+            <li onclick="paySwitch(this)">
+                <input type="radio" name="card_charge" value="BC_CARD_CHARGE">
+                <img src="http://beeclouddoc.qiniudn.com/icon-bcdk.png" alt="BC CARD CHARGE" >
+            </li>
+        </ul>
+    </div>
+    <div>
+        <input type="button" id="btn_card_charge" class="button" value="确认扣款">
+    </div>
+</form>
+
 <hr/>
 <div>
     <h2>微信、支付宝企业打款</h2>
@@ -239,6 +268,14 @@
             alert("请选择支付方式");return;
         }
         window.open('./pay.bill.php?type=' + type);
+    });
+
+    $("#btn_card_charge").click(function(){
+        var type = $("input[name='card_charge']:checked").val();
+        if(!type){
+            alert("请选择支付方式");return;
+        }
+        window.open('./card.charge.php?type=' + type);
     });
 
     $("#queryBIll").click(function(){

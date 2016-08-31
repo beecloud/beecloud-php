@@ -34,7 +34,11 @@ class APIConfig {
     const URI_SUBSCRIPTION = "/2/subscription";
     const URI_SUBSCRIPTION_PLAN = "/2/plan";
     const URI_SUBSCRIPTION_BANKS = "/2/subscription_banks";
-    const URI_SUBSCRIPTION_SMS = "/2/sms";
+
+    //发送验证码
+    const URI_SMS = "/2/sms";
+
+    //auth
     const URI_AUTH = "/2/auth";
 
 
@@ -296,6 +300,26 @@ class BCRESTApi {
         $data["app_sign"] = self::get_sign(self::$app_id, $data["timestamp"], $secret);
         self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
         return $data;
+    }
+
+
+    /*
+	  * @desc 发送短信验证码,返回验证码记录的唯一标识,并且手机端接收到验证码,二者供创建subscription使用
+	 * @param array $data, 主要包含以下四个参数:
+	 *  app_id string APP ID
+	 *  timestamp long 时间戳
+	 *  app_sign string 签名验证
+	 *  phone string 手机号
+	 * @return json:
+	 * 	result_code string
+	 *  result_msg string
+	 *  err_detail string
+	 *  sms_id string
+	 */
+    static public function sms($data){
+        $data = self::get_common_params($data);
+        self::verify_need_params('phone', $data);
+        return BCRESTUtil::post(APIConfig::URI_SMS, $data, 30, false);
     }
 
     /**
@@ -798,6 +822,9 @@ class BCRESTApi {
                 case "BC_EXPRESS" :
                 case "BC_APP" :
                 case "BC_NATIVE" :
+                case "BC_WX_WAP" :
+                case "BC_WX_JSAPI" :
+                case "BC_CARD_CHARGE" :
                     break;
                 default:
                     throw new Exception(APIConfig::NEED_VALID_PARAM . "channel");
@@ -877,7 +904,7 @@ class Subscriptions extends BCRESTApi{
     static public function sms($data){
         $data = parent::get_common_params($data);
         parent::verify_need_params('phone', $data);
-        return BCRESTUtil::post(APIConfig::URI_SUBSCRIPTION_SMS, $data, 30, false);
+        return BCRESTUtil::post(APIConfig::URI_SMS, $data, 30, false);
     }
 
     /*

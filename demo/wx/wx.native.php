@@ -38,13 +38,25 @@
         element.appendChild(wording);
         element.appendChild(canvas);
     }
+    //备注: 同渠道同一个订单号会有多条记录
+    // 1. WX_NATIVE, 更新的是最后一次订单记录
+    // 2. BC_NATIVE, 更新的是第一条订单记录
     $('#query').click(function(){
         $.getJSON('wx/wx.native.query.php', {'billNo' : '<?php echo $data["bill_no"]; ?>', 'channel' : '<?php echo $data["channel"]; ?>'}, function(res){
             var str = '';
-            if (res && res.result_msg == "OK" && res.count > 0) {
-                str = res.bills[0].spay_result?"支付成功":"未支付";
-            }else{
+            if (res && res.result_code == 0 ) {
+                var spay_result = false;
+                for(var i = 0; i < res.count; i++){
+                    if(res.bills[i].spay_result){
+                        spay_result = true;
+                        break;
+                    }
+                }
+                str = spay_result ? "支付成功" : "未支付";
+            }else if (res && res.result_code != 0) {
                 str = 'Error: ' + res.err_detail;
+            }else {
+                str = 'Notice: 该记录不存在';
             }
             $('#query-result').text(str);
         })

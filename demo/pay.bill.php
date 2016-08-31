@@ -35,6 +35,13 @@ $data["optional"] = (object)array("tag"=>"msgtoreturn");
 //京东(JD*)不支持该参数。
 //$data["bill_timeout"] = 360;
 
+/**
+ * notify_url 选填，该参数是为接收支付之后返回信息的, 等同于在beecloud平台配置webhook，
+ * 如果两者都设置了，则优先使用notify_url。配置时请结合自己的项目谨慎配置，具体请
+ * 参考demo/webhook.php
+ */
+//$data['notify_url'] = 'http://xxx/webhook.php';
+
 $type = $_GET['type'];
 switch($type){
     case 'ALI_WEB' :
@@ -204,13 +211,22 @@ switch($type){
         //$data["card_no"] = '622269192199384xxxx';
         $title = "BC快捷支付";
         break;
+	case 'BC_WX_JSAPI' :
+		$data["channel"] = "BC_WX_JSAPI";
+		$title = "BC微信H5网页";
+		require_once 'wx/wx.jsapi.php';
+		exit();
+		break;
     case 'BC_NATIVE' :
         $data["channel"] = "BC_NATIVE";
-        $data["total_fee"] = 1;
         $title = "BC微信扫码";
         require_once 'wx/wx.native.php';
         exit();
         break;
+	case 'BC_WX_WAP' :
+		$data["channel"] = "BC_WX_WAP";
+		$title = "BC微信移动网页支付";
+		break;
     default :
         exit("No this type.");
         break;
@@ -236,7 +252,7 @@ try {
     }
     if(isset($result->url)){
         header("Location:$result->url");
-    }else if(isset($result->html)) {
+	}else if(isset($result->html)) {
         echo $result->html;
     }else if(isset($result->credit_card_id)){
         echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
