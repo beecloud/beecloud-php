@@ -44,9 +44,6 @@ if($msg->transaction_type == "PAY") {
     //channel_type 微信/支付宝/银联/快钱/京东/百度/易宝/PAYPAL/BC
     switch ($msg->channel_type) {
         case "WX":
-            /**
-             * 处理业务
-             */
             break;
         case "ALI":
             break;
@@ -65,6 +62,10 @@ if($msg->transaction_type == "PAY") {
         case "BC":
             //BC订阅收费
             if($msg->sub_channel_type == 'BC_SUBSCRIPTION'){
+
+            }
+            //BC代扣
+            if($msg->sub_channel_type == 'BC_CARD_CHARGE'){
 
             }
             break;
@@ -87,7 +88,28 @@ if ($msg->transaction_type == "SUBSCRIPTION") {
     switch ($msg->channel_type) {
         case "BC":
             if($msg->sub_channel_type == 'BC_SUBSCRIPTION'){
+                //message_detail中包含签约相关的详细信息，包括card_id
+                //TODO...
+            }
+            break;
+    }
+}
 
+/*
+ * 推送代扣签约结果的
+ * transaction_id就是代扣签约返回的id，transaction_type为SIGN，sub_channel_type为BC_CARD_CHARGE，
+ * message_detail中包含签约相关的详细信息，其中的card_id注意留存。
+ */
+if ($msg->transaction_type == "SIGN") {
+    //创建的代扣签约状态是否为成功,true代表成功
+    $status = $msg->trade_success;
+
+    //message_detail 参考文档
+    switch ($msg->channel_type) {
+        case "BC":
+            if($msg->sub_channel_type == 'BC_CARD_CHARGE'){
+                //message_detail中包含签约相关的详细信息，包括card_id
+                //TODO...
             }
             break;
     }
