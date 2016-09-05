@@ -80,7 +80,7 @@ switch($type){
             'bank' => '中国银行',
             'id_no' => '413026xxxxxxxxxxx',
             'name' => 'jason',
-            'card_no' => '6226xxxxxxxxxxxxxxxx',
+            'card_no' => '6226xxxxxxxxxxxxxxxx', //银行卡号(借记卡,不支持信用卡)
             'sms_id' => 'd4fb7cdd-13ff-4c6c-ac57-df5aee717988',
             'sms_code' => '374932',
         );

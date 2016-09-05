@@ -98,10 +98,10 @@
                 <input type="radio" name="paytype" value="BC_EXPRESS">
                 <img src="http://beeclouddoc.qiniudn.com/icon_BcExpress.png" alt="BC EXPRESS" >
             </li>
-            <!--<li onclick="paySwitch(this)">
+            <li onclick="paySwitch(this)">
                 <input type="radio" name="paytype" value="BC_WX_JSAPI">
                 <img src="http://beeclouddoc.qiniudn.com/icon-bcwx.png" alt="BC WX JSAPI" >
-            </li>-->
+            </li>
             <li onclick="paySwitch(this)">
                 <input type="radio" name="paytype" value="BC_WX_WAP">
                 <img src="http://beeclouddoc.qiniudn.com/icon-bcwxwap.png" alt="BC WX WAP" >
@@ -109,6 +109,10 @@
             <li onclick="paySwitch(this)">
                 <input type="radio" name="paytype" value="BC_NATIVE">
                 <img src="http://beeclouddoc.qiniudn.com/icon-bcwxsm.png" alt="BC NATIVE" >
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" name="paytype" value="BC_ALI_QRCODE">
+                <img src="http://beeclouddoc.qiniudn.com/icon-bcalism.png" alt="BC ALI QRCODE" >
             </li>
         </ul>
     </div>

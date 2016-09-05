@@ -619,7 +619,22 @@ class api {
 		return self::post(\beecloud\rest\config::URI_OFFLINE_REFUND, $data, 30, false);
 	}
 
-	//签约API
+    /**
+     * @desc: 签约API
+     *
+     * @param $data
+     *   mobile 手机号
+     *   bank  银行名称
+     *   id_no 身份证号
+     *   name   姓名
+     *   card_no 银行卡号(借记卡,不支持信用卡)
+     *   sms_id  获取验证码接口返回验证码记录的唯一标识
+     *   sms_code 手机端接收到验证码
+     *
+     * @return json
+     * @author: jason
+     * @since: 2016-09-01
+     */
     static public function card_charge_sign($data){
         $data = self::get_common_params($data);
         self::verify_need_params(array('mobile', 'bank', 'id_no', 'name', 'card_no', 'sms_id', 'sms_code'), $data);
@@ -668,6 +683,7 @@ class api {
 				case "BC_WX_WAP" :
 				case "BC_WX_JSAPI" :
 				case "BC_CARD_CHARGE" :
+				case "BC_ALI_QRCODE" :
 					break;
 				default:
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");
