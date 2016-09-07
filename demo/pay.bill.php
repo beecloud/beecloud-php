@@ -212,12 +212,6 @@ switch($type){
         //$data["card_no"] = '622269192199384xxxx';
         $title = "BC快捷支付";
         break;
-	case 'BC_WX_JSAPI' :
-		$data["channel"] = "BC_WX_JSAPI";
-		$title = "BC微信H5网页";
-		require_once 'wx/wx.jsapi.php';
-		exit();
-		break;
     case 'BC_NATIVE' :
         $data["channel"] = "BC_NATIVE";
         $title = "BC微信扫码";

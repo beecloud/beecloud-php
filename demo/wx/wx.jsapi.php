@@ -12,25 +12,23 @@
  *      3.请检查方法createOauthUrlForCode是否对回调链接地址(redirect_uri)进行urlencode处理,如果没有请自行添加
  *      3.特别要强调的是JS_API_CALL_URL的访问域名必须与微信公众平台配置的授权回调页面域名一致.
  */
-//header("Content-type: text/html; charset=utf-8");
-//include_once('lib/WxPayPubHelper/WxPayPubHelper.php');
-//$jsApi = new JsApi_pub();
-////网页授权获取用户openid============
-////通过code获得openid
-//if (!isset($_GET['code'])){
-//    //触发微信返回code码
-//    $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL);
-//    header("Location: $url");
-//} else {
-//    //获取code码，以获取openid
-//    $code = $_GET['code'];
-//    $jsApi->setCode($code);
-//    $openid = $jsApi->getOpenId();
-//}
-//
-//$data["openid"] = $openid;
+header("Content-type: text/html; charset=utf-8");
+include_once('lib/WxPayPubHelper/WxPayPubHelper.php');
+$jsApi = new JsApi_pub();
+//网页授权获取用户openid============
+//通过code获得openid
+if (!isset($_GET['code'])){
+    //触发微信返回code码
+    $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL);
+    header("Location: $url");
+} else {
+    //获取code码，以获取openid
+    $code = $_GET['code'];
+    $jsApi->setCode($code);
+    $openid = $jsApi->getOpenId();
+}
 
-$data["openid"] = 'o3kKrjlROJ1qlDmFdlBQA95kvbN0';
+$data["openid"] = $openid;
 ?>
 
 <!DOCTYPE html>

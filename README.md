@@ -170,13 +170,13 @@ BCRESTApi::bills(array $data);
 根据ID查询调用的方法：
 
 ```
-\beecloud\rest\api::bill(array $data);
+\beecloud\rest\api::bill(array $data, 'get');
 ```
 
 不使用namespace的用户和2.2.0之前的v2版本用户请使用
 
 ```
-BCRESTApi::bill(array $data);
+BCRESTApi::bill(array $data, 'get');
 ```
 
 
@@ -262,13 +262,13 @@ BCRESTApi::refunds(array $data);
 根据ID查询调用的方法：
 
 ```
-\beecloud\rest\api::refund(array $data);
+\beecloud\rest\api::refund(array $data, 'get');
 ```
 
 不使用namespace的用户和2.2.0之前的v2版本用户请使用
 
 ```
-BCRESTApi::refund(array $data);
+BCRESTApi::refund(array $data, 'get');
 ```
 
 注：具体的请求参数和返回参数，请参考[线上支付REST
@@ -583,6 +583,7 @@ $data = array(
 //不使用namespace的用户和2.2.0之前的v2版本用户请使用
 Subscriptions::subscription($data)
 ```
+
 #### 查询订阅
 
 按照ID查询
