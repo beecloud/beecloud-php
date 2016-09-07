@@ -22,7 +22,7 @@ v2.3.7 发布日期: 2016年7月29日
   订阅的修改,即: \beecloud\rest\Subscriptions::update_subscription($data, $objectid)
   订阅的删除,即: \beecloud\rest\Subscriptions::cancel_subscription($data, $objectid)
   请参考demo,即demo/subscription.php
-+ 添加新的渠道BC_NATIVE, BC_CARD_CHARGE, BC_WX_WAP
++ 添加新的渠道BC_NATIVE, BC_CARD_CHARGE, BC_WX_WAP, BC_ALI_QRCODE, BC_WX_JSAPI
 + 添加自行配置接收webhook的参数notify_url
 
 BeeCloud PHP Changelog
