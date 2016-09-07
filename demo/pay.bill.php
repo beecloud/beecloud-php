@@ -36,7 +36,7 @@ $data["optional"] = (object)array("tag"=>"msgtoreturn");
 //$data["bill_timeout"] = 360;
 
 /**
- * notify_url 选填，该参数是为接收支付之后返回信息的, 等同于在beecloud平台配置webhook，
+ * notify_url 选填，该参数是为接收支付之后返回信息的,仅适用于线上支付方式, 等同于在beecloud平台配置webhook，
  * 如果两者都设置了，则优先使用notify_url。配置时请结合自己的项目谨慎配置，具体请
  * 参考demo/webhook.php
  */
@@ -65,6 +65,7 @@ switch($type){
         break;
     case 'ALI_OFFLINE_QRCODE' :
         $data["channel"] = "ALI_OFFLINE_QRCODE";
+        $title = "支付宝线下扫码";
         require_once 'ali.offline.qrcode/index.php';
         exit();
         break;
@@ -211,12 +212,6 @@ switch($type){
         //$data["card_no"] = '622269192199384xxxx';
         $title = "BC快捷支付";
         break;
-	case 'BC_WX_JSAPI' :
-		$data["channel"] = "BC_WX_JSAPI";
-		$title = "BC微信H5网页";
-		require_once 'wx/wx.jsapi.php';
-		exit();
-		break;
     case 'BC_NATIVE' :
         $data["channel"] = "BC_NATIVE";
         $title = "BC微信扫码";
@@ -227,6 +222,12 @@ switch($type){
 		$data["channel"] = "BC_WX_WAP";
 		$title = "BC微信移动网页支付";
 		break;
+    case 'BC_ALI_QRCODE' :
+        $data["channel"] = "BC_ALI_QRCODE";
+        $title = "BC支付宝线下扫码";
+        require_once 'ali.offline.qrcode/index.php';
+        exit();
+        break;
     default :
         exit("No this type.");
         break;

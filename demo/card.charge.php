@@ -10,7 +10,7 @@ try {
      * @param(fouth) $test_secret  beecloud平台的TEST SECRET, for sandbox
      */
     $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
-    //Test Model,只提供下单和支付订单查询的Sandbox模式,不写setSandbox函数或者false即live模式,true即test模式
+    //不支持测试模式
     $api->setSandbox(false);
 
     //\beecloud\rest\api::registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
@@ -34,13 +34,6 @@ $data["optional"] = (object)array("tag"=>"msgtoreturn");
 //必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒
 //京东(JD*)不支持该参数。
 //$data["bill_timeout"] = 360;
-
-/**
- * notify_url 选填，该参数是为接收支付之后返回信息的, 等同于在beecloud平台配置webhook，
- * 如果两者都设置了，则优先使用notify_url。配置时请结合自己的项目谨慎配置，具体请
- * 参考demo/webhook.php
- */
-//$data['notify_url'] = 'http://xxx/webhook.php';
 
 $type = $_GET['type'];
 switch($type){
@@ -73,7 +66,18 @@ switch($type){
             exit();
         }
         //echo 'sms_id: '.$result->sms_id;
-        //第二步: 签约API, 配置webhook,签约成功之后, 获取到card_id(注意保存)
+
+        /*
+         * 第二步: 签约API, 配置webhook,签约成功之后, 获取到card_id(注意保存)
+         * 具体参数含义如下:
+         *   mobile 手机号
+         *   bank  银行名称
+         *   id_no 身份证号
+         *   name   姓名
+         *   card_no 银行卡号(借记卡,不支持信用卡)
+         *   sms_id  获取验证码接口返回验证码记录的唯一标识
+         *   sms_code 手机端接收到验证码
+         */
         $sign = array(
             'timestamp' => $data['timestamp'],
             'mobile' => '1596214xxxxx',
