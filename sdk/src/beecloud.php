@@ -1092,7 +1092,7 @@ class Subscriptions extends BCRESTApi{
 
 class Auths extends BCRESTApi{
     /*
-	 * @desc 三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
+	 * @desc 二要素, 三要素, 四要素鉴权, 如果鉴权成功，会自动在全局的card表中创建一条card记录
 	 * @param array $data, 主要包含以下三个参数:
 	 * 	name string 身份证姓名(必填)
 	 *  id_no string 身份证号(必填)

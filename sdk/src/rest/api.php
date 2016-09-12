@@ -767,7 +767,7 @@ class Subscriptions extends api{
 	static public function sms($data){
 		$data = parent::get_common_params($data);
 		parent::verify_need_params('phone', $data);
-		return parent::post(\beecloud\rest\config::URI_SUBSCRIPTION_SMS, $data, 30, false);
+		return parent::post(\beecloud\rest\config::URI_SMS, $data, 30, false);
 	}
 
 	/*

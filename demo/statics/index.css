@@ -8,6 +8,14 @@
     height: 0;
 }
 
+.clearfix:before, .clearfix:after {
+    display: table;
+    content: ''
+}
+.clearfix:after {
+    clear: both;
+}
+
 html {
     width: 100%;
 }

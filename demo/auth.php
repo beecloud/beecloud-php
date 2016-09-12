@@ -7,6 +7,7 @@
  */
 
 require_once("../loader.php");
+require_once("config.php");
 
 Class AuthDemo{
 
@@ -14,7 +15,10 @@ Class AuthDemo{
 		\beecloud\rest\Auths::registerApp($app_id, $app_secret, $master_secret, $test_secret);
 	}
 
-	//二要素,三要素,四要素鉴权,如果鉴权成功，会自动在全局的card表中创建一条card记录
+	//二要素: (name, id_no)
+    //三要素: (name, id_no, card_no)
+    //四要素: (name, id_no, card_no, mobile)
+    //如果鉴权成功，会自动在全局的card表中创建一条card记录
 	function auth(){
 		$data = array(
 			'timestamp' => time() * 1000,
@@ -28,13 +32,7 @@ Class AuthDemo{
 }
 
 try {
-	$app_id = '95d87fff-989c-4426-812c-21408644cf88';
-	$app_secret = '8aaad136-b899-4793-9564-0ebc72ae86f2';
-	$master_secret = '688dbe68-a7e9-4f16-850a-21270949afe8';
-	$test_secret = '6e4cba42-2901-43eb-a6f0-74e2bb18515a';
-
-	$demo = new AuthDemo($app_id, $app_secret, $master_secret, $test_secret);
-	//三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
+	$demo = new AuthDemo(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
 	$auth = $demo->auth();
 	if ($auth->result_code != 0) {
 		print_r($auth);
