@@ -1093,10 +1093,13 @@ class Subscriptions extends BCRESTApi{
 class Auths extends BCRESTApi{
     /*
 	 * @desc 二要素, 三要素, 四要素鉴权, 如果鉴权成功，会自动在全局的card表中创建一条card记录
-	 * @param array $data, 主要包含以下三个参数:
+     * 二要素: (name, id_no)
+     * 三要素: (name, id_no, card_no)
+     * 四要素: (name, id_no, card_no, mobile)
+	 * @param array $data, 主要包含以下四个参数:
 	 * 	name string 身份证姓名(必填)
 	 *  id_no string 身份证号(必填)
-	 *  card_no string 用户银行卡卡号(必填)
+	 *  card_no string 用户银行卡卡号
 	 *  mobile string 手机号
 	 * @return json
 	 *  "card_id": "xxx", 要素认证成功返回card_id(即该记录的唯一标识)
@@ -1105,7 +1108,7 @@ class Auths extends BCRESTApi{
 	 */
     static public function auth($data){
         $data = parent::get_common_params($data);
-        parent::verify_need_params(array('name', 'id_no', 'card_no'), $data);
+        parent::verify_need_params(array('name', 'id_no'), $data);
         return BCRESTUtil::post(APIConfig::URI_AUTH, $data, 30, false);
     }
 }
