@@ -228,6 +228,16 @@ switch($type){
         require_once 'ali.offline.qrcode/index.php';
         exit();
         break;
+    case 'BC_WX_SCAN' :
+        $data["channel"] = "BC_WX_SCAN";
+        $title = "BC微信刷卡";
+        $data["auth_code"] = "13022657110xxxxxxxx";
+        break;
+    case 'BC_ALI_SCAN' :
+        $data["channel"] = "BC_ALI_SCAN";
+        $title = "BC支付宝刷卡";
+        $data["auth_code"] = "28886955594xxxxxxxx";
+        break;
     default :
         exit("No this type.");
         break;
@@ -244,6 +254,8 @@ switch($type){
 try {
     if(in_array($type, array('PAYPAL_PAYPAL', 'PAYPAL_CREDITCARD', 'PAYPAL_SAVED_CREDITCARD'))){
         $result =  $international->bill($data);
+    }else if(in_array($type, array('BC_ALI_SCAN', 'BC_WX_SCAN'))){
+        $result =  $api->offline_bill($data);
     }else{
         $result =  $api->bill($data);
     }

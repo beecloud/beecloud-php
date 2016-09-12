@@ -7,6 +7,7 @@
  */
 
 require_once("../loader.php");
+require_once("config.php");
 
 Class SubscriptionDemo{
 
@@ -88,9 +89,9 @@ Class SubscriptionDemo{
 		$data = array(
 			'timestamp' => time() * 1000,
 			'name_with_substring' => '计划',
-			//	'interval' => 'day',
-			//	'interval_count' => 1,
-			//	'trial_days' => 0,
+			//'interval' => 'day',
+			//'interval_count' => 1,
+			//'trial_days' => 0,
 		);
 		$plan = \beecloud\rest\Subscriptions::query_plan($data);
 		if ($plan->result_code != 0) {
@@ -170,9 +171,9 @@ Class SubscriptionDemo{
 
 		$data = array(
 			'timestamp' => time() * 1000,
-			'buyer_id' => 'ruitest',
-			//	'plan_id' => 'e39f8d8d-3769-4076-bad6-272251854f17',
-			//	'card_id' => '75021eb5-0d2f-4b1c-9194-8280d89dfb9f'
+			//'buyer_id' => '订阅',
+			//'plan_id' => 'e39f8d8d-3769-4076-bad6-272251854f17',
+			//'card_id' => '75021eb5-0d2f-4b1c-9194-8280d89dfb9f'
 		);
 		$subscription = \beecloud\rest\Subscriptions::query_subscription($data);
 		if ($subscription->result_code != 0) {
@@ -235,41 +236,51 @@ Class SubscriptionDemo{
 	}
 }
 
-
 try {
-	$app_id = '95d87fff-989c-4426-812c-21408644cf88';
-	$app_secret = '8aaad136-b899-4793-9564-0ebc72ae86f2';
-	$master_secret = '688dbe68-a7e9-4f16-850a-21270949afe8';
-	$test_secret = '6e4cba42-2901-43eb-a6f0-74e2bb18515a';
+	$demo = new SubscriptionDemo(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
 
-	$demo = new SubscriptionDemo($app_id, $app_secret, $master_secret, $test_secret);
-
-	//获取银行列表
-	$demo->banks();
-	//获取手机验证码
-	$demo->sms();
-
-	//创建plan
-	$demo->create_plan();
-	//更新plan
-	$demo->update_plan();
-	//删除plan
-	$demo->del_plan();
-	//按照条件查询plan
-	$demo->query_plan_bycondition();
-	//按照ID查询plan
-	$demo->query_plan_byid();
-
-	//创建subscription
-	$demo->create_subscription();
-	//更新subscription
-	$demo->update_subscription();
-	//取消subscription
-	$demo->cancel_subscription();
-	//按照条件查询subscription
-	$demo->query_subscription_bycondition();
-	//按照ID查询subscription
-	$demo->query_subscription_byid();
+    $type = isset($_GET['type']) ? $_GET['type'] : '';
+    switch($type){
+        case 'query_banks': //获取银行列表
+            $demo->banks();
+            break;
+        case 'send_code': //获取手机验证码
+            $demo->sms();
+            break;
+        case 'create_plan'://创建plan
+            $demo->create_plan();
+            break;
+        case 'update_plan': //更新plan
+            $demo->update_plan();
+            break;
+        case 'del_plan': //删除plan
+            $demo->del_plan();
+            break;
+        case 'query_plan_bycondition': //按照条件查询plan
+            $demo->query_plan_bycondition();
+            break;
+        case 'query_plan_byid': //按照ID查询plan
+            $demo->query_plan_byid();
+            break;
+        case 'create_subscription'://创建subscription
+            $demo->create_subscription();
+            break;
+        case 'update_subscription': //更新subscription
+            $demo->update_subscription();
+            break;
+        case 'cancel_subscription': //取消subscription
+            $demo->cancel_subscription();
+            break;
+        case 'query_subscription_bycondition'://按照条件查询subscription
+            $demo->query_subscription_bycondition();
+            break;
+        case 'query_subscription_byid': //按照ID查询subscription
+            $demo->query_subscription_byid();
+            break;
+        default:
+            exit('No this type!');
+            break;
+    }
 }catch(Exception $e){
 	echo $e->getMessage();
 }

@@ -350,7 +350,7 @@ API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【�
 
 ## 鉴权
 
-三要素{name(身份证姓名), id_no(身份证号), card_no(用户银行卡卡号)}，四要素{name(身份证姓名), id_no(身份证号), card_no(用户银行卡卡号), mobile(手机号)}鉴权，
+二要素{name(身份证姓名), id_no(身份证号)}，三要素{name(身份证姓名), id_no(身份证号), card_no(用户银行卡卡号)}，四要素{name(身份证姓名), id_no(身份证号), card_no(用户银行卡卡号), mobile(手机号)}鉴权，
 如果鉴权成功，会自动在全局的card表中创建一条card记录.
 
 ### 初始化
@@ -420,6 +420,7 @@ mobile | String | 手机号 | - | 133****3156 | 否
 //不使用namespace的用户和2.2.0之前的v2版本用户请使用
 Subscriptions::registerApp('app id', 'app secret', 'master secret', 'test secret')
 ```	
+
 ### 计划(plan)
 
 关于计划的说明, 具体的可参考[订阅系统说明文档](https://github.com/beecloud/beecloud-rest-api/blob/master/subscription/%E8%AE%A2%E9%98%85%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.md)
@@ -651,9 +652,12 @@ Subscriptions::cancel_subscription($data, $objectid);
 - 关于weekhook的接收 请参考demo中的webhook.php, 文档请阅读 [webhook](https://github.com/beecloud/beecloud-webhook)
 - 关于订阅接收webhook推送,有两个推送:
 
-		1.订阅结果的推送,transaction_id就是创建订阅时返回的订阅id，transaction_type为SUBSCRIPTION，sub_channel_type为BC_SUBSCRIPTION，message_detail中包含用户相关的注册信息，其中的card_id注意留存, 可供创建订阅使用;
-		2.订阅收费结果的推送，transaction_id为收费订单记录的订单号bill_no，transaction_type为PAY，sub_channel_type为BC_SUBSCRIPTION，transaction_fee为本次收费金额，message_detail中包含用户相关的注册信息
+    	1.订阅结果的推送,transaction_id就是创建订阅时返回的订阅id，transaction_type为SUBSCRIPTION，sub_channel_type为BC_SUBSCRIPTION，message_detail中包含用户相关的注册信息，其中的card_id注意留存, 可供创建订阅使用;
+    	2.订阅收费结果的推送，transaction_id为收费订单记录的订单号bill_no，transaction_type为PAY，sub_channel_type为BC_SUBSCRIPTION，transaction_fee为本次收费金额，message_detail中包含用户相关的注册信息
+-  关于代扣接收webhook推送,有两个推送:
 
+    	1.代扣签约的推送,transaction_id就是创建代扣签约时返回的id，transaction_type为SIGN，sub_channel_type为BC_CARD_CHARGE，message_detail中包含签约的详细信息，其中的card_id注意留存, 可供支付时使用;
+    	2.代扣支付结果的推送，transaction_id为收费订单记录的订单号bill_no，transaction_type为PAY，sub_channel_type为BC_CARD_CHARGE，transaction_fee为代扣支付金额，message_detail中包含签约的详细信息
 ## 测试
 
 项目文件夹tests为我们的样例测试,可根据自己的需要做出相应的调整
