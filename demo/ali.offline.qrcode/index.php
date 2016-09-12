@@ -3,17 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title><?php echo $title; ?>示例</title>
-    <?php
-        if($data['channel'] == 'BC_ALI_QRCODE'){
-            echo <<<EOF
-                <style type="text/css">
-                    #cancel {
-                        display:none;
-                    }
-                </style>     
-EOF;
-        }
-    ?>
 </head>
 <body>
 <?php

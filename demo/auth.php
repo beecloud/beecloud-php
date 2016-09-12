@@ -14,7 +14,7 @@ Class AuthDemo{
 		\beecloud\rest\Auths::registerApp($app_id, $app_secret, $master_secret, $test_secret);
 	}
 
-	//三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
+	//二要素,三要素,四要素鉴权,如果鉴权成功，会自动在全局的card表中创建一条card记录
 	function auth(){
 		$data = array(
 			'timestamp' => time() * 1000,

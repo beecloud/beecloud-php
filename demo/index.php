@@ -111,8 +111,16 @@
                 <img src="http://beeclouddoc.qiniudn.com/icon-bcwxsm.png" alt="BC NATIVE" >
             </li>
             <li onclick="paySwitch(this)">
+                <input type="radio" name="paytype" value="BC_WX_SCAN">
+                <img src="http://beeclouddoc.qiniudn.com/icon-bcwxsk.png" alt="BC WX SCAN" >
+            </li>
+            <li onclick="paySwitch(this)">
                 <input type="radio" name="paytype" value="BC_ALI_QRCODE">
                 <img src="http://beeclouddoc.qiniudn.com/icon-bcalism.png" alt="BC ALI QRCODE" >
+            </li>
+            <li onclick="paySwitch(this)">
+                <input type="radio" name="paytype" value="BC_ALI_SCAN">
+                <img src="http://beeclouddoc.qiniudn.com/icon-bczfbsk.png" alt="BC ALI SCAN" >
             </li>
         </ul>
     </div>

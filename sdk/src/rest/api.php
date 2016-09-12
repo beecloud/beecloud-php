@@ -518,6 +518,8 @@ class api {
 			switch ($data["channel"]) {
 				case "WX_SCAN":
 				case "ALI_SCAN":
+                case "BC_WX_SCAN":
+                case "BC_ALI_SCAN":
 					if (!isset($data['method']) && !isset($data['auth_code'])) {
 						throw new \Exception(\beecloud\rest\config::NEED_PARAM . "auth_code");
 					}
@@ -527,7 +529,7 @@ class api {
 				case "SCAN":
 					break;
 				default:
-					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN | SCAN");
+					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN | SCAN | BC_WX_SCAN | BC_ALI_SCAN");
 					break;
 			}
 		}
@@ -682,8 +684,10 @@ class api {
 				case "BC_NATIVE" :
 				case "BC_WX_WAP" :
 				case "BC_WX_JSAPI" :
+                case "BC_WX_SCAN" :
 				case "BC_CARD_CHARGE" :
 				case "BC_ALI_QRCODE" :
+                case "BC_ALI_SCAN" :
 					break;
 				default:
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");
@@ -945,11 +949,11 @@ class Subscriptions extends api{
 
 Class Auths extends api{
 	/*
-	 * @desc 三要素，四要素鉴权，如果鉴权成功，会自动在全局的card表中创建一条card记录
+	 * @desc 二要素,三要素,四要素鉴权,如果鉴权成功，会自动在全局的card表中创建一条card记录
 	 * @param array $data, 主要包含以下三个参数:
 	 * 	name string 身份证姓名(必填)
 	 *  id_no string 身份证号(必填)
-	 *  card_no string 用户银行卡卡号(必填)
+	 *  card_no string 用户银行卡卡号
 	 *  mobile string 手机号
 	 * @return json
 	 *  "card_id": "xxx", 要素认证成功返回
@@ -958,7 +962,7 @@ Class Auths extends api{
 	 */
 	static public function auth($data){
 		$data = parent::get_common_params($data);
-		parent::verify_need_params(array('name', 'id_no', 'card_no'), $data);
+		parent::verify_need_params(array('name', 'id_no'), $data);
 		return parent::post(\beecloud\rest\config::URI_AUTH, $data, 30, false);
 	}
 }

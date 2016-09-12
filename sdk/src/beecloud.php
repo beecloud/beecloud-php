@@ -680,6 +680,8 @@ class BCRESTApi {
             switch ($data["channel"]) {
                 case "WX_SCAN":
                 case "ALI_SCAN":
+                case "BC_WX_SCAN":
+                case "BC_ALI_SCAN":
                     if (!isset($data['method']) && !isset($data['auth_code'])) {
                         throw new Exception(APIConfig::NEED_PARAM . "auth_code");
                     }
@@ -689,7 +691,7 @@ class BCRESTApi {
                 case "SCAN":
                     break;
                 default:
-                    throw new Exception(APIConfig::NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN | SCAN");
+                    throw new Exception(APIConfig::NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | BC_WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN | BC_ALI_SCAN | SCAN | ");
                     break;
             }
         }
@@ -824,7 +826,10 @@ class BCRESTApi {
                 case "BC_NATIVE" :
                 case "BC_WX_WAP" :
                 case "BC_WX_JSAPI" :
+                case "BC_WX_SCAN" :
                 case "BC_CARD_CHARGE" :
+                case "BC_ALI_QRCODE" :
+                case "BC_ALI_SCAN" :
                     break;
                 default:
                     throw new Exception(APIConfig::NEED_VALID_PARAM . "channel");
