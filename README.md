@@ -652,12 +652,12 @@ Subscriptions::cancel_subscription($data, $objectid);
 - 关于weekhook的接收 请参考demo中的webhook.php, 文档请阅读 [webhook](https://github.com/beecloud/beecloud-webhook)
 - 关于订阅接收webhook推送,有两个推送:
 
-    1.订阅结果的推送,transaction_id就是创建订阅时返回的订阅id，transaction_type为SUBSCRIPTION，sub_channel_type为BC_SUBSCRIPTION，message_detail中包含用户相关的注册信息，其中的card_id注意留存, 可供创建订阅使用;
-    2.订阅收费结果的推送，transaction_id为收费订单记录的订单号bill_no，transaction_type为PAY，sub_channel_type为BC_SUBSCRIPTION，transaction_fee为本次收费金额，message_detail中包含用户相关的注册信息
+    	1.订阅结果的推送,transaction_id就是创建订阅时返回的订阅id，transaction_type为SUBSCRIPTION，sub_channel_type为BC_SUBSCRIPTION，message_detail中包含用户相关的注册信息，其中的card_id注意留存, 可供创建订阅使用;
+    	2.订阅收费结果的推送，transaction_id为收费订单记录的订单号bill_no，transaction_type为PAY，sub_channel_type为BC_SUBSCRIPTION，transaction_fee为本次收费金额，message_detail中包含用户相关的注册信息
 -  关于代扣接收webhook推送,有两个推送:
 
-    1.代扣签约的推送,transaction_id就是创建代扣签约时返回的id，transaction_type为SIGN，sub_channel_type为BC_CARD_CHARGE，message_detail中包含签约的详细信息，其中的card_id注意留存, 可供支付时使用;
-    2.代扣支付结果的推送，transaction_id为收费订单记录的订单号bill_no，transaction_type为PAY，sub_channel_type为BC_CARD_CHARGE，transaction_fee为代扣支付金额，message_detail中包含签约的详细信息
+    	1.代扣签约的推送,transaction_id就是创建代扣签约时返回的id，transaction_type为SIGN，sub_channel_type为BC_CARD_CHARGE，message_detail中包含签约的详细信息，其中的card_id注意留存, 可供支付时使用;
+    	2.代扣支付结果的推送，transaction_id为收费订单记录的订单号bill_no，transaction_type为PAY，sub_channel_type为BC_CARD_CHARGE，transaction_fee为代扣支付金额，message_detail中包含签约的详细信息
 ## 测试
 
 项目文件夹tests为我们的样例测试,可根据自己的需要做出相应的调整
