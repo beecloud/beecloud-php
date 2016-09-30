@@ -84,6 +84,30 @@ switch($type) {
         //选填optional
         $data["optional"] = (object)array("tag"=>"msgtoreturn"); //附加数据
         break;
+    case 'CJ_TRANSFER' :
+        $title = '测试畅捷企业打款';
+        unset($data['desc']);
+        $data["bill_no"] = "bcdemo" . $data["timestamp"];
+        $data["title"] = 'PHP测试畅捷企业打款';
+        /*
+         *  for bank_name, 支持的银行列表名称如下:
+         *  ICBC    中国工商银行      ABC     中国农业银行  BOC    中国银行
+         *  CCB     中国建设银行      COMM    交通银行      CMB    招商银行
+         *  CMBC    中国民生银行      CEB     中国光大银行  CIB   兴业银行
+         *  PSBC    中国邮政储蓄银行   GDB    广发银行      SPDB   上海浦东发展银行
+         *  SPDB    浦发银行          HXB    华夏银行
+         */
+        $data["bank_name"] = "中国银行"; //银行全称
+        $data["card_type"] = "DEBIT"; //银行卡类型,区分借记卡和信用卡，DEBIT代表借记卡，CREDIT代表信用卡，其他值为非法
+        $data["card_attribute"] = "B"; //帐户类型，B代表公户，C代表私户，其他值为非法
+        $data["bank_account_no"] = "6222691921993848888";   //收款方的银行卡号
+        $data["bank_branch"] = "中国银行独墅湖支行";   //收款方的银行卡号
+        $data["account_name"] = "test"; //收款方的姓名或者单位名
+        $data["province"] = "江苏省"; //银行所在省份
+        $data["city"] = "苏州市"; //银行所在市
+        //选填optional
+        $data["optional"] = (object)array("tag"=>"msgtoreturn"); //附加数据
+        break;
     default :
         exit("No this type.");
         break;
@@ -108,6 +132,9 @@ switch($type) {
             case 'BC_TRANSFER':
                 $result = $api->bc_transfer($data);
                 break;
+            case 'CJ_TRANSFER':
+                $result = $api->cj_transfer($data);
+                break;
             default :
                 $result = $api->transfer($data);
                 break;
@@ -119,6 +146,8 @@ switch($type) {
         if(isset($result->url)){
             header("Location:$result->url");
         }else{
+            echo '<pre>';
+            print_r($result);
             echo '下发成功!';
         }
     } catch (Exception $e) {

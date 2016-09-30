@@ -173,7 +173,7 @@
 
 <hr/>
 <div>
-    <h2>微信、支付宝企业打款</h2>
+    <h2>微信、支付宝、BC企业打款</h2>
     <p>请选择渠道进行操作</p>
     <p>注:单个微信红包金额介于[1.00元，200.00元]之间</p>
 </div>
@@ -199,6 +199,10 @@
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="BC_TRANSFER" name="transferType">
                 <img src="http://beeclouddoc.qiniudn.com/icon-companypay.png" alt="BC打款-银行卡">
+            </li>
+            <li onclick="clickSwitch(this)">
+                <input type="radio" value="CJ_TRANSFER" name="transferType">
+                <img src="" alt="畅捷-企业打款">
             </li>
     	</ul>
     </div>

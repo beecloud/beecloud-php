@@ -22,6 +22,7 @@ class config {
 	const URI_TRANSFER = "/2/rest/transfer";  //单笔打款 - 支付宝/微信
 	const URI_BC_TRANSFER_BANKS = '/2/rest/bc_transfer/banks'; //BC企业打款 - 支持银行
 	const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
+	const URI_CJ_TRANSFER = "/2/rest/cj_transfer"; //畅捷代付
 
 	//offline
 	const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单

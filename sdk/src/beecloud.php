@@ -22,6 +22,7 @@ class APIConfig {
     const URI_TRANSFER = "/2/rest/transfer";  //单笔打款 - 支付宝/微信
     const URI_BC_TRANSFER_BANKS = '/2/rest/bc_transfer/banks'; //BC企业打款 - 支持银行
     const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
+    const URI_CJ_TRANSFER = "/2/rest/cj_transfer"; //畅捷代付
 
     const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
     const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
@@ -671,6 +672,24 @@ class BCRESTApi {
         if(!in_array($data['account_type'], array('P', 'C'))) throw new Exception(APIConfig::NEED_VALID_PARAM . 'account_type(P, C)');
 
         return BCRESTUtil::post(APIConfig::URI_BC_TRANSFER, $data, 30, false);
+    }
+
+    //畅捷企业打款
+    static final public function cj_transfer(array $data) {
+        $data = self::get_common_params($data, '1');
+        $params = array(
+            'total_fee', 'bill_no', 'title', 'bank_name', 'bank_account_no', 'bank_branch', 'province', 'city',
+            'card_type', 'card_attribute', 'account_name'
+        );
+        foreach ($params as $v) {
+            if (!isset($data[$v])) {
+                throw new Exception(APIConfig::NEED_PARAM . $v);
+            }
+        }
+        if(!in_array($data['card_type'], array('DEBIT', 'CREDIT'))) throw new Exception(APIConfig::NEED_VALID_PARAM . 'card_type(DEBIT, CREDIT)');
+        if(!in_array($data['card_attribute'], array('B', 'C'))) throw new Exception(APIConfig::NEED_VALID_PARAM . 'card_attribute(B, C)');
+
+        return BCRESTUtil::post(APIConfig::URI_CJ_TRANSFER, $data, 30, false);
     }
 
 
