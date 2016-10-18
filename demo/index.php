@@ -200,11 +200,11 @@
                 <input type="radio" value="BC_TRANSFER" name="transferType">
                 <img src="http://beeclouddoc.qiniudn.com/icon-companypay.png" alt="BC打款-银行卡">
             </li>
-            <li onclick="clickSwitch(this)">
+            <!--<li onclick="clickSwitch(this)">
                 <input type="radio" value="CJ_TRANSFER" name="transferType">
                 <img src="" alt="畅捷-企业打款">
-            </li>
-    	</ul>
+            </li>-->
+        </ul>
     </div>
      <div>
         <input type="button" id="play_money" class="button" value="确认打款">
