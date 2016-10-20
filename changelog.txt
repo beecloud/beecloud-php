@@ -37,7 +37,6 @@ v2.3.7 发布日期: 2016年7月29日
 + 添加二要素鉴权
 + 添加新的渠道BC_ALI_SCAN, BC_WX_SCAN
 
-BeeCloud PHP Changelog
 ========================================================
 v2.3.6 发布日期: 2016年7月5日
 + BeeCloud平台参数配置,原在sdk/src/rest/config.php设置常量,现更改为
@@ -54,14 +53,12 @@ v2.3.6 发布日期: 2016年7月5日
 + 原sdk/src/rest/config.php,更改为在类中定义各常量,以适用于采用composer包管理的用户
 + 修改READMD.md文件
 
-BeeCloud PHP Changelog
 ========================================================
 v2.3.5 发布日期: 2016年6月24日
 + demo/wx/wx.jsapi.php中添加了对微信相关配置的描述
 + 支付渠道BC_EXPRESS添加银行卡号(card_no, 选填)字段的支持
 + READMD.md添加测试模式的描述
 
-BeeCloud PHP Changelog
 ========================================================
 v2.3.4 发布日期: 2016年6月6日
 + 所有的请求URL在config.php中统一定义,不再在单个类中分别定义
@@ -72,9 +69,7 @@ v2.3.4 发布日期: 2016年6月6日
 + 原demo的lib/WxPayPubHelper中提供的WxPayPubHelper.php方法createOauthUrlForCode现增加urlencode($redirectUrl),
   用户在使用获取code时不需要再次urlencode,请注意!!!
 + 提供下单和查询的Sandbox模式，即设置TEST_MODE＝true
-  
 
-BeeCloud PHP Changelog
 ========================================================
 v2.3.3 发布日期: 2016年5月9日
 + 修改渠道BC_GATEWAY, 字段bank在config.php添加常量定义
