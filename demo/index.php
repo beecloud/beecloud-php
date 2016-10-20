@@ -100,7 +100,8 @@
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_WX_JSAPI">
-                <img src="http://beeclouddoc.qiniudn.com/icon-bcwx.png" alt="BC WX JSAPI" title="特殊渠道,请详细阅读文件bc.wxjsapi.php">
+            <!--<img src="http://beeclouddoc.qiniudn.com/icon-bcwx.png" alt="BC WX JSAPI" title="特殊渠道,请详细阅读文件bc.wxjsapi.php">-->
+                <img src="http://beeclouddoc.qiniudn.com/icon-bcwx.png" alt="BC WX JSAPI">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_WX_WAP">
@@ -336,11 +337,7 @@
         if(!type){
             alert("请选择支付方式");return;
         }
-        if(type == 'BC_WX_JSAPI'){
-            window.open('./bc.wxjsapi.php');
-        }else{
-            window.open('./pay.bill.php?type=' + type);
-        }
+        window.open('./pay.bill.php?type=' + type);
     });
 
     $("#btn_card_charge").click(function(){

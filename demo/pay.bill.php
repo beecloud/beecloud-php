@@ -40,7 +40,7 @@ $data["optional"] = (object)array("tag"=>"msgtoreturn");
  * 如果两者都设置了，则优先使用notify_url。配置时请结合自己的项目谨慎配置，具体请
  * 参考demo/webhook.php
  */
-//$data['notify_url'] = 'http://xxx/webhook.php';
+$data['notify_url'] = 'http://beecloud.cn';
 
 $type = $_GET['type'];
 switch($type){
@@ -222,16 +222,22 @@ switch($type){
 		$data["channel"] = "BC_WX_WAP";
 		$title = "BC微信移动网页支付";
 		break;
+    case 'BC_WX_SCAN' :
+        $data["channel"] = "BC_WX_SCAN";
+        $title = "BC微信刷卡";
+        $data["auth_code"] = "13022657110xxxxxxxx";
+        break;
+    case 'BC_WX_JSAPI':
+        $data["channel"] = "BC_WX_JSAPI";
+        $title = "微信H5网页";
+        require_once 'wx/wx.jsapi.php';
+        exit();
+        break;
     case 'BC_ALI_QRCODE' :
         $data["channel"] = "BC_ALI_QRCODE";
         $title = "BC支付宝线下扫码";
         require_once 'ali.offline.qrcode/index.php';
         exit();
-        break;
-    case 'BC_WX_SCAN' :
-        $data["channel"] = "BC_WX_SCAN";
-        $title = "BC微信刷卡";
-        $data["auth_code"] = "13022657110xxxxxxxx";
         break;
     case 'BC_ALI_SCAN' :
         $data["channel"] = "BC_ALI_SCAN";
