@@ -90,6 +90,9 @@ class api {
 			throw new \Exception(\beecloud\rest\config::NEED_PARAM. 'APP(Master/Test) Secret, 请检查!');
 		}
 		$data["app_id"] = self::$app_id;
+        if(!isset($data["timestamp"])){
+            $data["timestamp"] = (int)(microtime(true) * 1000);
+        }
 		$data["app_sign"] = self::get_sign(self::$app_id, $data["timestamp"], $secret);
 		self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
 		return $data;
@@ -511,6 +514,24 @@ class api {
 		return self::post(\beecloud\rest\config::URI_BC_TRANSFER, $data, 30, false);
 	}
 
+    //畅捷企业打款
+    static final public function cj_transfer(array $data) {
+        $data = self::get_common_params($data, '1');
+        $params = array(
+            'total_fee', 'bill_no', 'title', 'bank_name', 'bank_account_no', 'bank_branch', 'province', 'city',
+            'card_type', 'card_attribute', 'account_name'
+        );
+        foreach ($params as $v) {
+            if (!isset($data[$v])) {
+                throw new \Exception(\beecloud\rest\config::NEED_PARAM . $v);
+            }
+        }
+        if(!in_array($data['card_type'], array('DEBIT', 'CREDIT'))) throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . 'card_type(DEBIT, CREDIT)');
+        if(!in_array($data['card_attribute'], array('B', 'C'))) throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . 'card_attribute(B, C)');
+
+        return self::post(\beecloud\rest\config::URI_CJ_TRANSFER, $data, 30, false);
+    }
+
 
 	static final public function offline_bill(array $data) {
 		$data = self::get_common_params($data, '0');
@@ -526,10 +547,11 @@ class api {
 					break;
 				case "WX_NATIVE":
 				case "ALI_OFFLINE_QRCODE":
+				case "BC_ALI_QRCODE":
 				case "SCAN":
 					break;
 				default:
-					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN | SCAN | BC_WX_SCAN | BC_ALI_SCAN");
+					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | BC_WX_SCAN | ALI_OFFLINE_QRCODE | BC_ALI_QRCODE | ALI_SCAN | BC_ALI_SCAN | SCAN");
 					break;
 			}
 		}

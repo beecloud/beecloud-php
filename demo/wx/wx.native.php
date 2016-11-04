@@ -42,17 +42,10 @@
     // 1. WX_NATIVE, 更新的是最后一次订单记录
     // 2. BC_NATIVE, 更新的是第一条订单记录
     $('#query').click(function(){
-        $.getJSON('wx/wx.native.query.php', {'billNo' : '<?php echo $data["bill_no"]; ?>', 'channel' : '<?php echo $data["channel"]; ?>'}, function(res){
+        $.getJSON('bill.status.php', {'billNo' : '<?php echo $data["bill_no"]; ?>', 'channel' : '<?php echo $data["channel"]; ?>'}, function(res){
             var str = '';
-            if (res && res.result_code == 0 ) {
-                var spay_result = false;
-                for(var i = 0; i < res.count; i++){
-                    if(res.bills[i].spay_result){
-                        spay_result = true;
-                        break;
-                    }
-                }
-                str = spay_result ? "支付成功" : "未支付";
+            if (res.result_code == 0 ) {
+                str = res.pay_result ? "支付成功" : "未支付";
             }else if (res && res.result_code != 0) {
                 str = 'Error: ' + res.err_detail;
             }else {

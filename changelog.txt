@@ -1,5 +1,22 @@
 BeeCloud PHP Changelog
 ========================================================
+v2.3.7 发布日期: 2016年11月02日
++ 线下扫码被扫接口订单支付状态查询（包括的主要渠道：WX_NATIVE、WX_SCAN、ALI_OFFLINE_QRCODE、ALI_SCAN）
++ 添加字段refund_account(类型Integer),适用于WX_NATIVE, WX_JSAPI, WX_SCAN,
+  退款资金来源 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款）
+
+BeeCloud PHP Changelog
+========================================================
+v2.3.7 发布日期: 2016年9月30日
++ 添加畅捷企业打款
+1.具体请参考demo/transfer.bill.php下type为'CJ_TRANSFER'部分的代码
+2.webhook请参考demo/webhook.php, 关于打款结果的推送，transaction_id为交易单号bill_no，
+  transaction_type为TRANSFER，sub_channel_type为BC_TRANSFER，
+  message_detail中包含打款的详细信息
+
+
+BeeCloud PHP Changelog
+========================================================
 v2.3.7 发布日期: 2016年7月29日
 + 鉴权, , 具体请参考api.php中的类Auths
   调用方式:\beecloud\rest\Auths::auth($data)

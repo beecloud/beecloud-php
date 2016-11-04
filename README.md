@@ -54,7 +54,7 @@ BCRESTApi::registerApp('app id', 'app secret', 'master secret', 'test secret')
 
 5. LIVE模式和TEST模式
 
-在代码中调用方法setMode, 即:
+在代码中调用方法setSandbox, 即:
 - setSandbox(false)或者不调用此方法, 即LIVE模式
 - setSandbox(true), 即TEST模式, 仅提供下单和支付订单查询的Sandbox模式
 
@@ -649,7 +649,7 @@ Subscriptions::cancel_subscription($data, $objectid);
 
 - 微信没有return_url，如果用户需要支付完成做类似同步跳转的形式，需根据微信支付提供的jsapi完成。
 - 关于支付宝支付、银联在线支付、百度钱包支付、京东支付、PayPal等支付方式的return_url,需要用户自己设定
-- 关于weekhook的接收 请参考demo中的webhook.php, 文档请阅读 [webhook](https://github.com/beecloud/beecloud-webhook)
+- 关于webhook的接收 请参考demo中的webhook.php, 文档请阅读 [webhook](https://github.com/beecloud/beecloud-webhook)
 - 关于订阅接收webhook推送,有两个推送:
 
     	1.订阅结果的推送,transaction_id就是创建订阅时返回的订阅id，transaction_type为SUBSCRIPTION，sub_channel_type为BC_SUBSCRIPTION，message_detail中包含用户相关的注册信息，其中的card_id注意留存, 可供创建订阅使用;
@@ -658,6 +658,12 @@ Subscriptions::cancel_subscription($data, $objectid);
 
     	1.代扣签约的推送,transaction_id就是创建代扣签约时返回的id，transaction_type为SIGN，sub_channel_type为BC_CARD_CHARGE，message_detail中包含签约的详细信息，其中的card_id注意留存, 可供支付时使用;
     	2.代扣支付结果的推送，transaction_id为收费订单记录的订单号bill_no，transaction_type为PAY，sub_channel_type为BC_CARD_CHARGE，transaction_fee为代扣支付金额，message_detail中包含签约的详细信息
+-  关于企业打款接收webhook推送: 
+        
+        推送企业打款结果,transaction_id就是企业打款的交易单号, 对应支付请求的bill_no, transaction_type为TRANSFER, sub_channel_type为BC_TRANSFER, message_detail中包含打款相关的详细信息
+        
+
+
 ## 测试
 
 项目文件夹tests为我们的样例测试,可根据自己的需要做出相应的调整

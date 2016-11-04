@@ -13,6 +13,10 @@ if(isset($_GET["need_approval"])){
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 
+//refund_account(类型Integer),适用于WX_NATIVE, WX_JSAPI, WX_SCAN
+//退款资金来源 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款）
+//$data["refund_account"] = 1;
+
 $type = $_GET['type'];
 switch($type){
     case 'ALI' :

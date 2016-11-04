@@ -75,6 +75,27 @@ if($msg->transaction_type == "PAY") {
 }
 
 /*
+ * 推送企业打款结果的
+ * transaction_id就是企业打款的交易单号, 对应支付请求的bill_no, transaction_type为TRANSFER, sub_channel_type为BC_TRANSFER
+ * message_detail中包含打款相关的详细信息
+ *
+ */
+if ($msg->transaction_type == "TRANSFER") {
+    //企业打款状态是否为成功,true代表成功
+    $status = $msg->trade_success;
+
+    //message_detail 参考文档
+    switch ($msg->channel_type) {
+        case "BC":
+            if($msg->sub_channel_type == 'BC_TRANSFER'){
+                //message_detail中包含打款相关的详细信息
+                //TODO...
+            }
+            break;
+    }
+}
+
+/*
  * 推送订阅结果的
  * transaction_id就是创建订阅时返回的订阅id，transaction_type为SUBSCRIPTION，sub_channel_type为BC_SUBSCRIPTION，
  * message_detail中包含用户相关的注册信息，其中的card_id注意留存。
@@ -115,7 +136,7 @@ if ($msg->transaction_type == "SIGN") {
     }
 }
 
-//打印所有字段
+//打印所有字段,仅供调试使用
 print_r($msg);
 
 //处理消息成功,不需要持续通知此消息返回success
