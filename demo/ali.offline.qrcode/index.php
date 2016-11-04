@@ -9,8 +9,8 @@
 try {
     switch ($data['channel']){
         case 'BC_ALI_QRCODE':
-            $result = $api->bill($data);
-            break;
+            //$result = $api->bill($data);
+            //break;
         case 'ALI_OFFLINE_QRCODE':
             $result = $api->offline_bill($data);
             break;
@@ -52,12 +52,14 @@ try {
         var billNo = "<?php echo $data["bill_no"];?>";
         var queryTimer = setInterval(function() {
             $("#msg").text("开始查询支付状态...");
-            $.getJSON("ali.offline.qrcode/ali.bill.status.php", {"billNo":billNo, 'channel' : '<?php echo $data['channel']; ?>'}, function(res) {
-                if(res.resultCode == 0 && res.pay_result){
-                    clearInterval(queryTimer);
-                    queryTimer = null;
-                    $("#msg").text("已经支付");
-                    $("#cancel").hide();
+            $.getJSON("bill.status.php", {"billNo":billNo, 'channel' : '<?php echo $data['channel']; ?>'}, function(res) {
+                if(res.result_code == 0){
+                    if(res.pay_result){
+                        clearInterval(queryTimer);
+                        queryTimer = null;
+                        $("#cancel").hide();
+                    }
+                    $("#msg").text(res.pay_result ? '已经支付' : '未支付');
                 }
             });
         }, 3000);

@@ -21,7 +21,7 @@ switch($type) {
         break;
     case 'WX_TRANSFER' :
         $title = '微信企业打款';
-        $data["transfer_no"] = "".time();//微信要求10位数字
+        $data["transfer_no"] = "".time();//微信企业打款为8-32位数字字母组合
         $data["channel"] = "WX_TRANSFER";
         $data["channel_user_id"] = '';   //微信用户openid o3kKrjlROJ1qlDmFdlBQA95kvbN0
         break;

@@ -298,6 +298,9 @@ class BCRESTApi {
             throw new Exception(APIConfig::NEED_PARAM. 'APP(Master/Test) Secret, 请检查!');
         }
         $data["app_id"] = self::$app_id;
+        if(!isset($data["timestamp"])){
+            $data["timestamp"] = (int)(microtime(true) * 1000);
+        }
         $data["app_sign"] = self::get_sign(self::$app_id, $data["timestamp"], $secret);
         self::verify_need_params(array('app_id', 'timestamp', 'app_sign'), $data);
         return $data;
@@ -707,10 +710,11 @@ class BCRESTApi {
                     break;
                 case "WX_NATIVE":
                 case "ALI_OFFLINE_QRCODE":
+                case "BC_ALI_QRCODE":
                 case "SCAN":
                     break;
                 default:
-                    throw new Exception(APIConfig::NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | BC_WX_SCAN | ALI_OFFLINE_QRCODE | ALI_SCAN | BC_ALI_SCAN | SCAN | ");
+                    throw new Exception(APIConfig::NEED_VALID_PARAM . "channel = WX_NATIVE | WX_SCAN | BC_WX_SCAN | ALI_OFFLINE_QRCODE | BC_ALI_QRCODE | ALI_SCAN | BC_ALI_SCAN | SCAN");
                     break;
             }
         }

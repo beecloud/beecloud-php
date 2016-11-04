@@ -15,7 +15,7 @@
 header("Content-type: text/html; charset=utf-8");
 include_once('lib/WxPayPubHelper/WxPayPubHelper.php');
 $jsApi = new JsApi_pub();
-//网页授权获取用户openid============
+//网页授权获取用户openid
 //通过code获得openid
 if (!isset($_GET['code'])){
     //触发微信返回code码

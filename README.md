@@ -54,7 +54,7 @@ BCRESTApi::registerApp('app id', 'app secret', 'master secret', 'test secret')
 
 5. LIVE模式和TEST模式
 
-在代码中调用方法setMode, 即:
+在代码中调用方法setSandbox, 即:
 - setSandbox(false)或者不调用此方法, 即LIVE模式
 - setSandbox(true), 即TEST模式, 仅提供下单和支付订单查询的Sandbox模式
 
