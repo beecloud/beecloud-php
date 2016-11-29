@@ -269,9 +269,9 @@ try {
         print_r($result);
         exit();
     }
-    if(isset($result->url)){
+    if(isset($result->url) && $result->url){
         header("Location:$result->url");
-	}else if(isset($result->html)) {
+	}else if(isset($result->html) && $result->html) {
         echo $result->html;
     }else if(isset($result->credit_card_id)){
         echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
