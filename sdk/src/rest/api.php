@@ -234,18 +234,19 @@ class api {
 //	                }
 //	                break;
 				case "BC_GATEWAY":
-					if (!isset($data["bank"])) {
-						throw new \Exception(\beecloud\rest\config::NEED_PARAM.'bank');
-					}
-					if (!in_array($data["bank"], \beecloud\rest\config::get_bank())) {
+                    self::verify_need_params(array('bank', 'card_type'), $data);
+                    if (!in_array($data["card_type"], \beecloud\rest\config::get_card_type())) {
+                        throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'card_type'));
+                    }
+                    if (!in_array($data["bank"], \beecloud\rest\config::get_bank($data["card_type"]))) {
 						throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'bank'));
 					}
 					break;
-				case "BC_EXPRESS" :
-					if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
-						throw new \Exception(\beecloud\rest\config::NEED_TOTAL_FEE);
-					}
-					break;
+//				case "BC_EXPRESS" :
+//					if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
+//						throw new \Exception(\beecloud\rest\config::NEED_TOTAL_FEE);
+//					}
+//					break;
 			}
 		}
 
@@ -710,6 +711,7 @@ class api {
 				case "BC_CARD_CHARGE" :
 				case "BC_ALI_QRCODE" :
                 case "BC_ALI_SCAN" :
+                case "BC_ALI_WAP":
 					break;
 				default:
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");

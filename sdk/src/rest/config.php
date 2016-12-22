@@ -77,20 +77,45 @@ class config {
 		return array(9102, 9103, 9104, 9105, 9107, 9108, 9109, 9110);
 	}
 
+    /*
+     * card_type(string 类型) for channel BC_GATEWAY
+    */
+
+    static function get_card_type($type = ''){
+        $card_type = array(
+            '1' => '1',
+            '2' => '2'
+        );
+        if($type && !in_array($type, $card_type)){
+            exit('卡类型: 1代表信用卡, 2代表借记卡');
+        }
+        if($type){
+            return $card_type[$type];
+        }
+        return $card_type;
+    }
+
 	/*
 	 * bank(string 类型) for channel BC_GATEWAY
-	 * CMB	  招商银行    ICBC	工商银行   CCB   建设银行(暂不支持)
-	 * BOC	  中国银行    ABC    农业银行   BOCM	交通银行
-	 * SPDB   浦发银行    GDB	广发银行   CITIC	中信银行
-	 * CEB	  光大银行    CIB	兴业银行   SDB	平安银行
-	 * CMBC   民生银行    NBCB   宁波银行   BEA   东亚银行
-	 * NJCB   南京银行    SRCB   上海农商行 BOB   北京银行
 	*/
-	static function get_bank(){
-		return array(
-			'CMB', 'ICBC', 'CCB', 'BOC', 'ABC', 'BOCM', 'SPDB', 'GDB', 'CITIC',
-			'CEB', 'CIB', 'SDB', 'CMBC', 'NBCB', 'BEA', 'NJCB', 'SRCB', 'BOB'
-		);
+	static function get_bank($type = ''){
+        $banks = array(
+		    //信用卡
+            '1' => array(
+                '工商银行', '建设银行', '中国银行', '农业银行', '交通银行', '邮政储蓄银行', '招商银行', '中信银行', '浦发银行', '兴业银行', '民生银行',
+                '光大银行', '平安银行', '华夏银行', '广发银行', '上海银行', '宁波银行', '杭州银行', '青岛银行', '北京银行', '浙江稠州银行',
+            ),
+            //借记卡
+		    '2' => array('工商银行', '建设银行', '中国银行', '农业银行', '交通银行', '邮政储蓄银行', '招商银行', '中信银行', '浦发银行', '兴业银行',
+                '民生银行', '光大银行', '平安银行', '华夏银行', '北京银行', '广发银行', '上海银行', '北京农商行', '重庆农商行', '上海农商行',
+                '南京银行', '宁波银行', '杭州银行', '成都银行', '青岛银行', '恒丰银行', '渤海银行', '厦门银行', '陕西信合', '浙江稠州银行',
+                '贵州农信')
+        );
+        $card_type = self::get_card_type($type);
+        if(!is_array($card_type)){
+            return $banks[$card_type];
+        }
+        return $banks;
 	}
 
 	/*
