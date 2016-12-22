@@ -26,7 +26,7 @@ $data["total_fee"] = 1;
 $data["bill_no"] = "bcdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = 'PHP '.$_GET['type'].'支付测试';
-//渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
+//渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB, BC_GATEWAY为京东渠道时为必填, BC_ALI_WAP不支持此参数
 $data["return_url"] = "https://beecloud.cn";
 //选填 optional
 $data["optional"] = (object)array("tag"=>"msgtoreturn");
@@ -39,8 +39,9 @@ $data["optional"] = (object)array("tag"=>"msgtoreturn");
  * notify_url 选填，该参数是为接收支付之后返回信息的,仅适用于线上支付方式, 等同于在beecloud平台配置webhook，
  * 如果两者都设置了，则优先使用notify_url。配置时请结合自己的项目谨慎配置，具体请
  * 参考demo/webhook.php
+ *
  */
-$data['notify_url'] = 'http://beecloud.cn';
+//$data['notify_url'] = 'http://beecloud.cn';
 
 $type = $_GET['type'];
 switch($type){
@@ -193,21 +194,20 @@ switch($type){
     case 'BC_GATEWAY' :
         $data["channel"] = "BC_GATEWAY";
         /*
-         * bank(string 类型) for channel BC_GATEWAY
-         * CMB	  招商银行    ICBC	工商银行   CCB   建设银行(暂不支持)
-         * BOC	  中国银行    ABC    农业银行   BOCM	交通银行
-         * SPDB   浦发银行    GDB	广发银行   CITIC	中信银行
-         * CEB	  光大银行    CIB	兴业银行   SDB	平安银行
-         * CMBC   民生银行    NBCB   宁波银行   BEA   东亚银行
-         * NJCB   南京银行    SRCB   上海农商行 BOB   北京银行
+         * card_type(string 类型) for channel BC_GATEWAY
+         * 卡类型: 1代表信用卡；2代表借记卡
         */
-        $data["bank"] = "BOC";
+        $data["card_type"] = '1';
+        /*
+         * bank(string 类型) for channel BC_GATEWAY
+         * 根据参数card_type确定银行名称， 获取银行的方法，即
+         *  $banks = get_bank($data["card_type"])
+        */
+        $data["bank"] = "建设银行";
         $title = "BC网关支付";
         break;
     case 'BC_EXPRESS' :
         $data["channel"] = "BC_EXPRESS";
-        //渠道类型BC_EXPRESS, total_fee(int 类型) 单位分, 最小金额100分
-        $data["total_fee"] = 100;
         //银行卡卡号, 选填
         //$data["card_no"] = '622269192199384xxxx';
         $title = "BC快捷支付";
@@ -271,7 +271,7 @@ try {
     }
     if(isset($result->url) && $result->url){
         header("Location:$result->url");
-	}else if(isset($result->html) && $result->html) {
+    }else if(isset($result->html) && $result->html) {
         echo $result->html;
     }else if(isset($result->credit_card_id)){
         echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;

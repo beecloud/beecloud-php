@@ -1,5 +1,10 @@
 BeeCloud PHP Changelog
 ========================================================
+v2.3.7 发布日期: 2016年12月22日
++ 渠道BC_GATEWAY调整，增加参数卡类型card_type, 参数bank由银行编码变更为银行名称
+
+BeeCloud PHP Changelog
+========================================================
 v2.3.7 发布日期: 2016年11月02日
 + 线下扫码被扫接口订单支付状态查询（包括的主要渠道：WX_NATIVE、WX_SCAN、ALI_OFFLINE_QRCODE、ALI_SCAN）
 + 添加字段refund_account(类型Integer),适用于WX_NATIVE, WX_JSAPI, WX_SCAN,
