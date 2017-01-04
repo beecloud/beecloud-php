@@ -20,7 +20,7 @@ try {
             break;
         case 'BC_NATIVE':
             $result = $api->bills($data);
-            if ($result->result_code == 0) {
+            if ($result->result_code != 0) {
                 echo json_encode($result);
                 exit();
             }

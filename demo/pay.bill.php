@@ -23,7 +23,7 @@ $data = array();
 $data["timestamp"] = time() * 1000;
 //total_fee(int 类型) 单位分
 $data["total_fee"] = 1;
-$data["bill_no"] = "bcdemo" . $data["timestamp"];
+$data["bill_no"] = "phpdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = 'PHP '.$_GET['type'].'支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB, BC_GATEWAY为京东渠道时为必填, BC_ALI_WAP不支持此参数
@@ -243,6 +243,10 @@ switch($type){
         $data["channel"] = "BC_ALI_SCAN";
         $title = "BC支付宝刷卡";
         $data["auth_code"] = "28886955594xxxxxxxx";
+        break;
+    case 'BC_ALI_WAP' :
+        $data["channel"] = "BC_ALI_WAP";
+        $title = "BC支付宝移动网页";
         break;
     default :
         exit("No this type.");

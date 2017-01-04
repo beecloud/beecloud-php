@@ -10,7 +10,7 @@ $type = $_GET['type'];
 switch($type) {
     case 'WX_REDPACK' :
         $title = '微信红包'; //单个微信红包金额介于[1.00元，200.00元]之间
-        $data["transfer_no"] = "".time();//微信要求10位数字
+        $data["transfer_no"] = "phpdemo".time();//微信要求10位数字
         $data["channel_user_id"] = '';  //微信用户openid o3kKrjlROJ1qlDmFdlBQA95kvbN0
         $data["channel"] = "WX_REDPACK";
         $data["redpack_info"] = (object)array(
@@ -21,14 +21,14 @@ switch($type) {
         break;
     case 'WX_TRANSFER' :
         $title = '微信企业打款';
-        $data["transfer_no"] = "".time();//微信企业打款为8-32位数字字母组合
+        $data["transfer_no"] = "phpdemo".time();//微信企业打款为8-32位数字字母组合
         $data["channel"] = "WX_TRANSFER";
         $data["channel_user_id"] = '';   //微信用户openid o3kKrjlROJ1qlDmFdlBQA95kvbN0
         break;
     case 'ALI_TRANSFER' :
         $title = '支付宝企业打款';
         $data["channel"] = "ALI_TRANSFER";
-        $data["transfer_no"] = "trans" . time();
+        $data["transfer_no"] = "phpdemo" . time();
 
         //收款方的id 账号和 名字也需要对应
         $data["channel_user_id"] = '';   //收款人账户
@@ -39,7 +39,7 @@ switch($type) {
     case 'ALI_TRANSFERS' :
         $title = '支付宝批量打款';
         $data["channel"] = "ALI";
-        $data["batch_no"] = "bcdemo" . $data["timestamp"];
+        $data["batch_no"] = "phpdemo" . time();
         $data["account_name"] = "苏州比可网络科技有限公司";
         $data["transfer_data"] = array(
             (object)array(
@@ -61,7 +61,7 @@ switch($type) {
     case 'BC_TRANSFER' :
         $title = 'BC企业打款';
         unset($data['desc']);
-        $data["bill_no"] = "bcdemo" . $data["timestamp"];
+        $data["bill_no"] = "phpdemo" . $data["timestamp"];
         $data["title"] = 'PHP测试BC企业打款';
         $data["trade_source"] = "OUT_PC";
         /*
@@ -87,7 +87,7 @@ switch($type) {
     case 'CJ_TRANSFER' :
         $title = '测试畅捷企业打款';
         unset($data['desc']);
-        $data["bill_no"] = "bcdemo" . $data["timestamp"];
+        $data["bill_no"] = "phpdemo" . $data["timestamp"];
         $data["title"] = 'PHP测试畅捷企业打款';
         /*
          *  for bank_name, 支持的银行列表名称如下:

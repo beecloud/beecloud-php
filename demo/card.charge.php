@@ -23,7 +23,7 @@ $data = array();
 $data["timestamp"] = time() * 1000;
 //total_fee(int 类型) 单位分,  最小金额150分
 $data["total_fee"] = 160;
-$data["bill_no"] = "bcdemo" . $data["timestamp"];
+$data["bill_no"] = "phpdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = 'PHP '.$_GET['type'].'支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB时为必填
