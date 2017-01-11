@@ -23,6 +23,7 @@ class APIConfig {
     const URI_BC_TRANSFER_BANKS = '/2/rest/bc_transfer/banks'; //BC企业打款 - 支持银行
     const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
     const URI_CJ_TRANSFER = "/2/rest/cj_transfer"; //畅捷代付
+    const URI_JD_TRANSFER = "/2/rest/bc_user_transfer"; //京东代付
 
     const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
     const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
@@ -699,7 +700,11 @@ class BCRESTApi {
         if(!in_array($data['card_type'], array('DE', 'CR'))) throw new Exception(APIConfig::NEED_VALID_PARAM . 'card_type(DE, CR)');
         if(!in_array($data['account_type'], array('P', 'C'))) throw new Exception(APIConfig::NEED_VALID_PARAM . 'account_type(P, C)');
 
-        return BCRESTUtil::post(APIConfig::URI_BC_TRANSFER, $data, 30, false);
+        $url = APIConfig::URI_BC_TRANSFER;
+        if(isset($data['channel']) &&  $data['channel'] == 'JD_TRANSFER'){
+            $url = APIConfig::URI_JD_TRANSFER;
+        }
+        return BCRESTUtil::post($url, $data, 30, false);
     }
 
     //畅捷企业打款

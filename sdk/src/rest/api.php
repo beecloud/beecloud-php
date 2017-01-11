@@ -512,7 +512,11 @@ class api {
 		if(!in_array($data['card_type'], array('DE', 'CR'))) throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . 'card_type(DE, CR)');
 		if(!in_array($data['account_type'], array('P', 'C'))) throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . 'account_type(P, C)');
 
-		return self::post(\beecloud\rest\config::URI_BC_TRANSFER, $data, 30, false);
+        $url = \beecloud\rest\config::URI_BC_TRANSFER;
+        if(isset($data['channel']) &&  $data['channel'] == 'JD_TRANSFER'){
+            $url = \beecloud\rest\config::URI_JD_TRANSFER;
+        }
+		return self::post($url, $data, 30, false);
 	}
 
     //畅捷企业打款

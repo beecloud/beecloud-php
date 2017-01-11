@@ -22,7 +22,7 @@ try {
 $data = array();
 $data["timestamp"] = time() * 1000;
 //total_fee(int 类型) 单位分
-$data["total_fee"] = 1;
+$data["total_fee"] = 2;
 $data["bill_no"] = "phpdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = 'PHP '.$_GET['type'].'支付测试';
@@ -277,6 +277,8 @@ try {
         header("Location:$result->url");
     }else if(isset($result->html) && $result->html) {
         echo $result->html;
+    }else if(isset($result->code_url) && $result->code_url) { //channel为BC_ALI_WAP, 请在手机内测试
+        header("Location:$result->code_url");
     }else if(isset($result->credit_card_id)){
         echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
     }else if(isset($result->id)){
