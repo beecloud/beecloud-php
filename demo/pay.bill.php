@@ -22,7 +22,7 @@ try {
 $data = array();
 $data["timestamp"] = time() * 1000;
 //total_fee(int 类型) 单位分
-$data["total_fee"] = 2;
+$data["total_fee"] = 1;
 $data["bill_no"] = "phpdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = 'PHP '.$_GET['type'].'支付测试';

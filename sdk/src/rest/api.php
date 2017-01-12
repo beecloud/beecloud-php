@@ -182,6 +182,7 @@ class api {
 				case 'JD_WEB':
 				case 'JD_B2B':
 				case "BC_GATEWAY":
+                case "BC_WX_WAP":
 					//case "BC_EXPRESS":
 					if (!isset($data["return_url"])) {
 						throw new \Exception(\beecloud\rest\config::NEED_RETURN_URL);
