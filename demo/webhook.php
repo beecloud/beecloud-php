@@ -17,12 +17,18 @@ $msg = json_decode($jsonStr);
 
 //第一步:验证签名
 //原签名算法：app_id + app_secret ＋ timestamp
+//$sign = md5($appId . $appSecret . $msg->timestamp);
+//if ($sign != $msg->sign) {
+//    // 签名不正确
+//    exit();
+//}
 //现修正如下：app_id + transaction_id + transaction_type + channel_type + transaction_fee + master_secret
 $sign = md5($appId . $msg->transaction_id . $msg->transaction_type . $msg->channel_type . $msg->transaction_fee.$masterSecret);
-if ($sign != $msg->sign) {
+if ($sign != $msg->signature) {
     // 签名不正确
     exit();
 }
+
 
 
 //第二步:过滤重复的Webhook
