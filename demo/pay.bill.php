@@ -244,7 +244,7 @@ switch($type){
         $title = "BC支付宝刷卡";
         $data["auth_code"] = "28886955594xxxxxxxx";
         break;
-    case 'BC_ALI_WAP' :
+    case 'BC_ALI_WAP' : //请在手机浏览器内测试
         $data["channel"] = "BC_ALI_WAP";
         $title = "BC支付宝移动网页";
         break;
@@ -277,6 +277,8 @@ try {
         header("Location:$result->url");
     }else if(isset($result->html) && $result->html) {
         echo $result->html;
+    }else if(isset($result->code_url) && $result->code_url) { //channel为BC_ALI_WAP
+        header("Location:$result->code_url");
     }else if(isset($result->credit_card_id)){
         echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
     }else if(isset($result->id)){
