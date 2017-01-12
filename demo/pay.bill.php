@@ -277,8 +277,6 @@ try {
         header("Location:$result->url");
     }else if(isset($result->html) && $result->html) {
         echo $result->html;
-    }else if(isset($result->code_url) && $result->code_url) { //channel为BC_ALI_WAP, 请在手机内测试
-        header("Location:$result->code_url");
     }else if(isset($result->credit_card_id)){
         echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
     }else if(isset($result->id)){

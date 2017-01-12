@@ -7,19 +7,10 @@
  *  一旦因此数据保管不善而导致的经济损失及法律责任，均由您独自承担。
  */
 
-//const APP_ID = 'c5d1cba1-5e3f-4ba0-941d-9b0a371fe719';
-////支付或者查询时使用
-//const APP_SECRET = '39a7a518-9ac8-4a9e-87bc-7885f33cf18c';
-////退款或者打款时使用
-//const MASTER_SECRET = 'e14ae2db-608c-4f8b-b863-c8c18953eef2';
-////test_secret for sandbox
-//const TEST_SECRET = '4bfdd244-574d-4bf3-b034-0c751ed34fee';
-
-
-const APP_ID = '8bb20009-9491-41b7-a420-b4725540a4a4';
+const APP_ID = 'c5d1cba1-5e3f-4ba0-941d-9b0a371fe719';
 //支付或者查询时使用
-const APP_SECRET = '4f4ec447-a247-450e-9a10-09c9a9613451';
+const APP_SECRET = '39a7a518-9ac8-4a9e-87bc-7885f33cf18c';
 //退款或者打款时使用
-const MASTER_SECRET = '24d6baa6-da52-45b0-8a6f-c1ddff4606e6';
+const MASTER_SECRET = 'e14ae2db-608c-4f8b-b863-c8c18953eef2';
 //test_secret for sandbox
-const TEST_SECRET = '6fbce0d9-c04f-4c0f-8468-6f2820f63b82';
+const TEST_SECRET = '4bfdd244-574d-4bf3-b034-0c751ed34fee';
