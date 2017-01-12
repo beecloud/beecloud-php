@@ -100,7 +100,6 @@
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_WX_JSAPI">
-            <!--<img src="http://beeclouddoc.qiniudn.com/icon-bcwx.png" alt="BC WX JSAPI" title="特殊渠道,请详细阅读文件bc.wxjsapi.php">-->
                 <img src="http://beeclouddoc.qiniudn.com/icon-bcwx.png" alt="BC WX JSAPI">
             </li>
             <li onclick="clickSwitch(this)">
@@ -115,6 +114,10 @@
                 <input type="radio" name="paytype" value="BC_WX_SCAN">
                 <img src="http://beeclouddoc.qiniudn.com/icon-bcwxsk.png" alt="BC WX SCAN" >
             </li>
+            <!--<li onclick="clickSwitch(this)">
+                <input type="radio" name="paytype" value="BC_ALI_WAP">
+                <img src="http://beeclouddoc.qiniudn.com/icon-bcaliwap700x200.png" alt="BC ALI WAP" >
+            </li>-->
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_ALI_QRCODE">
                 <img src="http://beeclouddoc.qiniudn.com/icon-bcalism.png" alt="BC ALI QRCODE" >
@@ -205,6 +208,10 @@
                 <input type="radio" value="CJ_TRANSFER" name="transferType">
                 <img src="" alt="畅捷-企业打款">
             </li>-->
+            <li onclick="clickSwitch(this)">
+                <input type="radio" value="JD_TRANSFER" name="transferType">
+                <img src="http://7ktp21.com1.z0.glb.clouddn.com/icon%EF%BC%8Djingdongdaifu700x200.png" alt="京东代付">
+            </li>
         </ul>
     </div>
      <div>

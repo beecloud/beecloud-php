@@ -26,7 +26,7 @@ $data["total_fee"] = 1;
 $data["bill_no"] = "phpdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = 'PHP '.$_GET['type'].'支付测试';
-//渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB, BC_GATEWAY为京东渠道时为必填, BC_ALI_WAP不支持此参数
+//渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB, BC_GATEWAY为京东、BC_WX_WAP渠道时为必填, BC_ALI_WAP不支持此参数
 $data["return_url"] = "https://beecloud.cn";
 //选填 optional
 $data["optional"] = (object)array("tag"=>"msgtoreturn");
@@ -218,7 +218,7 @@ switch($type){
         require_once 'wx/wx.native.php';
         exit();
         break;
-	case 'BC_WX_WAP' :
+	case 'BC_WX_WAP' : //请在手机浏览器内测试
 		$data["channel"] = "BC_WX_WAP";
 		$title = "BC微信移动网页支付";
 		break;
@@ -244,7 +244,7 @@ switch($type){
         $title = "BC支付宝刷卡";
         $data["auth_code"] = "28886955594xxxxxxxx";
         break;
-    case 'BC_ALI_WAP' :
+    case 'BC_ALI_WAP' : //请在手机浏览器内测试
         $data["channel"] = "BC_ALI_WAP";
         $title = "BC支付宝移动网页";
         break;
@@ -277,6 +277,8 @@ try {
         header("Location:$result->url");
     }else if(isset($result->html) && $result->html) {
         echo $result->html;
+    }else if(isset($result->code_url) && $result->code_url) { //channel为BC_ALI_WAP
+        header("Location:$result->code_url");
     }else if(isset($result->credit_card_id)){
         echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
     }else if(isset($result->id)){

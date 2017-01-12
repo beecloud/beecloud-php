@@ -108,6 +108,33 @@ switch($type) {
         //选填optional
         $data["optional"] = (object)array("tag"=>"msgtoreturn"); //附加数据
         break;
+    case 'JD_TRANSFER' :
+        $title = 'BC京东代付';
+        unset($data['desc']);
+        $data["bill_no"] = "phpdemo" . $data["timestamp"];
+        $data["channel"] = 'JD_TRANSFER';
+        $data["title"] = 'PHP测试京东代付';
+        $data["trade_source"] = "OUT_PC";
+        /*
+         *  如果未能确认银行的全称信息,可通过下面的接口获取并进行确认
+         *  //P_DE:对私借记卡,P_CR:对私信用卡,C:对公账户
+         *  $banks = $api->bc_transfer_banks(array('type' => 'P_DE'));
+         *  if ($result->result_code != 0) {
+         *      print_r($result);
+         *      exit();
+         *  }
+         *  print_r($banks->bank_list);die;
+         */
+        $data["bank_fullname"] = "中国银行"; //银行全称
+        $data["card_type"] = "DE"; //银行卡类型,区分借记卡和信用卡，DE代表借记卡，CR代表信用卡，其他值为非法
+        $data["account_type"] = "P"; //帐户类型，P代表私户，C代表公户，其他值为非法
+        $data["account_no"] = "6226621808888888";   //收款方的银行卡号
+        $data["account_name"] = "test"; //收款方的姓名或者单位名
+        //选填mobile
+        $data["mobile"] = ""; //银行绑定的手机号
+        //选填optional
+        $data["optional"] = (object)array("tag"=>"msgtoreturn"); //附加数据
+        break;
     default :
         exit("No this type.");
         break;
@@ -130,6 +157,7 @@ switch($type) {
                 $result = $api->transfers($data);
                 break;
             case 'BC_TRANSFER':
+            case 'JD_TRANSFER':
                 $result = $api->bc_transfer($data);
                 break;
             case 'CJ_TRANSFER':
