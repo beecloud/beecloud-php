@@ -3,6 +3,7 @@ BeeCloud PHP Changelog
 v2.3.8 发布日期: 2017年01月12日
 + 渠道BC_WX_WAP调整，变更return_url必填
 + 添加京东代付JD_TRANSFER
++ webhook签名算法变更
 
 BeeCloud PHP Changelog
 ========================================================

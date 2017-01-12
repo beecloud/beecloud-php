@@ -1,17 +1,24 @@
 <?php
 /**
- * http类型为 Application/json, 非XMLHttpRequest的application/x-www-form-urlencoded, $_POST方式是不能获取到的
+ * http类型为 Application/json, 非XMLHttpRequest的application/x-www-form-urlencoded, $_POST方式是不能获取到的，
+ * APP ID和Master Secret可以在https://beecloud.cn平台登录后获取
+ *
+ * 备注：secret是一个非常重要的数据，请您必须小心谨慎的确保此数据保存在足够安全的地方。
+ *      您从BeeCloud官方获得此数据的同时，即表明您保证不会被用于非法用途和不会在没有得到您授权的情况下被盗用，
+ *      一旦因此数据保管不善而导致的经济损失及法律责任，均由您独自承担。
  */
 $appId = "";
-$appSecret = "";
+$masterSecret = "";
 $jsonStr = file_get_contents("php://input");
 
 $msg = json_decode($jsonStr);
 
-// webhook字段文档: https://beecloud.cn/doc/?index=webhook
+// webhook字段文档: https://beecloud.cn/doc/#3-webhook或者https://github.com/beecloud/beecloud-webhook
 
 //第一步:验证签名
-$sign = md5($appId . $appSecret . $msg->timestamp);
+//原签名算法：app_id + app_secret ＋ timestamp
+//现修正如下：app_id + transaction_id + transaction_type + channel_type + transaction_fee + master_secret
+$sign = md5($appId . $msg->transaction_id . $msg->transaction_type . $msg->channel_type . $msg->transaction_fee.$masterSecret);
 if ($sign != $msg->sign) {
     // 签名不正确
     exit();
