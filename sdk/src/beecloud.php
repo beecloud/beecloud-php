@@ -808,9 +808,10 @@ class BCRESTApi {
             switch ($data["channel"]) {
                 case "ALI":
                 case "WX":
+                case "BC":
                     break;
                 default:
-                    throw new Exception(APIConfig::NEED_VALID_PARAM . "channel = ALI | WX");
+                    throw new Exception(APIConfig::NEED_VALID_PARAM . "channel = ALI | WX | BC");
                     break;
             }
         }
