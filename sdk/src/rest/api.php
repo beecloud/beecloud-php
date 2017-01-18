@@ -239,9 +239,6 @@ class api {
                     if (!in_array($data["card_type"], \beecloud\rest\config::get_card_type())) {
                         throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'card_type'));
                     }
-                    if (!in_array($data["bank"], \beecloud\rest\config::get_bank($data["card_type"]))) {
-						throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'bank'));
-					}
 					break;
 //				case "BC_EXPRESS" :
 //					if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
@@ -672,6 +669,21 @@ class api {
         self::verify_need_params(array('mobile', 'bank', 'id_no', 'name', 'card_no', 'sms_id', 'sms_code'), $data);
         return self::post(\beecloud\rest\config::URI_CARD_CHARGE_SIGN, $data, 30, false);
     }
+
+    static public function get_banks($data, $type = ''){
+        $data = self::get_common_params($data);
+        switch ($type){
+            case 'BC_GATEWAY':
+                self::verify_need_params(array('card_type'), $data);
+                if(isset($data['pay_type']) && !in_array($data['pay_type'], array('B2C', 'B2B')))
+                    throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . 'pay_type(B2C, B2B)');
+                return self::get(\beecloud\rest\config::URI_BC_GATEWAY_BANKS, $data, 30, false);
+                break;
+            default:
+                break;
+        }
+    }
+
 
 	static final private function channelCheck($data){
 		if (isset($data["channel"])) {

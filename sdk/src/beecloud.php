@@ -12,6 +12,7 @@ class APIConfig {
     const URI_TEST_BILLS = '/2/rest/sandbox/bills';
     const URI_BILLS_COUNT = '/2/rest/bills/count'; //订单总数查询
     const URI_TEST_BILLS_COUNT = '/2/rest/sandbox/bills/count';
+    const URI_BC_GATEWAY_BANKS = '/2/rest/bc_gateway/banks'; //获取银行列表
 
     const URI_REFUND = "/2/rest/refund";		//退款;预退款批量审核;退款订单查询(指定id)
     const URI_REFUNDS = "/2/rest/refunds";		//退款查询
@@ -428,9 +429,6 @@ class BCRESTApi {
                     if (!in_array($data["card_type"], APIConfig::get_card_type())) {
                         throw new Exception(sprintf(APIConfig::VALID_PARAM_RANGE, 'card_type'));
                     }
-                    if (!in_array($data["bank"], APIConfig::get_bank($data["card_type"]))) {
-                        throw new Exception(sprintf(APIConfig::VALID_PARAM_RANGE, 'bank'));
-                    }
                     break;
                 case "BC_EXPRESS" :
 //                    if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
@@ -839,6 +837,20 @@ class BCRESTApi {
         return BCRESTUtil::post(APIConfig::URI_OFFLINE_REFUND, $data, 30, false);
     }
 
+
+    static public function get_banks($data, $type = ''){
+        $data = self::get_common_params($data);
+        switch ($type){
+            case 'BC_GATEWAY':
+                self::verify_need_params(array('card_type'), $data);
+                if(isset($data['pay_type']) && !in_array($data['pay_type'], array('B2C', 'B2B')))
+                    throw new Exception(APIConfig::NEED_VALID_PARAM . 'pay_type(B2C, B2B)');
+                return self::get(APIConfig::URI_BC_GATEWAY_BANKS, $data, 30, false);
+                break;
+            default:
+                break;
+        }
+    }
 
     static final private function channelCheck($data){
         if (isset($data["channel"])) {
