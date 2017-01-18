@@ -6,12 +6,14 @@ namespace beecloud\rest;
 
 class config {
 	//online
-	const URI_BILL = '/2/rest/bill'; //支付;支付订单查询(指定id)
-	const URI_TEST_BILL = '/2/rest/sandbox/bill';
-	const URI_BILLS = '/2/rest/bills'; //订单查询
-	const URI_TEST_BILLS = '/2/rest/sandbox/bills';
-	const URI_BILLS_COUNT = '/2/rest/bills/count'; //订单总数查询
-	const URI_TEST_BILLS_COUNT = '/2/rest/sandbox/bills/count';
+    const URI_BILL = '/2/rest/bill'; //支付;支付订单查询(指定id)
+    const URI_TEST_BILL = '/2/rest/sandbox/bill';
+    const URI_BILLS = '/2/rest/bills'; //订单查询
+    const URI_TEST_BILLS = '/2/rest/sandbox/bills';
+    const URI_BILLS_COUNT = '/2/rest/bills/count'; //订单总数查询
+    const URI_TEST_BILLS_COUNT = '/2/rest/sandbox/bills/count';
+    const URI_BC_GATEWAY_BANKS = '/2/rest/bc_gateway/banks'; //获取银行列表
+
 
 	const URI_REFUND = "/2/rest/refund";		//退款;预退款批量审核;退款订单查询(指定id)
 	const URI_REFUNDS = "/2/rest/refunds";		//退款查询

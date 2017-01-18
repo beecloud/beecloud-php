@@ -239,9 +239,6 @@ class api {
                     if (!in_array($data["card_type"], \beecloud\rest\config::get_card_type())) {
                         throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'card_type'));
                     }
-                    if (!in_array($data["bank"], \beecloud\rest\config::get_bank($data["card_type"]))) {
-						throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'bank'));
-					}
 					break;
 //				case "BC_EXPRESS" :
 //					if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
@@ -614,40 +611,42 @@ class api {
 		return self::post(\beecloud\rest\config::URI_OFFLINE_BILL_STATUS, $data, 30, false);
 	}
 
-	static final public function offline_refund(array $data){
-		$data = self::get_common_params($data, '1');
-		if (isset($data['channel'])) {
-			switch ($data["channel"]) {
-				case "ALI":
-				case "WX":
-					break;
-				default:
-					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel = ALI | WX");
-					break;
-			}
-		}
+    static final public function offline_refund(array $data)
+    {
+        $data = self::get_common_params($data, '1');
+        if (isset($data['channel'])) {
+            switch ($data["channel"]) {
+                case "ALI":
+                case "WX":
+                case "BC":
+                    break;
+                default:
+                    throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel = ALI | WX | BC");
+                    break;
+            }
+        }
 
-		if (!isset($data["refund_fee"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "refund_fee");
-		} else if(!is_int($data["refund_fee"]) || 1>$data["refund_fee"]) {
-			throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "refund_fee");
-		}
+        if (!isset($data["refund_fee"])) {
+            throw new \Exception(\beecloud\rest\config::NEED_PARAM . "refund_fee");
+        } else if (!is_int($data["refund_fee"]) || 1 > $data["refund_fee"]) {
+            throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "refund_fee");
+        }
 
-		if (!isset($data["bill_no"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "bill_no");
-		}
-		if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "bill_no");
-		}
+        if (!isset($data["bill_no"])) {
+            throw new \Exception(\beecloud\rest\config::NEED_PARAM . "bill_no");
+        }
+        if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
+            throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "bill_no");
+        }
 
-		if (!isset($data["refund_no"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM . "refund_no");
-		}
-		if (!preg_match('/^\d{8}[0-9A-Za-z]{3,24}$/', $data["refund_no"]) || preg_match('/^\d{8}0{3}/', $data["refund_no"])) {
-			throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "refund_no");
-		}
-		return self::post(\beecloud\rest\config::URI_OFFLINE_REFUND, $data, 30, false);
-	}
+        if (!isset($data["refund_no"])) {
+            throw new \Exception(\beecloud\rest\config::NEED_PARAM . "refund_no");
+        }
+        if (!preg_match('/^\d{8}[0-9A-Za-z]{3,24}$/', $data["refund_no"]) || preg_match('/^\d{8}0{3}/', $data["refund_no"])) {
+            throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "refund_no");
+        }
+        return self::post(\beecloud\rest\config::URI_OFFLINE_REFUND, $data, 30, false);
+    }
 
     /**
      * @desc: 签约API
@@ -670,6 +669,21 @@ class api {
         self::verify_need_params(array('mobile', 'bank', 'id_no', 'name', 'card_no', 'sms_id', 'sms_code'), $data);
         return self::post(\beecloud\rest\config::URI_CARD_CHARGE_SIGN, $data, 30, false);
     }
+
+    static public function get_banks($data, $type = ''){
+        $data = self::get_common_params($data);
+        switch ($type){
+            case 'BC_GATEWAY':
+                self::verify_need_params(array('card_type'), $data);
+                if(isset($data['pay_type']) && !in_array($data['pay_type'], array('B2C', 'B2B')))
+                    throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . 'pay_type(B2C, B2B)');
+                return self::get(\beecloud\rest\config::URI_BC_GATEWAY_BANKS, $data, 30, false);
+                break;
+            default:
+                break;
+        }
+    }
+
 
 	static final private function channelCheck($data){
 		if (isset($data["channel"])) {

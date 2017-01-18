@@ -87,6 +87,10 @@ switch($type){
             if($type == 'BC' || $type == 'PAYPAL' || $api->getSandbox()){
                 $refund = false;
                 $pre_refund = false;
+                if(in_array($list->sub_channel, array('BC_ALI_SCAN', 'BC_ALI_QRCODE', 'BC_NATIVE', 'BC_WX_JSAPI'))) {
+                    $type = trim($list->sub_channel);
+                    $refund = true;
+                }
             }
             $strParams = "agree.refund.php?type=$type&refund_no=".$refund_no."&bill_no=".$list->bill_no."&refund_fee=".$list->total_fee;
             $agree_refund = $list->spay_result&&!$list->refund_result&&$refund ? "<a href='".$strParams."' target='_blank'>退款</a>" : "";
