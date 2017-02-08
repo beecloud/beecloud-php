@@ -4,6 +4,7 @@ v2.3.8 发布日期: 2017年01月12日
 + 渠道BC_WX_WAP调整，变更return_url必填
 + 添加京东代付JD_TRANSFER
 + webhook签名算法变更
++ 网关支付(BC_GATEWAY)参数修改，增加获取银行列表
 
 BeeCloud PHP Changelog
 ========================================================

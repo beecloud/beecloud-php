@@ -53,7 +53,7 @@ switch($type){
         $title = "支付宝移动网页";
         $data["channel"] = "ALI_WAP";
         //非必填参数,boolean型,是否使用APP支付,true使用,否则不使用
-        //$data["use_app"] = true;
+//        $data["use_app"] = false;
         break;
     case 'ALI_QRCODE' :
         $title = "支付宝扫码支付";
