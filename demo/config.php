@@ -16,8 +16,8 @@
 //const TEST_SECRET = '4bfdd244-574d-4bf3-b034-0c751ed34fee';
 
 
-const APP_ID = 'beacfdf5-badd-4a11-9b23-9ef3801732d1';
+const APP_ID = '7e9705bb-5005-49f5-a055-59c1aa14c142';
 //支付或者查询时使用
-const APP_SECRET = '17bc2268-9964-4c33-9f7c-37cd561a8c5c';
+const APP_SECRET = '325c4ba5-c37b-4cc7-8324-b76b846d2871';
 //退款或者打款时使用
-const MASTER_SECRET = '78d87fab-44a3-4e6a-83ac-8373c4495795';
+const MASTER_SECRET = '09fa36ef-cd14-490f-9659-1d25d77a9f22';
