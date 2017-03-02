@@ -4,14 +4,7 @@ namespace beecloud\rest;
 
 class network {
     static final public function getApiUrl() {
-        $domainList = array("apibj.beecloud.cn", "apisz.beecloud.cn", "apiqd.beecloud.cn", "apihz.beecloud.cn");
-        //apibj.beecloud.cn	北京
-        //apisz.beecloud.cn	深圳
-        //apiqd.beecloud.cn	青岛
-        //apihz.beecloud.cn	杭州
-
-        $random = rand(0, 3);
-        return "https://" . $domainList[$random];
+        return 'https://api.beecloud.cn';
     }
 
     static final public function request($url, $method, array $data, $timeout) {
@@ -22,7 +15,9 @@ class network {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             /*重定向跟随*/
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            if (ini_get('open_basedir') == '' && !ini_get('safe_mode')) {
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            }
             curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);

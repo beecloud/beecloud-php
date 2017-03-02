@@ -83,6 +83,14 @@ switch($type) {
         $data["mobile"] = ""; //银行绑定的手机号
         //选填optional
         $data["optional"] = (object)array("tag"=>"msgtoreturn"); //附加数据
+
+        /**
+         * notify_url 选填，该参数是为打款成功之后接收返回信息配置的url,等同于在beecloud平台配置webhook，
+         * 如果两者都设置了，则优先使用notify_url。配置时请结合自己的项目谨慎配置，具体请
+         * 参考demo/webhook.php
+         */
+        //$data['notify_url'] = 'http://beecloud.cn';
+
         break;
     case 'CJ_TRANSFER' :
         $title = '测试畅捷企业打款';

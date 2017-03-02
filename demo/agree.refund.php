@@ -13,9 +13,16 @@ if(isset($_GET["need_approval"])){
 //选填 optional
 $data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
 
-//refund_account(类型Integer),适用于WX_NATIVE, WX_JSAPI, WX_SCAN
+//refund_account(类型Integer),适用于WX_NATIVE, WX_JSAPI, WX_SCAN, WX_APP
 //退款资金来源 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款）
 //$data["refund_account"] = 1;
+
+/**
+ * notify_url 选填，该参数是为退款成功之后接收返回信息配置的url,等同于在beecloud平台配置webhook，
+ * 如果两者都设置了，则优先使用notify_url。配置时请结合自己的项目谨慎配置，具体请
+ * 参考demo/webhook.php
+ */
+//$data['notify_url'] = 'http://beecloud.cn';
 
 $type = $_GET['type'];
 switch($type){
