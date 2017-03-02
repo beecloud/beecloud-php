@@ -15,7 +15,7 @@ class network {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             /*重定向跟随*/
-            if (empty(ini_get('open_basedir')) && !ini_get('safe_mode')) {
+            if (ini_get('open_basedir') == '' && !ini_get('safe_mode')) {
                 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
             }
             curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
