@@ -9,8 +9,8 @@
 try {
     switch ($data['channel']){
         case 'BC_ALI_QRCODE':
-            //$result = $api->bill($data);
-            //break;
+            $result = $api->bill($data);
+            break;
         case 'ALI_OFFLINE_QRCODE':
             $result = $api->offline_bill($data);
             break;
