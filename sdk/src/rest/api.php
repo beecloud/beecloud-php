@@ -183,6 +183,7 @@ class api {
 				case 'JD_B2B':
 				case "BC_GATEWAY":
                 case "BC_WX_WAP":
+                case "BC_ALI_WEB":
 					//case "BC_EXPRESS":
 					if (!isset($data["return_url"])) {
 						throw new \Exception(\beecloud\rest\config::NEED_RETURN_URL);
@@ -731,6 +732,7 @@ class api {
 				case "BC_ALI_QRCODE" :
                 case "BC_ALI_SCAN" :
                 case "BC_ALI_WAP":
+                case "BC_ALI_WEB":
 					break;
 				default:
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");

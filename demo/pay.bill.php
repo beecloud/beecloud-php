@@ -26,8 +26,8 @@ $data["total_fee"] = 1;
 $data["bill_no"] = "phpdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = 'PHP '.$_GET['type'].'支付测试';
-//渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB, BC_GATEWAY为京东、BC_WX_WAP渠道时为必填, BC_ALI_WAP不支持此参数
-$data["return_url"] = "https://beecloud.cn";
+//渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB, BC_GATEWAY为京东、BC_WX_WAP、BC_ALI_WEB渠道时为必填, BC_ALI_WAP不支持此参数
+//$data["return_url"] = "https://beecloud.cn";
 //选填 optional
 $data["optional"] = (object)array("tag"=>"msgtoreturn");
 //选填 订单失效时间bill_timeout
@@ -46,7 +46,7 @@ $data["optional"] = (object)array("tag"=>"msgtoreturn");
 $type = $_GET['type'];
 switch($type){
     case 'ALI_WEB' :
-        $title = "支付宝及时到账";
+        $title = "支付宝即时到账";
         $data["channel"] = "ALI_WEB";
         break;
     case 'ALI_WAP' :
@@ -260,6 +260,10 @@ switch($type){
     case 'BC_ALI_WAP' : //请在手机浏览器内测试
         $data["channel"] = "BC_ALI_WAP";
         $title = "BC支付宝移动网页";
+        break;
+    case 'BC_ALI_WEB' : //支付宝ISV即时到账
+        $data["channel"] = "BC_ALI_WEB";
+        $title = "BC支付宝即时到账";
         break;
     default :
         exit("No this type.");

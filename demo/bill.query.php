@@ -87,7 +87,7 @@ switch($type){
             if($type == 'BC' || $type == 'PAYPAL' || $api->getSandbox()){
                 $refund = false;
                 $pre_refund = false;
-                if(in_array($list->sub_channel, array('BC_ALI_SCAN', 'BC_ALI_QRCODE', 'BC_NATIVE', 'BC_WX_JSAPI'))) {
+                if(in_array($list->sub_channel, array('BC_ALI_SCAN', 'BC_ALI_QRCODE', 'BC_ALI_APP', 'BC_ALI_WAP', 'BC_ALI_SCAN', 'BC_NATIVE', 'BC_WX_JSAPI', 'BC_WX_SCAN'))) {
                     $type = trim($list->sub_channel);
                     $refund = true;
                 }

@@ -126,6 +126,10 @@
                 <input type="radio" name="paytype" value="BC_ALI_SCAN">
                 <img src="http://beeclouddoc.qiniudn.com/icon-bczfbsk.png" alt="BC ALI SCAN" >
             </li>
+            <li onclick="clickSwitch(this)">
+                <input type="radio" name="paytype" value="BC_ALI_WEB">
+                <img src="statics/images/icon-bcaliweb.png" alt="BC ALI WEB" >
+            </li>
         </ul>
     </div>
     <div>
