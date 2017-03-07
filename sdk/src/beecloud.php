@@ -49,7 +49,7 @@ class APIConfig {
     const NEED_PARAM = "需要必填字段:";
     const NEED_VALID_PARAM = "字段值不合法:";
     const NEED_WX_JSAPI_OPENID = "微信公众号支付(WX_JSAPI) 需要openid字段";
-    const NEED_RETURN_URL = "当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或JD_WAP 或 JD_WEB 或 BC_WX_WAP时 return_url为必填";
+    const NEED_RETURN_URL = "当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或JD_WAP 或 JD_WEB 或 BC_WX_WAP 或 BC_ALI_WEB时 return_url为必填";
     const NEED_IDENTITY_ID = "当channel参数为 YEE_WAP时 identity_id为必填";
     const BILL_TIMEOUT_ERROR = "当channel参数为 JD* 不支持bill_timeout";
     const NEED_QR_PAY_MODE = '当channel参数为 ALI_QRCODE时 qr_pay_mode为必填';
@@ -365,6 +365,7 @@ class BCRESTApi {
                 case 'JD_B2B':
                 case "BC_GATEWAY":
                 case "BC_WX_WAP":
+                case "BC_ALI_WEB":
                     //case "BC_EXPRESS":
                     if (!isset($data["return_url"])) {
                         throw new Exception(APIConfig::NEED_RETURN_URL);
@@ -893,6 +894,7 @@ class BCRESTApi {
                 case "BC_ALI_QRCODE" :
                 case "BC_ALI_SCAN" :
                 case "BC_ALI_WAP":
+                case "BC_ALI_WEB":
                     break;
                 default:
                     throw new Exception(APIConfig::NEED_VALID_PARAM . "channel");
