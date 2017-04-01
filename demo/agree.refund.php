@@ -70,6 +70,7 @@ switch($type){
         $title = $type." 线下退款";
         $data["channel"] = substr($type, 0, strpos($type, '_'));
         break;
+    case 'BC_WX_SCAN':
     case 'BC_ALI_SCAN':
     case 'BC_ALI_QRCODE':
     case 'BC_NATIVE':
@@ -93,7 +94,7 @@ switch($type){
         //设置app id, app secret, master secret, test secret
         $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
 
-        if(in_array($type, array('ALI_OFFLINE_QRCODE', 'ALI_SCAN', 'WX_SCAN', 'WX_NATIVE', 'BC_NATIVE', 'BC_ALI_SCAN', 'BC_ALI_QRCODE'))){
+        if(in_array($type, array('ALI_OFFLINE_QRCODE', 'ALI_SCAN', 'WX_SCAN', 'WX_NATIVE', 'BC_NATIVE', 'BC_WX_SCAN', 'BC_ALI_SCAN', 'BC_ALI_QRCODE'))){
             $result = $api->offline_refund($data);
         }else{
             $result = $api->refund($data);
