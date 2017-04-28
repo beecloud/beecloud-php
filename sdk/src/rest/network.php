@@ -4,6 +4,7 @@ namespace beecloud\rest;
 
 class network {
     static final public function getApiUrl() {
+        return 'http://api.beecloud.cn:8080';
         return 'https://api.beecloud.cn';
     }
 
