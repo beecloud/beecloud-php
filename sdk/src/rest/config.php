@@ -26,6 +26,7 @@ class config {
 	const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
 	const URI_CJ_TRANSFER = "/2/rest/cj_transfer"; //畅捷代付
 	const URI_JD_TRANSFER = "/2/rest/bc_user_transfer"; //京东代付
+	const URI_PAY_CONFIRM = "/2/rest/bill/confirm"; //确认支付
 
 	//offline
 	const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单

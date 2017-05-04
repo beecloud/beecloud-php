@@ -25,6 +25,7 @@ class APIConfig {
     const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
     const URI_CJ_TRANSFER = "/2/rest/cj_transfer"; //畅捷代付
     const URI_JD_TRANSFER = "/2/rest/bc_user_transfer"; //京东代付
+    const URI_PAY_CONFIRM = "/2/rest/bill/confirm"; //确认支付
 
     const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
     const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
@@ -44,6 +45,8 @@ class APIConfig {
     //auth
     const URI_AUTH = "/2/auth";
 
+    //代扣API
+    const URI_CARD_CHARGE_SIGN = "/2/sign";
 
     const UNEXPECTED_RESULT = "非预期的返回结果:";
     const NEED_PARAM = "需要必填字段:";
@@ -834,6 +837,46 @@ class BCRESTApi {
     }
 
 
+    /**
+     * @desc: 签约API
+     *
+     * @param $data
+     *   mobile 手机号
+     *   bank  银行名称
+     *   id_no 身份证号
+     *   name   姓名
+     *   card_no 银行卡号(借记卡,不支持信用卡)
+     *   sms_id  获取验证码接口返回验证码记录的唯一标识
+     *   sms_code 手机端接收到验证码
+     *
+     * @return json
+     * @author: jason
+     * @since: 2016-09-01
+     */
+    static public function card_charge_sign($data){
+        $data = self::get_common_params($data);
+        self::verify_need_params(array('mobile', 'bank', 'id_no', 'name', 'card_no', 'sms_id', 'sms_code'), $data);
+        return BCRESTUtil::post(APIConfig::URI_CARD_CHARGE_SIGN, $data, 30, false);
+    }
+
+    /**
+     * @desc: 认证支付－确认支付
+     *
+     * @param $data
+     *   token 渠道返回的token
+     *   bc_bill_id  BeeCloud生成的唯一支付记录id
+     *   verify_code 短信验证码
+     *
+     * @return json
+     * @author: jason
+     * @since: 2016-09-01
+     */
+    static public function confirm_bill_pay($data){
+        $data = self::get_common_params($data);
+        self::verify_need_params(array('token', 'bc_bill_id', 'verify_code'), $data);
+        return BCRESTUtil::post(APIConfig::URI_PAY_CONFIRM, $data, 30, false);
+    }
+
     static public function get_banks($data, $type = ''){
         $data = self::get_common_params($data);
         switch ($type){
@@ -841,7 +884,7 @@ class BCRESTApi {
                 self::verify_need_params(array('card_type'), $data);
                 if(isset($data['pay_type']) && !in_array($data['pay_type'], array('B2C', 'B2B')))
                     throw new Exception(APIConfig::NEED_VALID_PARAM . 'pay_type(B2C, B2B)');
-                return self::get(APIConfig::URI_BC_GATEWAY_BANKS, $data, 30, false);
+                return BCRESTUtil::get(APIConfig::URI_BC_GATEWAY_BANKS, $data, 30, false);
                 break;
             default:
                 break;

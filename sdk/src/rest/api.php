@@ -671,6 +671,24 @@ class api {
         return self::post(\beecloud\rest\config::URI_CARD_CHARGE_SIGN, $data, 30, false);
     }
 
+    /**
+     * @desc: 认证支付－确认支付
+     *
+     * @param $data
+     *   token 渠道返回的token
+     *   bc_bill_id  BeeCloud生成的唯一支付记录id
+     *   verify_code 短信验证码
+     *
+     * @return json
+     * @author: jason
+     * @since: 2016-09-01
+     */
+    static public function confirm_bill_pay($data){
+        $data = self::get_common_params($data);
+        self::verify_need_params(array('token', 'bc_bill_id', 'verify_code'), $data);
+        return self::post(\beecloud\rest\config::URI_PAY_CONFIRM, $data, 30, false);
+    }
+
     static public function get_banks($data, $type = ''){
         $data = self::get_common_params($data);
         switch ($type){
