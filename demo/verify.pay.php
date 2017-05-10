@@ -44,17 +44,17 @@ $data["optional"] = (object)array('id_no' => '21302619870917xxxx', 'customer_nam
 <body>
 <?php
 try {
-    //第一步: 获取验证码,得到参数token, 短信验证码code，支付记录的唯一标识id
+    //第一步: 获取验证码；得到参数token, 支付记录的唯一标识id以及手机上收到的短信验证码
     $result =  $api->bill($data);
     if ($result->result_code != 0) {
         print_r($result);
         exit();
     }
-    //第二步: 确认支付，传入token,短信验证码code，支付记录的id
+    //第二步: 确认支付；传入token、支付记录的id、短信验证码
     $verify = array(
-        'bc_bill_id' => $result->id,
-        'token' => $result->token,
-        'verify_code' => 'xxxxxx'
+        'bc_bill_id' => $result->id, //BeeCloud生成的唯一支付记录id
+        'token' => $result->token,  //渠道返回的token
+        'verify_code' => 'xxxxxx'   //短信验证码
     );
     $result = $api->confirm_bill_pay($verify);
     if ($result->result_code != 0) {

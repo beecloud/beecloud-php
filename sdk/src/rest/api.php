@@ -192,6 +192,7 @@ class api {
 			}
 
 			switch ($data["channel"]) {
+				case "BC_WX_JSAPI":
 				case "WX_JSAPI":
 					if (!isset($data["openid"])) {
 						throw new \Exception(\beecloud\rest\config::NEED_WX_JSAPI_OPENID);
