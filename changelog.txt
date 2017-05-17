@@ -1,5 +1,13 @@
 BeeCloud PHP Changelog
 ========================================================
+v2.3.8 发布日期: 2017年05月17日
++ 添加BeePay自动打款-打款到银行卡
+   1.具体请参考demo/gateway.transfer.php的代码
+   2.BeePay打款Webhook
+    参考官网https://beecloud.cn/doc/#3-4-webhook
+    此场景下，channel_type为BC，sub_channel_type为BC_TRANSFER，transaction_type为TRANSFER
+
+========================================================
 v2.3.8 发布日期: 2017年05月10日
 + 添加认证支付(需要开通)
    1.发起支付，传入支付请求参数，获取token，支付记录的id，且收到短信验证码

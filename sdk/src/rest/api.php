@@ -537,6 +537,32 @@ class api {
         return self::post(\beecloud\rest\config::URI_CJ_TRANSFER, $data, 30, false);
     }
 
+    //BeePay自动打款 - 打款到银行卡
+    function gateway_transfer($data){
+        if(!isset($data['app_id'])){
+            $data['app_id'] = self::$app_id;
+        }
+        /*
+         * 对关键参数的签名，签名方式为MD5（32位小写字符）, 编码格式为UTF-8
+         * 验签规则即：app_id + bill_no + withdraw_amount + bank_account_no + master_secret的MD5生成的签名
+         * 其中master_secret为用户创建Beecloud App时获取的参数。
+         */
+        if(!isset($data['signature'])){
+            $data['signature'] = md5($data["app_id"] . $data["bill_no"] . $data["withdraw_amount"] . $data["bank_account_no"] . self::$master_secret);
+        }
+        $params = array(
+            'app_id', 'withdraw_amount', 'bill_no', 'transfer_type', 'bank_name',
+            'bank_account_no', 'bank_account_name', 'bank_code', 'signature', 'note'
+        );
+        foreach ($params as $v) {
+            if (!isset($data[$v])) {
+                throw new \Exception(\beecloud\rest\config::NEED_PARAM . $v);
+            }
+        }
+        if(!in_array($data['transfer_type'], array('1', '2'))) throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . 'transfer_type(1, 2)');
+        return self::post(\beecloud\rest\config::URI_GATEWAY_TRANSFER, $data, 30, false);
+    }
+
 
 	static final public function offline_bill(array $data) {
 		$data = self::get_common_params($data, '0');
