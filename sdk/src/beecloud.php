@@ -25,7 +25,10 @@ class APIConfig {
     const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
     const URI_CJ_TRANSFER = "/2/rest/cj_transfer"; //畅捷代付
     const URI_JD_TRANSFER = "/2/rest/bc_user_transfer"; //京东代付
-    const URI_PAY_CONFIRM = "/2/rest/bill/confirm"; //确认支付
+    const URI_GATEWAY_TRANSFER = "/2/rest/gateway/bc_transfer"; //BeePay自动打款 - 打款到银行卡
+
+    //确认支付
+    const URI_PAY_CONFIRM = "/2/rest/bill/confirm";
 
     const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
     const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
@@ -724,6 +727,32 @@ class BCRESTApi {
         return BCRESTUtil::post(APIConfig::URI_CJ_TRANSFER, $data, 30, false);
     }
 
+
+    //BeePay自动打款 - 打款到银行卡
+    function gateway_transfer($data){
+        if(!isset($data['app_id'])){
+            $data['app_id'] = self::$app_id;
+        }
+        /*
+         * 对关键参数的签名，签名方式为MD5（32位小写字符）, 编码格式为UTF-8
+         * 验签规则即：app_id + bill_no + withdraw_amount + bank_account_no + master_secret的MD5生成的签名
+         * 其中master_secret为用户创建Beecloud App时获取的参数。
+         */
+        if(!isset($data['signature'])){
+            $data['signature'] = md5($data["app_id"] . $data["bill_no"] . $data["withdraw_amount"] . $data["bank_account_no"] . self::$master_secret);
+        }
+        $params = array(
+            'app_id', 'withdraw_amount', 'bill_no', 'transfer_type', 'bank_name',
+            'bank_account_no', 'bank_account_name', 'bank_code', 'signature', 'note'
+        );
+        foreach ($params as $v) {
+            if (!isset($data[$v])) {
+                throw new Exception(APIConfig::NEED_PARAM . $v);
+            }
+        }
+        if(!in_array($data['transfer_type'], array('1', '2'))) throw new Exception(APIConfig::NEED_VALID_PARAM . 'transfer_type(1, 2)');
+        return BCRESTUtil::post(APIConfig::URI_GATEWAY_TRANSFER, $data, 30, false);
+    }
 
     static final public function offline_bill(array $data) {
         $data = self::get_common_params($data, '0');
