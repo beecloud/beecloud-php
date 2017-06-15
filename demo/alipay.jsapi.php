@@ -44,7 +44,7 @@ if(!isset($_GET['auth_code'])){
             $user_id = $result->$responseNode->user_id;
         } else {
             echo '<pre>';
-            print_r($result);
+            print_r($result);die;
         }
 
         $data = array();
@@ -62,8 +62,7 @@ if(!isset($_GET['auth_code'])){
         $result = $api->bill($data);
         if ($result->result_code != 0) {
             echo '<pre>';
-            print_r($result);
-            exit();
+            print_r($result);die;
         }
         $trade_no = $result->trade_no;
     } catch (Exception $e) {
