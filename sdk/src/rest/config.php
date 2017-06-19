@@ -5,6 +5,9 @@
 namespace beecloud\rest;
 
 class config {
+    //php sdk verssion
+    const PHP_SDK_VERSION = 'PHP_2.3.9';
+
 	//online
     const URI_BILL = '/2/rest/bill'; //支付;支付订单查询(指定id)
     const URI_TEST_BILL = '/2/rest/sandbox/bill';

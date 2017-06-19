@@ -5,6 +5,8 @@
  */
 
 class APIConfig {
+    //php sdk verssion
+    const PHP_SDK_VERSION = 'PHP_2.3.9';
 
     const URI_BILL = '/2/rest/bill'; //支付;支付订单查询(指定id)
     const URI_TEST_BILL = '/2/rest/sandbox/bill';
@@ -451,6 +453,7 @@ class BCRESTApi {
                 return BCRESTUtil::get($url.'/'.$order_id, $data, 30, false);
                 break;
             case 'post': // 支付
+                $data['analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
                 if (!isset($data["channel"])) {
                     throw new Exception(APIConfig::NEED_PARAM . "channel");
                 }
@@ -756,6 +759,7 @@ class BCRESTApi {
 
     static final public function offline_bill(array $data) {
         $data = self::get_common_params($data, '0');
+        $data['analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
         if (isset($data["channel"])) {
             switch ($data["channel"]) {
                 case "WX_SCAN":
