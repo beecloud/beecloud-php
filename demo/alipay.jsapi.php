@@ -56,9 +56,6 @@ if(!isset($_GET['auth_code'])){
         $data["title"] = 'PHP BC_ALI_JSAPI支付测试';
         $data["channel"] = "BC_ALI_JSAPI";
         $data["openid"] = $user_id;
-        //php sdk version
-        $data['analysis'] = (object)array('sdk_version' => \beecloud\rest\config::PHP_SDK_VERSION);
-        //$data['analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
         $aop = new AopClient ();
         //设置app id, app secret, master secret, test secret
         $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
