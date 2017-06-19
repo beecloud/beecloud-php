@@ -453,7 +453,6 @@ class BCRESTApi {
                 return BCRESTUtil::get($url.'/'.$order_id, $data, 30, false);
                 break;
             case 'post': // 支付
-                $data['analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
                 if (!isset($data["channel"])) {
                     throw new Exception(APIConfig::NEED_PARAM . "channel");
                 }
@@ -759,7 +758,6 @@ class BCRESTApi {
 
     static final public function offline_bill(array $data) {
         $data = self::get_common_params($data, '0');
-        $data['analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
         if (isset($data["channel"])) {
             switch ($data["channel"]) {
                 case "WX_SCAN":

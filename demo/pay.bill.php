@@ -43,6 +43,10 @@ $data["optional"] = (object)array("key"=>"value");
  */
 //$data['notify_url'] = 'http://beecloud.cn';
 
+//php sdk version
+$data['analysis'] = (object)array('sdk_version' => \beecloud\rest\config::PHP_SDK_VERSION);
+//$data['analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
+
 $type = $_GET['type'];
 switch($type){
     case 'ALI_WEB' :
