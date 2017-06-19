@@ -27,7 +27,7 @@ $data["bill_no"] = "phpdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
 $data["title"] = 'PHP '.$_GET['type'].'支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB, BC_GATEWAY为京东、BC_WX_WAP、BC_ALI_WEB渠道时为必填, BC_ALI_WAP不支持此参数
-//$data["return_url"] = "https://beecloud.cn";
+$data["return_url"] = "https://beecloud.cn";
 //选填 optional
 $data["optional"] = (object)array("key"=>"value");
 //选填 订单失效时间bill_timeout
@@ -43,9 +43,7 @@ $data["optional"] = (object)array("key"=>"value");
  */
 //$data['notify_url'] = 'http://beecloud.cn';
 
-//php sdk version
-$data['analysis'] = (object)array('sdk_version' => \beecloud\rest\config::PHP_SDK_VERSION);
-//$data['analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
+$data['analysis'] = (object)array();
 
 $type = $_GET['type'];
 switch($type){

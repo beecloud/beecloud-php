@@ -261,6 +261,12 @@ class api {
 				return self::get($url.'/'.$order_id, $data, 30, false);
 				break;
 			case 'post': // 支付
+                //php sdk version
+                if(!isset($data['analysis']) || !$data['analysis']){
+                    $data['analysis'] = (object)array('sdk_version' => \beecloud\rest\config::PHP_SDK_VERSION);
+                }else{
+                    $data['analysis']->sdk_version = \beecloud\rest\config::PHP_SDK_VERSION;
+                }
 				if (!isset($data["channel"])) {
 					throw new \Exception(\beecloud\rest\config::NEED_PARAM . "channel");
 				}
@@ -566,6 +572,12 @@ class api {
 
 	static final public function offline_bill(array $data) {
 		$data = self::get_common_params($data, '0');
+        //php sdk version
+        if(!isset($data['analysis']) || !$data['analysis']){
+            $data['analysis'] = (object)array('sdk_version' => \beecloud\rest\config::PHP_SDK_VERSION);
+        }else{
+            $data['analysis']->sdk_version = \beecloud\rest\config::PHP_SDK_VERSION;
+        }
 		if (isset($data["channel"])) {
 			switch ($data["channel"]) {
 				case "WX_SCAN":
