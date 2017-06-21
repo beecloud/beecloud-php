@@ -454,11 +454,7 @@ class BCRESTApi {
                 break;
             case 'post': // 支付
                 //php sdk version
-                if(!isset($data['analysis']) || !$data['analysis']){
-                    $data['analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
-                }else{
-                    $data['analysis']->sdk_version = APIConfig::PHP_SDK_VERSION;
-                }
+                $data['bc_analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
                 if (!isset($data["channel"])) {
                     throw new Exception(APIConfig::NEED_PARAM . "channel");
                 }
@@ -765,11 +761,7 @@ class BCRESTApi {
     static final public function offline_bill(array $data) {
         $data = self::get_common_params($data, '0');
         //php sdk version
-        if(!isset($data['analysis']) || !$data['analysis']){
-            $data['analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
-        }else{
-            $data['analysis']->sdk_version = APIConfig::PHP_SDK_VERSION;
-        }
+        $data['bc_analysis'] = (object)array('sdk_version' => APIConfig::PHP_SDK_VERSION);
         if (isset($data["channel"])) {
             switch ($data["channel"]) {
                 case "WX_SCAN":
