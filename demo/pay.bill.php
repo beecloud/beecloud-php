@@ -43,7 +43,11 @@ $data["optional"] = (object)array("key"=>"value");
  */
 //$data['notify_url'] = 'http://beecloud.cn';
 
-$data['analysis'] = (object)array();
+/**
+ * buyer_id选填
+ * 商户为其用户分配的ID.可以是email、手机号、随机字符串等；最长64位；在商户自己系统内必须保证唯一。
+ */
+//$data['buyer_id'] = 'xxxx';
 
 $type = $_GET['type'];
 switch($type){

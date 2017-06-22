@@ -7,55 +7,62 @@ namespace beecloud\rest;
 class config {
     //php sdk verssion
     const PHP_SDK_VERSION = 'PHP_2.3.9';
+    //api version
+    const API_VERSION = '2';
 
 	//online
-    const URI_BILL = '/2/rest/bill'; //支付;支付订单查询(指定id)
-    const URI_TEST_BILL = '/2/rest/sandbox/bill';
-    const URI_BILLS = '/2/rest/bills'; //订单查询
-    const URI_TEST_BILLS = '/2/rest/sandbox/bills';
-    const URI_BILLS_COUNT = '/2/rest/bills/count'; //订单总数查询
-    const URI_TEST_BILLS_COUNT = '/2/rest/sandbox/bills/count';
-    const URI_BC_GATEWAY_BANKS = '/2/rest/bc_gateway/banks'; //获取银行列表
+    const URI_BILL = 'rest/bill'; //支付;支付订单查询(指定id)
+    const URI_TEST_BILL = 'rest/sandbox/bill';
+    const URI_BILLS = 'rest/bills'; //订单查询
+    const URI_TEST_BILLS = 'rest/sandbox/bills';
+    const URI_BILLS_COUNT = 'rest/bills/count'; //订单总数查询
+    const URI_TEST_BILLS_COUNT = 'rest/sandbox/bills/count';
+    const URI_BC_GATEWAY_BANKS = 'rest/bc_gateway/banks'; //获取银行列表
 
+	const URI_REFUND = 'rest/refund';		//退款;预退款批量审核;退款订单查询(指定id)
+	const URI_REFUNDS = 'rest/refunds';		//退款查询
+	const URI_REFUNDS_COUNT = 'rest/refunds/count'; //退款总数查询
+	const URI_REFUND_STATUS = 'rest/refund/status'; //退款状态更新
 
-	const URI_REFUND = "/2/rest/refund";		//退款;预退款批量审核;退款订单查询(指定id)
-	const URI_REFUNDS = "/2/rest/refunds";		//退款查询
-	const URI_REFUNDS_COUNT = "/2/rest/refunds/count"; //退款总数查询
-	const URI_REFUND_STATUS = "/2/rest/refund/status"; //退款状态更新
-
-	const URI_TRANSFERS = "/2/rest/transfers"; //批量打款 - 支付宝
-	const URI_TRANSFER = "/2/rest/transfer";  //单笔打款 - 支付宝/微信
-	const URI_BC_TRANSFER_BANKS = '/2/rest/bc_transfer/banks'; //BC企业打款 - 支持银行
-	const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
-	const URI_CJ_TRANSFER = "/2/rest/cj_transfer"; //畅捷代付
-	const URI_JD_TRANSFER = "/2/rest/bc_user_transfer"; //京东代付
-	const URI_GATEWAY_TRANSFER = "/2/rest/gateway/bc_transfer"; //BeePay自动打款 - 打款到银行卡
+	const URI_TRANSFERS = 'rest/transfers'; //批量打款 - 支付宝
+	const URI_TRANSFER = 'rest/transfer';  //单笔打款 - 支付宝/微信
+	const URI_BC_TRANSFER_BANKS = 'rest/bc_transfer/banks'; //BC企业打款 - 支持银行
+	const URI_BC_TRANSFER = 'rest/bc_transfer'; //代付 - 银行卡
+	const URI_CJ_TRANSFER = 'rest/cj_transfer'; //畅捷代付
+	const URI_JD_TRANSFER = 'rest/bc_user_transfer'; //京东代付
+	const URI_GATEWAY_TRANSFER = 'rest/gateway/bc_transfer'; //BeePay自动打款 - 打款到银行卡
 
     //确认支付
-	const URI_PAY_CONFIRM = "/2/rest/bill/confirm"; //确认支付
+	const URI_PAY_CONFIRM = 'rest/bill/confirm'; //确认支付
 
 	//offline
-	const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
-	const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
-	const URI_OFFLINE_REFUND = '/2/rest/offline/refund'; //线下退款
+	const URI_OFFLINE_BILL = 'rest/offline/bill'; //线下支付-撤销订单
+	const URI_OFFLINE_BILL_STATUS = 'rest/offline/bill/status'; //线下订单状态查询
+	const URI_OFFLINE_REFUND = 'rest/offline/refund'; //线下退款
 
 	//international
-	const URI_INTERNATIONAL_BILL = "/2/rest/international/bill";
-	const URI_INTERNATIONAL_REFUND = "/2/rest/international/refund";
+	const URI_INTERNATIONAL_BILL = 'rest/international/bill';
+	const URI_INTERNATIONAL_REFUND = 'rest/international/refund';
 
     //发送验证码
-    const URI_SMS = "/2/sms";
+    const URI_SMS = 'sms';
 
 	//auth
-	const URI_AUTH = "/2/auth";
+	const URI_AUTH = 'auth';
 
 	//subscription
-	const URI_SUBSCRIPTION = "/2/subscription";
-	const URI_SUBSCRIPTION_PLAN = "/2/plan";
-	const URI_SUBSCRIPTION_BANKS = "/2/subscription_banks";
+	const URI_SUBSCRIPTION = 'subscription';
+	const URI_SUBSCRIPTION_PLAN = 'plan';
+	const URI_SUBSCRIPTION_BANKS = 'subscription_banks';
 
     //代扣API
-    const URI_CARD_CHARGE_SIGN = "/2/sign";
+    const URI_CARD_CHARGE_SIGN = 'sign';
+
+    //user system
+    const URI_USERSYS_USER = 'rest/user'; //单个用户注册接口
+    const URI_USERSYS_MULTI_USERS = 'rest/users'; //批量用户导入接口／查询接口
+    const URI_USERSYS_HISTORY_BILLS = 'rest/history_bills'; //历史数据补全接口（批量）
+
 
 	const UNEXPECTED_RESULT = "非预期的返回结果:";
 	const NEED_PARAM = "需要必填字段:";
