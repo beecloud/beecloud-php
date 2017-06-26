@@ -28,7 +28,8 @@ $data["bill_no"] = "phpdemo" . $data["timestamp"];
 $data["title"] = 'PHP '.$_GET['type'].'支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB, BC_GATEWAY为京东、BC_WX_WAP、BC_ALI_WEB渠道时为必填, BC_ALI_WAP不支持此参数
 $data["return_url"] = "https://beecloud.cn";
-//选填 optional
+//选填 optional, 附加数据, eg: {"key1”:“value1”,“key2”:“value2”}
+//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
 $data["optional"] = (object)array("key"=>"value");
 //选填 订单失效时间bill_timeout
 //必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒
@@ -50,13 +51,13 @@ $data["optional"] = (object)array("key"=>"value");
 //$data['buyer_id'] = 'xxxx';
 
 /**
- * analysis选填, 分析数据
+ * analysis选填, 分析数据, eg: {"key1”:“value1”,“key2”:“value2”}
  * 用于统计分析的数据，将会在控制台的统计分析报表中展示，用户自愿上传。包括以下基本字段：
  *      os_name(系统名称，如"iOS"，"Android") os_version(系统版本，如"5.1") model(手机型号，如"iPhone 6")
  *      app_name(应用名称) app_version(应用版本号) device_id(设备ID) category(类别，用户可自定义，如游戏分发渠道，门店ID等)
  *      browser_name(浏览器名称) browser_version(浏览器版本)
  */
-//$data['analysis'] = '';
+//$data['analysis'] = (object)array("key"=>"value");
 
 $type = $_GET['type'];
 switch($type){
