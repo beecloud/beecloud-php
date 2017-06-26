@@ -49,6 +49,15 @@ $data["optional"] = (object)array("key"=>"value");
  */
 //$data['buyer_id'] = 'xxxx';
 
+/**
+ * analysis选填, 分析数据
+ * 用于统计分析的数据，将会在控制台的统计分析报表中展示，用户自愿上传。包括以下基本字段：
+ *      os_name(系统名称，如"iOS"，"Android") os_version(系统版本，如"5.1") model(手机型号，如"iPhone 6")
+ *      app_name(应用名称) app_version(应用版本号) device_id(设备ID) category(类别，用户可自定义，如游戏分发渠道，门店ID等)
+ *      browser_name(浏览器名称) browser_version(浏览器版本)
+ */
+//$data['analysis选填'] = '';
+
 $type = $_GET['type'];
 switch($type){
     case 'ALI_WEB' :
