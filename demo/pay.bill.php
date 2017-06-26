@@ -56,7 +56,7 @@ $data["optional"] = (object)array("key"=>"value");
  *      app_name(应用名称) app_version(应用版本号) device_id(设备ID) category(类别，用户可自定义，如游戏分发渠道，门店ID等)
  *      browser_name(浏览器名称) browser_version(浏览器版本)
  */
-//$data['analysis选填'] = '';
+//$data['analysis'] = '';
 
 $type = $_GET['type'];
 switch($type){
