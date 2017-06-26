@@ -7,51 +7,58 @@
 class APIConfig {
     //php sdk verssion
     const PHP_SDK_VERSION = 'PHP_2.3.9';
+    //api version
+    const API_VERSION = '2';
 
-    const URI_BILL = '/2/rest/bill'; //支付;支付订单查询(指定id)
-    const URI_TEST_BILL = '/2/rest/sandbox/bill';
-    const URI_BILLS = '/2/rest/bills'; //订单查询
-    const URI_TEST_BILLS = '/2/rest/sandbox/bills';
-    const URI_BILLS_COUNT = '/2/rest/bills/count'; //订单总数查询
-    const URI_TEST_BILLS_COUNT = '/2/rest/sandbox/bills/count';
-    const URI_BC_GATEWAY_BANKS = '/2/rest/bc_gateway/banks'; //获取银行列表
+    const URI_BILL = 'rest/bill'; //支付;支付订单查询(指定id)
+    const URI_TEST_BILL = 'rest/sandbox/bill';
+    const URI_BILLS = 'rest/bills'; //订单查询
+    const URI_TEST_BILLS = 'rest/sandbox/bills';
+    const URI_BILLS_COUNT = 'rest/bills/count'; //订单总数查询
+    const URI_TEST_BILLS_COUNT = 'rest/sandbox/bills/count';
+    const URI_BC_GATEWAY_BANKS = 'rest/bc_gateway/banks'; //获取银行列表
 
-    const URI_REFUND = "/2/rest/refund";		//退款;预退款批量审核;退款订单查询(指定id)
-    const URI_REFUNDS = "/2/rest/refunds";		//退款查询
-    const URI_REFUNDS_COUNT = "/2/rest/refunds/count"; //退款总数查询
-    const URI_REFUND_STATUS = "/2/rest/refund/status"; //退款状态更新
+    const URI_REFUND = 'rest/refund';		//退款;预退款批量审核;退款订单查询(指定id)
+    const URI_REFUNDS = 'rest/refunds';		//退款查询
+    const URI_REFUNDS_COUNT = 'rest/refunds/count'; //退款总数查询
+    const URI_REFUND_STATUS = 'rest/refund/status'; //退款状态更新
 
-    const URI_TRANSFERS = "/2/rest/transfers"; //批量打款 - 支付宝
-    const URI_TRANSFER = "/2/rest/transfer";  //单笔打款 - 支付宝/微信
-    const URI_BC_TRANSFER_BANKS = '/2/rest/bc_transfer/banks'; //BC企业打款 - 支持银行
-    const URI_BC_TRANSFER = "/2/rest/bc_transfer"; //代付 - 银行卡
-    const URI_CJ_TRANSFER = "/2/rest/cj_transfer"; //畅捷代付
-    const URI_JD_TRANSFER = "/2/rest/bc_user_transfer"; //京东代付
-    const URI_GATEWAY_TRANSFER = "/2/rest/gateway/bc_transfer"; //BeePay自动打款 - 打款到银行卡
+    const URI_TRANSFERS = 'rest/transfers'; //批量打款 - 支付宝
+    const URI_TRANSFER = 'rest/transfer';  //单笔打款 - 支付宝/微信
+    const URI_BC_TRANSFER_BANKS = 'rest/bc_transfer/banks'; //BC企业打款 - 支持银行
+    const URI_BC_TRANSFER = 'rest/bc_transfer'; //代付 - 银行卡
+    const URI_CJ_TRANSFER = 'rest/cj_transfer'; //畅捷代付
+    const URI_JD_TRANSFER = 'rest/bc_user_transfer'; //京东代付
+    const URI_GATEWAY_TRANSFER = 'rest/gateway/bc_transfer'; //BeePay自动打款 - 打款到银行卡
 
     //确认支付
-    const URI_PAY_CONFIRM = "/2/rest/bill/confirm";
+    const URI_PAY_CONFIRM = 'rest/bill/confirm';
 
-    const URI_OFFLINE_BILL = '/2/rest/offline/bill'; //线下支付-撤销订单
-    const URI_OFFLINE_BILL_STATUS = '/2/rest/offline/bill/status'; //线下订单状态查询
-    const URI_OFFLINE_REFUND = '/2/rest/offline/refund'; //线下退款
+    const URI_OFFLINE_BILL = 'rest/offline/bill'; //线下支付-撤销订单
+    const URI_OFFLINE_BILL_STATUS = 'rest/offline/bill/status'; //线下订单状态查询
+    const URI_OFFLINE_REFUND = 'rest/offline/refund'; //线下退款
 
-    const URI_INTERNATIONAL_BILL = "/2/rest/international/bill";
-    const URI_INTERNATIONAL_REFUND = "/2/rest/international/refund";
+    const URI_INTERNATIONAL_BILL = 'rest/international/bill';
+    const URI_INTERNATIONAL_REFUND = 'rest/international/refund';
 
     //subscription
-    const URI_SUBSCRIPTION = "/2/subscription";
-    const URI_SUBSCRIPTION_PLAN = "/2/plan";
-    const URI_SUBSCRIPTION_BANKS = "/2/subscription_banks";
+    const URI_SUBSCRIPTION = 'subscription';
+    const URI_SUBSCRIPTION_PLAN = 'plan';
+    const URI_SUBSCRIPTION_BANKS = 'subscription_banks';
 
     //发送验证码
-    const URI_SMS = "/2/sms";
+    const URI_SMS = 'sms';
 
     //auth
-    const URI_AUTH = "/2/auth";
+    const URI_AUTH = 'auth';
 
     //代扣API
-    const URI_CARD_CHARGE_SIGN = "/2/sign";
+    const URI_CARD_CHARGE_SIGN = 'sign';
+
+    //user system
+    const URI_USERSYS_USER = 'rest/user'; //单个用户注册接口
+    const URI_USERSYS_MULTI_USERS = 'rest/users'; //批量用户导入接口／查询接口
+    const URI_USERSYS_HISTORY_BILLS = 'rest/history_bills'; //历史数据补全接口（批量）
 
     const UNEXPECTED_RESULT = "非预期的返回结果:";
     const NEED_PARAM = "需要必填字段:";
@@ -137,9 +144,9 @@ class BCRESTUtil {
         return 'https://api.beecloud.cn';
     }
 
-    static final public function post($api, $data, $timeout) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "post", $data, $timeout);
+    static public function get_result($url, $type, $data, $timeout, $returnArr){
+        $api_url = self::getApiUrl() . '/' . APIConfig::API_VERSION . '/'. $url;
+        $httpResultStr = BCRESTUtil::request($api_url, $type, $data, $timeout);
         $result = json_decode($httpResultStr);
         if (!$result) {
             throw new Exception(APIConfig::UNEXPECTED_RESULT . $httpResultStr);
@@ -147,34 +154,20 @@ class BCRESTUtil {
         return $result;
     }
 
+    static final public function post($api, $data, $timeout, $returnArray) {
+        return self::get_result($api, 'post', $data, $timeout, $returnArray);
+    }
+
     static final public function get($api, $data, $timeout, $returnArray, $type = true) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, $type ? 'get' : 'new_get', $data, $timeout);
-        $result = json_decode($httpResultStr,!$returnArray ? false : true);
-        if (!$result) {
-            throw new Exception(APIConfig::UNEXPECTED_RESULT . $httpResultStr);
-        }
-        return $result;
+        return self::get_result($api, $type ? 'get' : 'new_get', $data, $timeout, $returnArray);
     }
 
     static final public function put($api, $data, $timeout, $returnArray) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "put", $data, $timeout);
-        $result = json_decode($httpResultStr,!$returnArray ? false : true);
-        if (!$result) {
-            throw new Exception(APIConfig::UNEXPECTED_RESULT . $httpResultStr);
-        }
-        return $result;
+        return self::get_result($api, 'put', $data, $timeout, $returnArray);
     }
 
     static public function delete($api, $data, $timeout, $returnArray) {
-        $url = BCRESTUtil::getApiUrl() . $api;
-        $httpResultStr = BCRESTUtil::request($url, "delete", $data, $timeout);
-        $result = json_decode($httpResultStr,!$returnArray ? false : true);
-        if (!$result) {
-            throw new Exception(BCRESTUtil::UNEXPECTED_RESULT . $httpResultStr);
-        }
-        return $result;
+        return self::get_result($api, 'delete', $data, $timeout, $returnArray);
     }
 
     static final public function request($url, $method, array $data, $timeout) {
@@ -1254,5 +1247,75 @@ class Auths extends BCRESTApi{
         $data = parent::get_common_params($data);
         parent::verify_need_params(array('name', 'id_no'), $data);
         return BCRESTUtil::post(APIConfig::URI_AUTH, $data, 30, false);
+    }
+}
+
+Class Usersys extends BCRESTApi{
+    /*
+     * @desc 单个用户注册接口
+     * @params
+     *    buyer_id string (必填)	商户为自己的用户分配的ID。可以是email、手机号、随机字符串等。最长32位。在商户自己系统内必须保证唯一
+     * @return json
+     *    result_code int 	返回码，0为正常
+     *    result_msg 	string 	返回信息， OK为正常
+     *    err_detail 	string 	具体错误信息
+     */
+    static public function register($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('buyer_id'), $data);
+        return BCRESTUtil::post(APIConfig::URI_USERSYS_USER, $data, 30, false);
+    }
+
+    /*
+     * @desc 批量用户导入接口
+     * @params
+     *    email string (必填) 用户账号
+     *    buyer_ids array (必填) 商户为自己的多个用户分配的IDs。每个ID可以是email、手机号、随机字符串等；最长32位；在商户自己系统内必须保证唯一。
+     * @return json
+     *    result_code int 	返回码，0为正常
+     *    result_msg 	string 	返回信息， OK为正常
+     *    err_detail 	string 	具体错误信息
+     */
+    static public function import_users($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('email', 'buyer_ids'), $data);
+        return BCRESTUtil::post(APIConfig::URI_USERSYS_MULTI_USERS, $data, 30, false);
+    }
+
+    /*
+     * @desc 商户用户批量查询接口
+     * @params
+     *    email string (非必填) 用户账号
+     *    start_time int (非必填) 起始时间。该接口会返回此时间戳之后创建的用户。毫秒时间戳, 13位
+     *    end_time int (非必填) 结束时间。该接口会返回此时间戳之前创建的用户。毫秒时间戳, 13位
+     *    注意：如果传入email, 就查询该email下的用户;如果不传email，就查询注册时使用该app_id注册的用户
+     * @return json
+     *    result_code int 	返回码，0为正常
+     *    result_msg 	string 	返回信息， OK为正常
+     *    err_detail 	string 	具体错误信息
+     *    users 	array 	获取到的用户信息列表
+     */
+    static public function query_users($data){
+        $data = parent::get_common_params($data);
+        return BCRESTUtil::get(APIConfig::URI_USERSYS_MULTI_USERS, $data, 30, false);
+    }
+
+    /*
+     * @desc 历史数据补全接口（批量）。该接口要求用户传入订单号与用户ID的对应关系，该接口会将历史数据中，属于该用户ID的订单数据进行标识。
+     * @params
+     *    bill_info string (必填), json字符串key为buyer_id，value是订单列表
+     *      eg: {"aaa@bb.com":["20170302005"], "xxx@bb.com":["20170302001","20170302002","20170302011"]}
+     * @return json
+     *      result_code int 	返回码，0为正常
+     *      result_msg 	string 	返回信息， OK为正常
+     *      err_detail 	string 	具体错误信息
+     *      如果更新失败会返回以下信息：
+     *          failed_bills array 更新失败的订单信息,可能是部分信息。key是buyer_id, value是隶属于该buyer_id的订单列表
+     *      注意：重试时，请依据更新失败返回的失败订单信息进行重试，以避免重复更新历史订单信息
+     */
+    static public function supply_bills($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('bill_info'), $data);
+        return BCRESTUtil::post(APIConfig::URI_USERSYS_HISTORY_BILLS, $data, 30, false);
     }
 }

@@ -6,11 +6,11 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "beecloud",
+            "name": "jasonhzy",
             "email": "support@beecloud.cn"
         }
     ],
-    "version" : "v2.3.9",
+    "version" : "v2.3.10",
     "minimum-stability": "dev",
     "homepage": "https://beecloud.cn/",
     "require": {

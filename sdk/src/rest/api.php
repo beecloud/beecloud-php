@@ -98,14 +98,19 @@ class api {
 		return $data;
 	}
 
+	static public function get_result($url, $type, $data, $timeout, $returnArr){
+        $api_url = \beecloud\rest\network::getApiUrl() . '/' . \beecloud\rest\config::API_VERSION . '/' . $url;
+
+        $httpResultStr = \beecloud\rest\network::request($api_url, $type, $data, $timeout);
+        $result = json_decode($httpResultStr, !$returnArr ? false : true);
+        if (!$result) {
+            throw new \Exception(\beecloud\rest\config::UNEXPECTED_RESULT . $httpResultStr);
+        }
+        return $result;
+    }
+
 	static public function post($api, $data, $timeout, $returnArray) {
-		$url = \beecloud\rest\network::getApiUrl() . $api;
-		$httpResultStr = \beecloud\rest\network::request($url, "post", $data, $timeout);
-		$result = json_decode($httpResultStr, !$returnArray ? false : true);
-		if (!$result) {
-			throw new \Exception(\beecloud\rest\config::UNEXPECTED_RESULT . $httpResultStr);
-		}
-		return $result;
+        return self::get_result($api, 'post', $data, $timeout, $returnArray);
 	}
 
 	/*
@@ -114,35 +119,16 @@ class api {
 	 *  设置false, 即: url?key=value&key1=value1,处理即http_build_query($data)
 	 */
 	static public function get($api, $data, $timeout, $returnArray, $type = true) {
-		$url = \beecloud\rest\network::getApiUrl() . $api;
-		$httpResultStr = \beecloud\rest\network::request($url, $type ? "get" : 'new_get', $data, $timeout);
-		$result = json_decode($httpResultStr,!$returnArray ? false : true);
-		if (!$result) {
-			throw new \Exception(\beecloud\rest\config::UNEXPECTED_RESULT . $httpResultStr);
-		}
-		return $result;
+        return self::get_result($api, $type ? "get" : 'new_get', $data, $timeout, $returnArray);
 	}
 
 	static public function put($api, $data, $timeout, $returnArray) {
-		$url = \beecloud\rest\network::getApiUrl() . $api;
-		$httpResultStr = \beecloud\rest\network::request($url, "put", $data, $timeout);
-		$result = json_decode($httpResultStr,!$returnArray ? false : true);
-		if (!$result) {
-			throw new \Exception(\beecloud\rest\config::UNEXPECTED_RESULT . $httpResultStr);
-		}
-		return $result;
+        return self::get_result($api, 'put', $data, $timeout, $returnArray);
 	}
 
 	static public function delete($api, $data, $timeout, $returnArray) {
-		$url = \beecloud\rest\network::getApiUrl() . $api;
-		$httpResultStr = \beecloud\rest\network::request($url, "delete", $data, $timeout);
-		$result = json_decode($httpResultStr,!$returnArray ? false : true);
-		if (!$result) {
-			throw new \Exception(\beecloud\rest\config::UNEXPECTED_RESULT . $httpResultStr);
-		}
-		return $result;
+        return self::get_result($api, 'delete', $data, $timeout, $returnArray);
 	}
-
 
     /*
       * @desc 发送短信验证码,返回验证码记录的唯一标识,并且手机端接收到验证码,二者供创建subscription使用
@@ -1062,4 +1048,74 @@ Class Auths extends api{
 		parent::verify_need_params(array('name', 'id_no'), $data);
 		return parent::post(\beecloud\rest\config::URI_AUTH, $data, 30, false);
 	}
+}
+
+Class Usersys extends api{
+    /*
+     * @desc 单个用户注册接口
+     * @params
+     *    buyer_id string (必填)	商户为自己的用户分配的ID。可以是email、手机号、随机字符串等。最长32位。在商户自己系统内必须保证唯一
+     * @return json
+     *    result_code int 	返回码，0为正常
+     *    result_msg 	string 	返回信息， OK为正常
+     *    err_detail 	string 	具体错误信息
+     */
+    static public function register($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('buyer_id'), $data);
+        return parent::post(\beecloud\rest\config::URI_USERSYS_USER, $data, 30, false);
+    }
+
+    /*
+     * @desc 批量用户导入接口
+     * @params
+     *    email string (必填) 用户账号
+     *    buyer_ids array (必填) 商户为自己的多个用户分配的IDs。每个ID可以是email、手机号、随机字符串等；最长32位；在商户自己系统内必须保证唯一。
+     * @return json
+     *    result_code int 	返回码，0为正常
+     *    result_msg 	string 	返回信息， OK为正常
+     *    err_detail 	string 	具体错误信息
+     */
+    static public function import_users($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('email', 'buyer_ids'), $data);
+        return parent::post(\beecloud\rest\config::URI_USERSYS_MULTI_USERS, $data, 30, false);
+    }
+
+    /*
+     * @desc 商户用户批量查询接口
+     * @params
+     *    email string (非必填) 用户账号
+     *    start_time int (非必填) 起始时间。该接口会返回此时间戳之后创建的用户。毫秒时间戳, 13位
+     *    end_time int (非必填) 结束时间。该接口会返回此时间戳之前创建的用户。毫秒时间戳, 13位
+     *    注意：如果传入email, 就查询该email下的用户;如果不传email，就查询注册时使用该app_id注册的用户
+     * @return json
+     *    result_code int 	返回码，0为正常
+     *    result_msg 	string 	返回信息， OK为正常
+     *    err_detail 	string 	具体错误信息
+     *    users 	array 	获取到的用户信息列表
+     */
+    static public function query_users($data){
+        $data = parent::get_common_params($data);
+        return parent::get(\beecloud\rest\config::URI_USERSYS_MULTI_USERS, $data, 30, false);
+    }
+
+    /*
+     * @desc 历史数据补全接口（批量）。该接口要求用户传入订单号与用户ID的对应关系，该接口会将历史数据中，属于该用户ID的订单数据进行标识。
+     * @params
+     *    bill_info string (必填), json字符串key为buyer_id，value是订单列表
+     *      eg: {"aaa@bb.com":["20170302005"], "xxx@bb.com":["20170302001","20170302002","20170302011"]}
+     * @return json
+     *      result_code int 	返回码，0为正常
+     *      result_msg 	string 	返回信息， OK为正常
+     *      err_detail 	string 	具体错误信息
+     *      如果更新失败会返回以下信息：
+     *          failed_bills array 更新失败的订单信息,可能是部分信息。key是buyer_id, value是隶属于该buyer_id的订单列表
+     *      注意：重试时，请依据更新失败返回的失败订单信息进行重试，以避免重复更新历史订单信息
+     */
+    static public function supply_bills($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('bill_info'), $data);
+        return parent::post(\beecloud\rest\config::URI_USERSYS_HISTORY_BILLS, $data, 30, false);
+    }
 }
