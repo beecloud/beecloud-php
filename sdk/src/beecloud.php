@@ -55,6 +55,10 @@ class APIConfig {
     //代扣API
     const URI_CARD_CHARGE_SIGN = 'sign';
 
+    //T1代付
+    const URI_T1_EXPRESS_TRANSFER_BANKS = 'rest/t1express/transfer/banks';//代付银行列表接口
+    const URI_T1_EXPRESS_TRANSFER = 'rest/t1express/transfer';//代付接口
+
     //user system
     const URI_USERSYS_USER = 'rest/user'; //单个用户注册接口
     const URI_USERSYS_MULTI_USERS = 'rest/users'; //批量用户导入接口／查询接口
@@ -751,6 +755,31 @@ class BCRESTApi {
         return BCRESTUtil::post(APIConfig::URI_GATEWAY_TRANSFER, $data, 30, false);
     }
 
+    //T1代付接口
+    function bct1_transfer($data){
+        if(!isset($data['app_id'])){
+            $data['app_id'] = self::$app_id;
+        }
+        $params = array(
+            'app_id', 'total_fee', 'bill_no', 'bank_name', 'bank_account_no', 'bank_account_name', 'is_personal'
+        );
+        foreach ($params as $v) {
+            if (!isset($data[$v])) {
+                throw new Exception(APIConfig::NEED_PARAM . $v);
+            }
+        }
+        /*
+         * 对关键参数的签名，签名方式为MD5（32位小写字符）, 编码格式为UTF-8
+         * 验签规则即：app_id + bill_no + total_fee + bank_account_no的MD5生成的签名
+         */
+        if(!isset($data['signature'])){
+            $data['signature'] = md5($data["app_id"] . $data["bill_no"] . $data["total_fee"] . $data["bank_account_no"] . self::$master_secret);
+        }
+        if(!in_array($data['is_personal'], array('0', '1'))) throw new Exception(APIConfig::NEED_VALID_PARAM . 'is_personal(0, 1)');
+        return BCRESTUtil::post(APIConfig::URI_T1_EXPRESS_TRANSFER, $data, 30, false);
+    }
+
+
     static final public function offline_bill(array $data) {
         $data = self::get_common_params($data, '0');
         //php sdk version
@@ -914,6 +943,10 @@ class BCRESTApi {
                 if(isset($data['pay_type']) && !in_array($data['pay_type'], array('B2C', 'B2B')))
                     throw new Exception(APIConfig::NEED_VALID_PARAM . 'pay_type(B2C, B2B)');
                 return BCRESTUtil::get(APIConfig::URI_BC_GATEWAY_BANKS, $data, 30, false);
+                break;
+            case 'T1_EXPRESS_TRANSFER':
+                $data = self::get_common_params($data);
+                return BCRESTUtil::get(APIConfig::URI_T1_EXPRESS_TRANSFER_BANKS, $data, 30, false);
                 break;
             default:
                 break;

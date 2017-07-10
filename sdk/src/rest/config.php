@@ -58,6 +58,10 @@ class config {
     //代扣API
     const URI_CARD_CHARGE_SIGN = 'sign';
 
+    //T1代付
+    const URI_T1_EXPRESS_TRANSFER_BANKS = 'rest/t1express/transfer/banks';//代付银行列表接口
+    const URI_T1_EXPRESS_TRANSFER = 'rest/t1express/transfer';//代付接口
+
     //user system
     const URI_USERSYS_USER = 'rest/user'; //单个用户注册接口
     const URI_USERSYS_MULTI_USERS = 'rest/users'; //批量用户导入接口／查询接口
