@@ -551,6 +551,31 @@ class api {
         return self::post(\beecloud\rest\config::URI_GATEWAY_TRANSFER, $data, 30, false);
     }
 
+    //T1代付接口
+    function bct1_transfer($data){
+        if(!isset($data['app_id'])){
+            $data['app_id'] = self::$app_id;
+        }
+        $params = array(
+            'app_id', 'total_fee', 'bill_no', 'bank_name', 'bank_account_no', 'bank_account_name', 'is_personal'
+        );
+        foreach ($params as $v) {
+            if (!isset($data[$v])) {
+                throw new \Exception(\beecloud\rest\config::NEED_PARAM . $v);
+            }
+        }
+        /*
+         * 对关键参数的签名，签名方式为MD5（32位小写字符）, 编码格式为UTF-8
+         * 验签规则即：app_id + bill_no + total_fee + bank_account_no的MD5生成的签名
+         */
+        if(!isset($data['signature'])){
+            $data['signature'] = md5($data["app_id"] . $data["bill_no"] . $data["total_fee"] . $data["bank_account_no"] . self::$master_secret);
+        }
+        if(!in_array($data['is_personal'], array('0', '1'))) throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . 'is_personal(0, 1)');
+        return self::post(\beecloud\rest\config::URI_T1_EXPRESS_TRANSFER, $data, 30, false);
+    }
+
+
 
 	static final public function offline_bill(array $data) {
 		$data = self::get_common_params($data, '0');
@@ -714,6 +739,10 @@ class api {
                 if(isset($data['pay_type']) && !in_array($data['pay_type'], array('B2C', 'B2B')))
                     throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . 'pay_type(B2C, B2B)');
                 return self::get(\beecloud\rest\config::URI_BC_GATEWAY_BANKS, $data, 30, false);
+                break;
+            case 'T1_EXPRESS_TRANSFER':
+                $data = self::get_common_params($data);
+                return self::get(\beecloud\rest\config::URI_T1_EXPRESS_TRANSFER_BANKS, $data, 30, false);
                 break;
             default:
                 break;
