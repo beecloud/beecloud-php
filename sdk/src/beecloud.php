@@ -427,10 +427,10 @@ class BCRESTApi {
 //                    }
 //                    break;
                 case "BC_GATEWAY":
-                    self::verify_need_params(array('bank', 'card_type'), $data);
-                    if (!in_array($data["card_type"], APIConfig::get_card_type())) {
-                        throw new Exception(sprintf(APIConfig::VALID_PARAM_RANGE, 'card_type'));
-                    }
+//                    self::verify_need_params(array('bank', 'card_type'), $data);
+//                    if (!in_array($data["card_type"], APIConfig::get_card_type())) {
+//                        throw new Exception(sprintf(APIConfig::VALID_PARAM_RANGE, 'card_type'));
+//                    }
                     break;
                 case "BC_EXPRESS" :
 //                    if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
@@ -970,6 +970,7 @@ class BCRESTApi {
                 case "WX_JSAPI":
                 case "WX_NATIVE":
                 case "WX_APP":
+                case "WX_WAP":
                 case "JD":
                 case "JD_WEB":
                 case "JD_WAP":

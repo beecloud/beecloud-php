@@ -139,7 +139,7 @@
 <hr/>
 
 <ul class="clearfix">
-    <li>
+    <!--li>
         <div>
             <h2>代扣： ¥1.5</h2>
             <p>请选择支付方式</p>
@@ -157,7 +157,7 @@
                 <input type="button" id="btn_card_charge" class="button" value="确认扣款">
             </div>
         </form>
-    </li>
+    </li -->
     <li>
         <div>
             <h2>鉴权</h2>
