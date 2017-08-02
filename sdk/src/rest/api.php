@@ -221,18 +221,18 @@ class api {
 //	                if (isset($data["bill_timeout"])) {
 //	                    throw new \Exception(BILL_TIMEOUT_ERROR);
 //	                }
-//	                break;
+	                break;
 				case "BC_GATEWAY":
-                    self::verify_need_params(array('bank', 'card_type'), $data);
-                    if (!in_array($data["card_type"], \beecloud\rest\config::get_card_type())) {
-                        throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'card_type'));
-                    }
+//                    self::verify_need_params(array('bank', 'card_type'), $data);
+//                    if (!in_array($data["card_type"], \beecloud\rest\config::get_card_type())) {
+//                        throw new \Exception(sprintf(\beecloud\rest\config::VALID_PARAM_RANGE, 'card_type'));
+//                    }
 					break;
 //				case "BC_EXPRESS" :
 //					if ($data["total_fee"] < 100 || !is_int($data["total_fee"])) {
 //						throw new \Exception(\beecloud\rest\config::NEED_TOTAL_FEE);
 //					}
-//					break;
+					break;
 			}
 		}
 
@@ -767,6 +767,7 @@ class api {
 				case "WX_JSAPI":
 				case "WX_NATIVE":
 				case "WX_APP":
+                case "WX_WAP":
 				case "JD":
 				case "JD_WEB":
 				case "JD_WAP":

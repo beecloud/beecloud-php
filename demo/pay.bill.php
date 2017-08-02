@@ -42,7 +42,7 @@ $data["optional"] = (object)array("key"=>"value");
  * 参考demo/webhook.php
  *
  */
-//$data['notify_url'] = 'http://beecloud.cn';
+//$data['notify_url'] = 'https://beecloud.cn';
 
 /**
  * buyer_id选填
@@ -136,7 +136,7 @@ switch($type){
         break;
     case 'WX_JSAPI':
         $data["channel"] = "WX_JSAPI";
-        $title = "微信H5网页";
+        $title = "微信公众号";
         require_once 'wx/wx.jsapi.php';
         exit();
         break;
