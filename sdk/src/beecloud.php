@@ -6,7 +6,7 @@
 
 class APIConfig {
     //php sdk verssion
-    const PHP_SDK_VERSION = 'PHP_2.3.10';
+    const PHP_SDK_VERSION = 'PHP_2.3.11';
     //api version
     const API_VERSION = '2';
 
