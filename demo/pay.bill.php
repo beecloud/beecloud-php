@@ -50,6 +50,14 @@ $data["optional"] = (object)array("key"=>"value");
  */
 //$data['buyer_id'] = 'xxxx';
 
+
+/*
+ * coupon_id string 选填 卡券id
+ * 传入卡券id，下单时会自动扣除优惠金额再发起支付
+ *
+ */
+//$data['coupon_id'] = 'xxxxxx';
+
 /**
  * analysis选填, 分析数据
  * 用于统计分析的数据，将会在控制台的统计分析报表中展示，用户自愿上传。包括以下基本字段：
