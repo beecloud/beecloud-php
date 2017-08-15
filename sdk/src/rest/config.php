@@ -6,7 +6,7 @@ namespace beecloud\rest;
 
 class config {
     //php sdk verssion
-    const PHP_SDK_VERSION = 'PHP_2.3.9';
+    const PHP_SDK_VERSION = 'PHP_2.3.10';
     //api version
     const API_VERSION = '2';
 
@@ -67,6 +67,9 @@ class config {
     const URI_USERSYS_MULTI_USERS = 'rest/users'; //批量用户导入接口／查询接口
     const URI_USERSYS_HISTORY_BILLS = 'rest/history_bills'; //历史数据补全接口（批量）
 
+    //coupon
+    const URI_COUPON = 'rest/coupon'; //发放卡券, 优惠券根据ID或其他条件查询
+    const URI_COUPON_TEMP = 'rest/coupon/template'; //根据优惠券模板ID或其他条件查询
 
 	const UNEXPECTED_RESULT = "非预期的返回结果:";
 	const NEED_PARAM = "需要必填字段:";

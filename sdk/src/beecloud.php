@@ -6,7 +6,7 @@
 
 class APIConfig {
     //php sdk verssion
-    const PHP_SDK_VERSION = 'PHP_2.3.9';
+    const PHP_SDK_VERSION = 'PHP_2.3.10';
     //api version
     const API_VERSION = '2';
 
@@ -63,6 +63,10 @@ class APIConfig {
     const URI_USERSYS_USER = 'rest/user'; //单个用户注册接口
     const URI_USERSYS_MULTI_USERS = 'rest/users'; //批量用户导入接口／查询接口
     const URI_USERSYS_HISTORY_BILLS = 'rest/history_bills'; //历史数据补全接口（批量）
+
+    //coupon
+    const URI_COUPON = 'rest/coupon'; //发放卡券, 优惠券根据ID或其他条件查询
+    const URI_COUPON_TEMP = 'rest/coupon/template'; //根据优惠券模板ID或其他条件查询
 
     const UNEXPECTED_RESULT = "非预期的返回结果:";
     const NEED_PARAM = "需要必填字段:";
@@ -1351,5 +1355,72 @@ Class Usersys extends BCRESTApi{
         $data = parent::get_common_params($data);
         parent::verify_need_params(array('bill_info'), $data);
         return BCRESTUtil::post(APIConfig::URI_USERSYS_HISTORY_BILLS, $data, 30, false);
+    }
+}
+
+
+Class Coupons extends BCRESTApi  {
+
+    /*
+     * desc: 根据优惠券模板ID或者其他条件查询
+     * @params $objectid string
+     *  返回coupon_template，即优惠券模板详情
+     *
+     * @params $data array:
+     *  name string 模板名（如果提供则限制模板名）
+     *  created_before long 毫秒数时间戳（如果提供则限制创建时间戳>=该时间戳的模板）
+     *  created_after long	毫秒数时间戳（如果提供则限制创建时间戳<该时间戳的模板）
+     *  skip long	查询起始位置，默认为0
+     *  limit long	查询的条数，默认为10
+     *  返回coupon_templates，即优惠券模板列表，此处返回的列表都属于验证签名所用应用app_id下
+     *
+     */
+    public static function query_coupon_temp($data, $objectid = ''){
+        $data = parent::get_common_params($data);
+        if(!empty($objectid)){
+            $url = APIConfig::URI_COUPON_TEMP.'/'.$objectid;
+        }else{
+            $url = APIConfig::URI_COUPON_TEMP;
+        }
+        return BCRESTUtil::get($url, $data, 30, false);
+    }
+
+    /*
+     * desc: 根据优惠券ID或者其他条件查询
+     * @params $objectid string
+     *  返回coupon，即优惠券详情
+     *
+     * @params $data array:
+     *  user_id string 用户ID（如果提供则限制领券的用户ID）
+     *  template_id string 优惠券的模板ID（如果提供则限制优惠券的模板ID）
+     *  status	int	优惠券的状态（如果提供则限制优惠券的状态，0表示未使用，1表示已使用（核销））
+     *  limit_fee int 一般传入订单金额，返回满足限额的优惠券，比如传入11000，返回满100元减10元的优惠券
+     *  created_before int 毫秒数时间戳（如果提供则限制创建时间戳>=该时间戳的优惠券）
+     *  created_after int	毫秒数时间戳（如果提供则限制创建时间戳<该时间戳的优惠券）
+     *  skip int	查询起始位置，默认为0
+     *  limit int	查询的条数，默认为10
+     *  返回coupons，即优惠券列表，此处返回的列表都属于验证签名所用应用app_id下
+     *
+     */
+    public static function query_coupon($data, $objectid = ''){
+        if(!empty($objectid)){
+            $url = APIConfig::URI_COUPON.'/'.$objectid;
+        }else{
+            $url = APIConfig::URI_COUPON;
+        }
+        $data = parent::get_common_params($data);
+        return BCRESTUtil::get($url, $data, 30, false);
+    }
+
+    /*
+     * 发放卡券
+     * @params $data array:
+     *  user_id string 用户ID
+     *  template_id string 优惠券的模板ID
+     */
+    public static function coupon($data){
+        $data = parent::get_common_params($data);
+        parent::verify_need_params(array('template_id', 'user_id'), $data);
+        return BCRESTUtil::post(BCRESTUtil::URI_COUPON, $data, 30, false);
     }
 }

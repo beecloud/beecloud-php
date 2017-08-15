@@ -7,9 +7,8 @@ class network {
         return 'https://api.beecloud.cn';
     }
 
-    static final public function request($url, $method, array $data, $timeout) {
+    static final public function request($url, $method, array $data, $timeout = 30) {
         try {
-            $timeout = (isset($timeout) && is_int($timeout)) ? $timeout : 20;
             $ch = curl_init();
             /*支持SSL 不验证CA根验证*/
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
