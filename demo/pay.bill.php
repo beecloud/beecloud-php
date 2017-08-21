@@ -148,6 +148,12 @@ switch($type){
         require_once 'wx/wx.jsapi.php';
         exit();
         break;
+    case  'WX_WAP':
+        $data["channel"] = "WX_WAP";
+        $title = "微信H5网页";
+        if(!isset($data['analysis']) || !$data['analysis']) $data['analysis'] = new stdClass();
+        $data['analysis']->ip = $_SERVER['REMOTE_ADDR'];
+        break;
     case 'YEE_WEB' :
         $data["channel"] = "YEE_WEB";
         $title = "易宝网页";
@@ -254,7 +260,7 @@ switch($type){
         break;
     case 'BC_WX_JSAPI':
         $data["channel"] = "BC_WX_JSAPI";
-        $title = "微信H5网页";
+        $title = "微信公众号";
         require_once 'wx/wx.jsapi.php';
         exit();
         break;

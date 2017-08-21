@@ -1,0 +1,39 @@
+/**index.wxss**/
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.demo {
+  margin-top: 60px;
+  width: 100px;
+}
+.demo .price{
+  border-bottom:1px dashed #C9C9C9;
+  padding-bottom:10px;
+  color:#666666;
+  font-size:12px;
+}
+
+.demo .price strong{
+  font-weight:normal;
+  color:#EE6209;
+  font-size:16px;
+  font-family:Helvetica;
+}
+
+.userinfo-nickname {
+  color: #aaa;
+}
+
+.usermotto {
+  margin-top: 120px;
+}
