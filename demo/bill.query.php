@@ -1,4 +1,9 @@
 <?php
+/**
+ *  根据具体的条件进行查询，可查询的字段以文档为准
+ *  参考文档：https://beecloud.cn/doc/#4-4
+ *
+ */
 require_once("../loader.php");
 require_once("config.php");
 

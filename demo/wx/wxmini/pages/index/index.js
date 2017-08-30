@@ -43,7 +43,7 @@ Page({
   getOpenId: function (code) {
     var that = this;
     wx.request({
-      url: "http(s)://xxxxx/wxmini.php",
+      url: "https://xxxxx/wx.mini.php",
       data: {
         type : 'openid',
         code : code
@@ -74,9 +74,9 @@ Page({
   generateOrder: function (openid) {
     var that = this;
     wx.request({
-      url: "http(s)://xxxxx/wxmini.php",
+      url: "https://xxxxx/wx.mini.php",
       data: {
-        type: 'wxmini',
+        type: 'pay',
         openid : openid
       },
       header: {
@@ -125,6 +125,6 @@ Page({
         // complete
         console.log("pay complete");
       }
-    })
+    });
   }
 })

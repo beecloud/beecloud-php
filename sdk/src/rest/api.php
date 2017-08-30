@@ -768,6 +768,7 @@ class api {
 				case "WX_NATIVE":
 				case "WX_APP":
                 case "WX_WAP":
+                case "WX_MINI":
 				case "JD":
 				case "JD_WEB":
 				case "JD_WAP":
@@ -793,11 +794,13 @@ class api {
 				case "BC_WX_WAP" :
 				case "BC_WX_JSAPI" :
                 case "BC_WX_SCAN" :
+                case "BC_WX_MINI" :
 				case "BC_CARD_CHARGE" :
 				case "BC_ALI_QRCODE" :
                 case "BC_ALI_SCAN" :
                 case "BC_ALI_WAP":
                 case "BC_ALI_WEB":
+                case "BC_ALI_JSAPI" :
 					break;
 				default:
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");
