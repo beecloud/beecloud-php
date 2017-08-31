@@ -61,7 +61,6 @@ switch($type){
     case 'PAYPAL' :
         $data["channel"] = "PAYPAL";
         $title = "PAYPAL";
-        exit('开发中...');
         break;
     case 'ALI_OFFLINE_QRCODE':
     case 'ALI_SCAN':
