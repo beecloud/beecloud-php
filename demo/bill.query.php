@@ -12,9 +12,6 @@ $data["timestamp"] = time() * 1000;
 $data["spay_result"] = true;
 $data["limit"] = 10;
 
-//退款单号,为(预)退款使用的
-$refund_no = date('Ymd',time()).time() * 1000;
-
 $type = $_GET['type'];
 switch($type){
     case 'ALI' :
@@ -97,7 +94,7 @@ switch($type){
                     $refund = true;
                 }
             }
-            $strParams = "agree.refund.php?type=$type&refund_no=".$refund_no."&bill_no=".$list->bill_no."&refund_fee=".$list->total_fee;
+            $strParams = "bill.refund.php?type=$type&bill_no={$list->bill_no}&refund_fee={$list->total_fee}";
             $agree_refund = $list->spay_result&&!$list->refund_result&&$refund ? "<a href='".$strParams."' target='_blank'>退款</a>" : "";
             $prep_refund = $list->spay_result&&!$list->refund_result&&$pre_refund ? "<a href='".$strParams."&need_approval=true' target='_blank'>预退款</a>" : "";
             $spay_result = $list->spay_result ? ($list->refund_result ? '已退款' : '支付') : '未支付';
