@@ -83,7 +83,7 @@ switch($type){
         $title = "支付宝移动网页";
         $data["channel"] = "ALI_WAP";
         //非必填参数,boolean型,是否使用APP支付,true使用,否则不使用
-//        $data["use_app"] = false;
+        //$data["use_app"] = false;
         break;
     case 'ALI_QRCODE' :
         $title = "支付宝扫码支付";
@@ -151,8 +151,8 @@ switch($type){
     case  'WX_WAP':
         $data["channel"] = "WX_WAP";
         $title = "微信H5网页";
-        if(!isset($data['analysis']) || !$data['analysis']) $data['analysis'] = new stdClass();
-        $data['analysis']->ip = $_SERVER['REMOTE_ADDR'];
+        //需要参数终端ip，格式如下：
+        //$data['analysis'] = (object)array('ip' => $_SERVER['REMOTE_ADDR']);
         break;
     case 'YEE_WEB' :
         $data["channel"] = "YEE_WEB";
@@ -239,8 +239,14 @@ switch($type){
         break;
     case 'BC_EXPRESS' :
         $data["channel"] = "BC_EXPRESS";
-        //银行卡卡号, 选填
-        //$data["card_no"] = '622269192199384xxxx';
+        //银行卡卡号, (选填，注意：可能必填，根据信息提示进行调整)
+        //$data["card_no"] = '622662183243xxxx';
+        /**
+         * 积分通道：需要额外的参数optional
+         *  user_fee: string 手续费，单位分
+         *  fc_card_no: string 入账卡号
+         */
+        //$data['optional'] = (object)array("user_fee" => "80", "fc_card_no" => "622662183243xxxx");
         $title = "BC快捷支付";
         break;
     case 'BC_NATIVE' :
