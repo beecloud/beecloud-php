@@ -4,14 +4,19 @@ require_once("config.php");
 
 $data["timestamp"] = time() * 1000;
 $data["bill_no"] = $_GET["bill_no"];
-$data["refund_no"] = $_GET["refund_no"];
+
+//refund_no退款单号,为(预)退款使用的, 格式为:退款日期(8位) + 流水号(3~24 位)。
+//请自行确保在商户系统中唯一，且退款日期必须是发起退款的当天日期, 同一退款单号不可重复提交，否则会造成退款单重复。
+//流水号可以接受数字或英文字符，建议使用数字，但不可接受“000”
+$data["refund_no"] = date('Ymd',time()).time() * 1000;
+
 $data["refund_fee"] = (int)$_GET["refund_fee"];
 //选填,是否为预退款,预退款need_approval->true,直接退款->不加此参数或者false
 if(isset($_GET["need_approval"])){
     $data["need_approval"] = true;
 }
 //选填 optional
-$data["optional"] = json_decode(json_encode(array("tag"=>"msgtoreturn")));
+$data["optional"] = (object)array("key"=>"refund");
 
 //refund_account(类型Integer),适用于WX_NATIVE, WX_JSAPI, WX_SCAN, WX_APP
 //退款资金来源 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款）
@@ -64,16 +69,19 @@ switch($type){
         break;
     case 'ALI_OFFLINE_QRCODE':
     case 'ALI_SCAN':
+        $title = $type."线下退款";
+        $data["channel"] = 'ALI';
+        break;
     case 'WX_SCAN':
     case 'WX_NATIVE' : //非服务商WX_NATIVE 可通过/rest/refund/ 或 /rest/offline/refund/进行退款
-        $title = $type." 线下退款";
-        $data["channel"] = substr($type, 0, strpos($type, '_'));
+        $title = $type."线下退款";
+        $data["channel"] = 'WX';
         break;
     case 'BC_WX_SCAN':
     case 'BC_ALI_SCAN':
     case 'BC_ALI_QRCODE':
     case 'BC_NATIVE':
-        $title = $type." 线下退款";
+        $title = $type."线下退款";
         $data["channel"] = 'BC';
         break;
     default :

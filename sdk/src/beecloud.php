@@ -560,7 +560,7 @@ class BCRESTApi {
                 if (!isset($data["refund_no"])) {
                     throw new Exception(APIConfig::NEED_PARAM . "refund_no");
                 }
-                if (!preg_match('/^\d{8}[0-9A-Za-z]{3,24}$/', $data["refund_no"])) {
+                if (!preg_match('/^\d{8}[0-9A-Za-z]{3,24}$/', $data["refund_no"]) || preg_match('/^\d{8}0{3}$/', $data["refund_no"])) {
                     throw new Exception(APIConfig::NEED_VALID_PARAM . "refund_no");
                 }
 
