@@ -4,10 +4,6 @@ dist: trusty
 # list any PHP version you want to test against
 php:
   # using major version aliases
-
-  # aliased to 5.3.29
-  - 5.3
-    dist: precise
   # aliased to a recent 5.4.x version
   - 5.4
   # aliased to a recent 5.5.x version
@@ -24,6 +20,10 @@ script:
   - phpunit
 
 matrix:
+  include:
+    # aliased to 5.3.29
+    - php: 5.3
+      dist: precise
   allow_failures:
     - php: hhvm
   fast_finish: true
