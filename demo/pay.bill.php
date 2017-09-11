@@ -160,7 +160,7 @@ switch($type){
         break;
     case 'YEE_WAP' :
         $data["channel"] = "YEE_WAP";
-        $data["identity_id"] = "lengthlessthan50useruniqueid";
+        $data["identity_id"] = "xxxxxxxxxxxxxx";
         $title = "易宝移动网页";
         break;
     case 'YEE_NOBANKCARD':
@@ -168,9 +168,9 @@ switch($type){
         $data["total_fee"] = 10;
         $data["channel"] = "YEE_NOBANKCARD";
         //点卡卡号，每种卡的要求不一样
-        $data["cardno"] = "15078120125091678";
+        $data["cardno"] = "622662180018xxxx";
         //点卡密码，简称卡密
-        $data["cardpwd"] = "121684730734269992";
+        $data["cardpwd"] = "xxxxxxxxxxxxxx";
         /*
          * frqid 点卡类型编码
          * 骏网一卡通(JUNNET),盛大卡(SNDACARD),神州行(SZX),征途卡(ZHENGTU),Q币卡(QQCARD),联通卡(UNICOM),

@@ -47,9 +47,11 @@ try{
             }
             $data = array(
                 'total_fee' => 1,
+                'title' => 'PHP BC_WX_MINI支付测试',
+                'channel' => 'BC_WX_MINI',
                 //如果是微信官方小程序支付，channel为WX_MINI
-                'title' => 'PHP BC_WX_MINI支付测试', //'title' => 'PHP WX_MINI支付测试',
-                'channel' => 'BC_WX_MINI', //'channel' => 'WX_MINI',
+                //'title' => 'PHP WX_MINI支付测试',
+                //'channel' => 'WX_MINI',
                 'bill_no' => 'phpdemo' . time() * 1000,
                 'openid' => $openid
             );
