@@ -1,5 +1,6 @@
 language: php
-
+sudo: required
+dist: trusty
 # list any PHP version you want to test against
 php:
   # using major version aliases
@@ -22,6 +23,11 @@ script:
   - phpunit
 
 matrix:
+  include:
+    - php: 5.2
+      dist: precise
+    - php: 5.3
+      dist: precise
   allow_failures:
     - php: hhvm
   fast_finish: true
