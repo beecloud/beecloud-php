@@ -685,7 +685,7 @@ class api {
         if (!isset($data["refund_no"])) {
             throw new \Exception(\beecloud\rest\config::NEED_PARAM . "refund_no");
         }
-        if (!preg_match('/^\d{8}[0-9A-Za-z]{3,24}$/', $data["refund_no"]) || preg_match('/^\d{8}0{3}/', $data["refund_no"])) {
+        if (!preg_match('/^\d{8}[0-9A-Za-z]{3,24}$/', $data["refund_no"])) {
             throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "refund_no");
         }
         return self::post(\beecloud\rest\config::URI_OFFLINE_REFUND, $data, 30, false);

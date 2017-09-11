@@ -111,7 +111,7 @@ switch($type){
             exit();
         }
         //当channel为ALI_APP、ALI_WEB、ALI_QRCODE，并且不是预退款
-        if(!isset($data["need_approval"]) && $type == 'ALI'){
+        if((!isset($data["need_approval"]) || $data["need_approval"] === false) && $type == 'ALI'){
             header("Location:$result->url");
             exit();
         }
