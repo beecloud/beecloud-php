@@ -1,6 +1,6 @@
 <?php
 /**
- * @desc: bc alipay jsapi
+ * @desc: bc alipay jsapi（支付宝服务窗）
  * 1.oauth认证获取user_id，参考资料: https://doc.open.alipay.com/docs/doc.htm?treeId=220&articleId=105337&docType=1#s5
  * 2.支付宝jsapi调起支付，参考资料：https://doc.open.alipay.com/docs/doc.htm?&docType=1&articleId=105591
  *

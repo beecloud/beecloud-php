@@ -236,6 +236,25 @@ switch($type){
         $data["card_type"] = '1';
         $data["bank"] = "交通银行";
         $title = "BC网关支付";
+
+        /*
+         *
+            //bank(string 类型) for channel BC_GATEWAY
+            //根据参数card_type, pay_type(B2C/B2B，参数可选)确定银行名称，获取银行的方法，即
+            $params = array(
+                'card_type' => $data["card_type"],
+                'pay_type' => 'B2C' //B2C或B2B
+            );
+            $info = $api->get_banks($params, 'BC_GATEWAY');
+            if (isset($info->result_code) && $info->result_code != 0) {
+                print_r($info);
+                exit();
+            }
+            if(!in_array($data["bank"], $info->banks)){
+                exit('参数bank不在限定的范围内, 请重新设置');
+            }
+            $data["pay_type"] = "B2C";
+        */
         break;
     case 'BC_EXPRESS' :
         $data["channel"] = "BC_EXPRESS";
