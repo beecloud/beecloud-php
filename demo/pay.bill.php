@@ -236,37 +236,11 @@ switch($type){
         $data["card_type"] = '1';
         $data["bank"] = "交通银行";
         $title = "BC网关支付";
-
-        /*
-         *
-            //bank(string 类型) for channel BC_GATEWAY
-            //根据参数card_type, pay_type(B2C/B2B，参数可选)确定银行名称，获取银行的方法，即
-            $params = array(
-                'card_type' => $data["card_type"],
-                'pay_type' => 'B2C' //B2C或B2B
-            );
-            $info = $api->get_banks($params, 'BC_GATEWAY');
-            if (isset($info->result_code) && $info->result_code != 0) {
-                print_r($info);
-                exit();
-            }
-            if(!in_array($data["bank"], $info->banks)){
-                exit('参数bank不在限定的范围内, 请重新设置');
-            }
-            $data["pay_type"] = "B2C";
-        */
         break;
     case 'BC_EXPRESS' :
         $data["channel"] = "BC_EXPRESS";
         //银行卡卡号, (选填，注意：可能必填，根据信息提示进行调整)
         //$data["card_no"] = '622662183243xxxx';
-        /**
-         * 积分通道：需要额外的参数optional
-         *  user_fee: string 手续费，单位分
-         *  fc_card_no: string 入账卡号
-         */
-        //$data['optional'] = (object)array("user_fee" => "80", "fc_card_no" => "622662183243xxxx");
-        $title = "BC快捷支付";
         break;
     case 'BC_NATIVE' :
         $data["channel"] = "BC_NATIVE";
@@ -304,9 +278,11 @@ switch($type){
         $data["channel"] = "BC_ALI_WAP";
         $title = "BC支付宝移动网页";
         break;
-    case 'BC_ALI_WEB' : //支付宝ISV即时到账
-        $data["channel"] = "BC_ALI_WEB";
-        $title = "BC支付宝即时到账";
+    case 'BC_QQ_NATIVE' :
+        $data["channel"] = "BC_QQ_NATIVE";
+        $title = "BCQQ钱包扫码";
+        require_once 'wx/wx.native.php';
+        exit();
         break;
     default :
         exit("No this type.");

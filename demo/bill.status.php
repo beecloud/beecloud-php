@@ -18,6 +18,7 @@ try {
             }
             echo json_encode(array('result_code' => 0, 'pay_result' => isset($result->bills[0]) && $result->bills[0] ? $result->bills[0]->spay_result : false));
             break;
+        case 'BC_QQ_NATIVE':
         case 'BC_NATIVE':
             $result = $api->bills($data);
             if ($result->result_code != 0) {
