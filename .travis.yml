@@ -21,7 +21,6 @@ script:
 
 matrix:
   include:
-    # aliased to 5.3.29
     - php: 5.3
       dist: precise
   allow_failures:

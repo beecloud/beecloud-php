@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCloud微信扫码示例</title>
+    <title>BeeCloud扫码示例</title>
 </head>
 <body>
 <?php

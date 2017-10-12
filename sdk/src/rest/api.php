@@ -801,6 +801,7 @@ class api {
                 case "BC_ALI_WAP":
                 case "BC_ALI_WEB":
                 case "BC_ALI_JSAPI" :
+                case "BC_QQ_NATIVE":
 					break;
 				default:
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");
