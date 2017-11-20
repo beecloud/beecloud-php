@@ -39,9 +39,6 @@
         element.appendChild(wording);
         element.appendChild(canvas);
     }
-    //备注: 同渠道同一个订单号会有多条记录
-    // 1. WX_NATIVE, 更新的是最后一次订单记录
-    // 2. BC_NATIVE, 更新的是第一条订单记录
     $('#query').click(function(){
         $.getJSON('bill.status.php', {'billNo' : '<?php echo $data["bill_no"]; ?>', 'channel' : '<?php echo $data["channel"]; ?>'}, function(res){
             var str = '';

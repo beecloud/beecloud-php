@@ -790,18 +790,19 @@ class api {
 				case "BC_GATEWAY" :
 				case "BC_EXPRESS" :
 				case "BC_APP" :
+                case "BC_CARD_CHARGE" :
 				case "BC_NATIVE" :
 				case "BC_WX_WAP" :
 				case "BC_WX_JSAPI" :
                 case "BC_WX_SCAN" :
                 case "BC_WX_MINI" :
-				case "BC_CARD_CHARGE" :
 				case "BC_ALI_QRCODE" :
                 case "BC_ALI_SCAN" :
                 case "BC_ALI_WAP":
                 case "BC_ALI_WEB":
                 case "BC_ALI_JSAPI" :
                 case "BC_QQ_NATIVE":
+                case "BC_JD_QRCODE":
 					break;
 				default:
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "channel");
