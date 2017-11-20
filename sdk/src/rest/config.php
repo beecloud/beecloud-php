@@ -6,7 +6,7 @@ namespace beecloud\rest;
 
 class config {
     //php sdk verssion
-    const PHP_SDK_VERSION = 'PHP_2.3.11';
+    const PHP_SDK_VERSION = 'PHP_2.3.12';
     //api version
     const API_VERSION = '2';
 

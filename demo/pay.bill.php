@@ -148,7 +148,7 @@ switch($type){
         require_once 'wx/wx.jsapi.php';
         exit();
         break;
-    case  'WX_WAP':
+    case 'WX_WAP':
         $data["channel"] = "WX_WAP";
         $title = "微信H5网页";
         //需要参数终端ip，格式如下：
@@ -250,7 +250,9 @@ switch($type){
         break;
 	case 'BC_WX_WAP' : //请在手机浏览器内测试
 		$data["channel"] = "BC_WX_WAP";
-		$title = "BC微信移动网页支付";
+        //需要参数终端ip，格式如下：
+        //$data['analysis'] = (object)array('ip' => $_SERVER['REMOTE_ADDR']);
+        $title = "BC微信移动网页支付";
 		break;
     case 'BC_WX_SCAN' :
         $data["channel"] = "BC_WX_SCAN";
@@ -281,7 +283,13 @@ switch($type){
     case 'BC_QQ_NATIVE' :
         $data["channel"] = "BC_QQ_NATIVE";
         $title = "BCQQ钱包扫码";
-        require_once 'wx/wx.native.php';
+        require_once 'bc.qrcode.php';
+        exit();
+        break;
+    case 'BC_JD_QRCODE' :
+        $data["channel"] = "BC_JD_QRCODE";
+        $title = "BC京东扫码";
+        require_once 'bc.qrcode.php';
         exit();
         break;
     default :
@@ -306,11 +314,13 @@ try {
         $result =  $api->bill($data);
     }
     if ($result->result_code != 0) {
+        echo '<pre>';
         print_r($result);
         exit();
     }
     if(isset($result->url) && $result->url){
         header("Location:$result->url");
+        //echo "<script>location.href='{$result->url}'</script>";
     }else if(isset($result->html) && $result->html) {
         echo $result->html;
     }else if(isset($result->code_url) && $result->code_url) { //channel为BC_ALI_WAP
