@@ -30,9 +30,9 @@ class api {
 	 * @param $master_secret  beecloud平台的MASTER SECRET
 	 * @param $test_secret  beecloud平台的TEST SECRET
 	 */
-	static function registerApp($app_id, $app_secret, $master_secret = '', $test_secret = ''){
-		if(empty($app_id) || empty($app_secret)){
-			throw new \Exception(\beecloud\rest\config::VALID_BC_PARAM);
+	static function registerApp($app_id, $app_secret, $master_secret, $test_secret = ''){
+	    if(empty($app_id)){
+			throw new \Exception(\beecloud\rest\config::VALID_APP_ID);
 		}
 		self::$app_id = $app_id;
 		self::$app_secret = $app_secret;
@@ -87,7 +87,11 @@ class api {
 				break;
 		}
 		if(empty($secret)){
-			throw new \Exception(\beecloud\rest\config::NEED_PARAM. 'APP(Master/Test) Secret, 请检查!');
+		    if(self::$mode){
+                throw new \Exception(\beecloud\rest\config::NEED_PARAM. 'Test Secret, 请检查!');
+            }else{
+                throw new \Exception(\beecloud\rest\config::NEED_PARAM. 'APP/Master Secret, 请检查!');
+            }
 		}
 		$data["app_id"] = self::$app_id;
         if(!isset($data["timestamp"])){

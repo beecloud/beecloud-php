@@ -72,7 +72,7 @@ class config {
     const URI_COUPON_TEMP = 'rest/coupon/template'; //根据优惠券模板ID或其他条件查询
 
 	const UNEXPECTED_RESULT = "非预期的返回结果:";
-	const NEED_PARAM = "需要必填字段:";
+	const NEED_PARAM = "需要必填参数:";
 	const NEED_VALID_PARAM = "字段值不合法:";
 	const NEED_WX_JSAPI_OPENID = "微信公众号支付需要openid";
 	const NEED_RETURN_URL = "当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或JD_WAP 或 JD_WEB 或 BC_WX_WAP 或 BC_ALI_WEB时 return_url为必填";
@@ -84,9 +84,8 @@ class config {
 	const NEED_FRQID = '当channel参数为 YEE_NOBANKCARD时 frqid为必填';
 	const NEED_TOTAL_FEE = '当channel参数为 BC_EXPRESS时 total_fee单位分,最小金额100分';
 	const VALID_BC_PARAM = 'APP ID,APP Secret,Master Secret参数值均不能为空,请重新设置';
-	const VALID_SIGN_PARAM = 'APP ID, timestamp,APP(Master) Secret参数值均不能为空,请设置';
-	const VALID_MASTER_SECRET = 'Master Secret参数值不能为空,请设置';
-	const VALID_APP_SECRET = 'APP Secret参数值不能为空,请设置';
+	const VALID_SIGN_PARAM = 'APP ID, timestamp,APP(Master/Test) Secret参数值均不能为空,请设置';
+	const VALID_APP_ID = 'APP ID参数值不能为空,请设置';
 
 	const VALID_PARAM_RANGE = '参数 %s 不在限定的范围内, 请重新设置';
 
