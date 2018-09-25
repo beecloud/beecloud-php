@@ -85,6 +85,11 @@ switch ($type) {
         //非必填参数,boolean型,是否使用APP支付,true使用,否则不使用
         //$data["use_app"] = false;
         break;
+    case 'ALI_SCAN' :
+        $data["channel"] = "ALI_SCAN";
+        $title = "支付宝刷卡";
+        $data["auth_code"] = "28675357560xxxxxxxxx";
+        break;
     case 'ALI_QRCODE' :
         $title = "支付宝扫码支付";
         $data["channel"] = "ALI_QRCODE";
@@ -141,6 +146,11 @@ switch ($type) {
         $title = "微信扫码";
         require_once 'wx/wx.native.php';
         exit();
+        break;
+    case 'WX_SCAN' :
+        $data["channel"] = "WX_SCAN";
+        $title = "微信刷卡";
+        $data["auth_code"] = "13022657110xxxxxxxx";
         break;
     case 'WX_JSAPI':
         $data["channel"] = "WX_JSAPI";
@@ -236,6 +246,25 @@ switch ($type) {
         $data["card_type"] = '1';
         $data["bank"] = "交通银行";
         $title = "BC网关支付";
+
+        /*
+         *
+            //bank(string 类型) for channel BC_GATEWAY
+            //根据参数card_type, pay_type(B2C/B2B，参数可选)确定银行名称，获取银行的方法，即
+            $params = array(
+                'card_type' => $data["card_type"],
+                'pay_type' => 'B2C' //B2C或B2B
+            );
+            $info = $api->get_banks($params, 'BC_GATEWAY');
+            if (isset($info->result_code) && $info->result_code != 0) {
+                print_r($info);
+                exit();
+            }
+            if(!in_array($data["bank"], $info->banks)){
+                exit('参数bank不在限定的范围内, 请重新设置');
+            }
+            $data["pay_type"] = "B2C";
+        */
         break;
     case 'BC_EXPRESS' :
         $data["channel"] = "BC_EXPRESS";
@@ -266,11 +295,6 @@ switch ($type) {
         $title = "BC微信刷卡";
         $data["auth_code"] = "13022657110xxxxxxxx";
         break;
-    case 'WX_SCAN' :
-        $data["channel"] = "WX_SCAN";
-        $title = "微信刷卡";
-        $data["auth_code"] = "13022657110xxxxxxxx";
-        break;
     case 'BC_WX_JSAPI':
         $data["channel"] = "BC_WX_JSAPI";
         $title = "微信公众号";
@@ -283,10 +307,9 @@ switch ($type) {
         require_once 'ali.offline.qrcode/index.php';
         exit();
         break;
-    case 'ALI_SCAN' :
-        $data["channel"] = "ALI_SCAN";
-        $title = "支付宝刷卡";
-        $data["auth_code"] = "28675357560xxxxxxxxx";
+    case 'BC_ALI_WEB' :
+        $data["channel"] = "BC_ALI_WEB";
+        $title = "BC支付宝网页支付";
         break;
     case 'BC_ALI_SCAN' :
         $data["channel"] = "BC_ALI_SCAN";
