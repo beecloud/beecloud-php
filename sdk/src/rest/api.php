@@ -262,12 +262,12 @@ class api {
 					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "total_fee");
 				}
 
-				if (!isset($data["bill_no"])) {
-					throw new \Exception(\beecloud\rest\config::NEED_PARAM . "bill_no");
-				}
-				if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
-					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "bill_no");
-				}
+//				if (!isset($data["bill_no"])) {
+//					throw new \Exception(\beecloud\rest\config::NEED_PARAM . "bill_no");
+//				}
+//				if (!preg_match('/^[0-9A-Za-z]{8,32}$/', $data["bill_no"])) {
+//					throw new \Exception(\beecloud\rest\config::NEED_VALID_PARAM . "bill_no");
+//				}
 
 				if (!isset($data["title"])) {
 					throw new \Exception(\beecloud\rest\config::NEED_PARAM . "title");
@@ -745,7 +745,6 @@ class api {
                 return self::get(\beecloud\rest\config::URI_BC_GATEWAY_BANKS, $data, 30, false);
                 break;
             case 'T1_EXPRESS_TRANSFER':
-                $data = self::get_common_params($data);
                 return self::get(\beecloud\rest\config::URI_T1_EXPRESS_TRANSFER_BANKS, $data, 30, false);
                 break;
             default:
@@ -762,6 +761,7 @@ class api {
 				case "ALI_WAP":
 				case "ALI_QRCODE":
 				case "ALI_APP":
+                case "ALI_SCAN":
 				case "ALI_OFFLINE_QRCODE":
 				case "UN":
 				case "UN_WEB":
@@ -773,6 +773,7 @@ class api {
 				case "WX_APP":
                 case "WX_WAP":
                 case "WX_MINI":
+                case "WX_SCAN":
 				case "JD":
 				case "JD_WEB":
 				case "JD_WAP":

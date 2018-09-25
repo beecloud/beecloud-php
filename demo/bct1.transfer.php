@@ -14,7 +14,7 @@
         //设置app id, app secret, master secret, test secret
         $api->registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
 
-        //$data["app_id"] = APP_ID; //必须是正整数，单位为分
+        //$data["app_id"] = APP_ID;
         $data["total_fee"] = 1; //必须是正整数，单位为分
         //商户订单号, 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
         $data["bill_no"] = 'phptransfer' . time();

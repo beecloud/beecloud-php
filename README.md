@@ -36,7 +36,7 @@
 ## 初始化
 
 1. 注册开发者: BeeCloud平台[注册账号](http://beecloud.cn/register/)
-2. 创建应用: 使用注册的账号登陆,在控制台中创建应用,点击**"+添加应用"**创建新应用,具体可参考[快速开始](https://beecloud.cn/apply/)
+2. 创建应用: 使用注册的账号登陆,在控制台中创建应用,点击 **"+添加应用"** 创建新应用,具体可参考[快速开始](https://beecloud.cn/apply/)
 3. 获取参数: 在新创建的应用中即可获取APP ID,APP Secret,Master Secret,Test Secret
 4. 在代码中调用方法registerApp(请注意各个参数一一对应):
 
@@ -149,7 +149,7 @@ BCRESTInteraional::bill(array $data);
 BCRESTApi::bill(array $data);
 ```
 
-注：具体的请求参数和返回参数，请参考[线上支付REST API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【2. 支付】**部分
+注：具体的请求参数和返回参数，请参考[线上支付REST API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【2. 支付】** 部分
 
 ## 支付订单查询
 
@@ -182,7 +182,7 @@ BCRESTApi::bill(array $data, 'get');
 
 注：具体的请求参数和返回参数，请参考[线上支付REST
 API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【5.订单查询】【11.
-支付订单查询(指定ID)】**部分
+支付订单查询(指定ID)】** 部分
 
 ## 订单总数查询
 
@@ -201,7 +201,7 @@ BCRESTApi::bills_count(array $data);
 ```
 
 注：具体的请求参数和返回参数，请参考[线上支付REST
-API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【6. 订单总数查询】**部分
+API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【6. 订单总数查询】** 部分
 
 ## 发起退款
 
@@ -222,7 +222,7 @@ BCRESTApi::refund(array $data);
 ```
 
 注：具体的请求参数和返回参数，请参考[线上支付REST
-API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【3. 退款】**部分
+API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【3. 退款】** 部分
 
 
 ## 预退款批量审核
@@ -241,7 +241,7 @@ BCRESTApi::refund(array $data);
 ```
 
 注：具体的请求参数和返回参数，请参考[线上支付REST
-API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【4. 预退款批量审核】**部分
+API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【4. 预退款批量审核】** 部分
 
 
 ## 退款订单查询
@@ -272,8 +272,7 @@ BCRESTApi::refund(array $data, 'get');
 ```
 
 注：具体的请求参数和返回参数，请参考[线上支付REST
-API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【7. 退款查询】【10.
-退款订单查询(指定ID)】**部分
+API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【7. 退款查询】【10.退款订单查询(指定ID)】** 部分
 
 
 ## 退款总数查询
@@ -293,7 +292,7 @@ BCRESTApi::refunds_count(array $data);
 ```
 
 注：具体的请求参数和返回参数，请参考[线上支付REST
-API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【8. 退款总数查询】**部分
+API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【8. 退款总数查询】** 部分
 
 ## 退款状态更新
 
@@ -312,7 +311,7 @@ BCRESTApi::refundStatus(array $data);
 ```
 
 注：具体的请求参数和返回参数，请参考[线上支付REST
-API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【9. 退款状态更新】**部分
+API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【9. 退款状态更新】** 部分
 
 ## BeeCloud企业打款 - 打款到银行卡
 
@@ -327,7 +326,7 @@ API](https://github.com/beecloud/beecloud-rest-api/tree/master/online) **【9. �
 BCRESTApi::bc_transfer(array $data);
 ```
 
-注：具体的请求参数和返回参数，请参考[企业打款REST API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【BeeCloud企业打款 - 打款到银行卡】**部分
+注：具体的请求参数和返回参数，请参考[企业打款REST API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【BeeCloud企业打款 - 打款到银行卡】** 部分
 
 ## 微信企业打款/微信红包
 
@@ -346,7 +345,7 @@ BCRESTApi::transfer(array $data);
 ```
 
 注：具体的请求参数和返回参数，请参考[企业打款REST
-API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【微信企业打款/微信红包】**部分
+API](https://github.com/beecloud/beecloud-rest-api/tree/master/transfer) **【微信企业打款/微信红包】** 部分
 
 ## 鉴权
 

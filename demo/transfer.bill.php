@@ -131,7 +131,7 @@ switch($type) {
          *      print_r($result);
          *      exit();
          *  }
-         *  print_r($banks->bank_list);die;
+         *  print_r($banks->bank);die;
          */
         $data["bank_fullname"] = "中国银行"; //银行全称
         $data["card_type"] = "DE"; //银行卡类型,区分借记卡和信用卡，DE代表借记卡，CR代表信用卡，其他值为非法

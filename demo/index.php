@@ -15,116 +15,116 @@
         <ul class="clear" style="margin-top:20px">
             <li class="clicked" onclick="clickSwitch(this)">
                 <input type="radio" value="ALI_WEB" name="paytype" checked="checked">
-                <img src="http://beeclouddoc.qiniudn.com/ali.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/ali.png" alt="">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="ALI_WAP" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/aliwap.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/aliwap.png" alt="">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="ALI_QRCODE" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/alis.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/alis.png" alt="">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="WX_NATIVE" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/wechats.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/wechats.png" alt="">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="WX_JSAPI" name="paytype">
-                <img src="http://7xavqo.com1.z0.glb.clouddn.com/wechatgzh.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/wechatgzh.png" alt="">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="UN_WEB" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/unionpay.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/unionpay.png" alt="">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="UN_WAP" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/icon-unwap.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/icon-unwap.png" alt="">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="JD_WEB" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/jd.png" alt="JD　WEB">
+                <img src="http://bcdoc.beecloud.cn/jd.png" alt="JD　WEB">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="JD_WAP" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/jdwap.png" alt="JD　WAP">
+                <img src="http://bcdoc.beecloud.cn/jdwap.png" alt="JD　WAP">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="BD_WEB" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/bd.png" alt="BD WEB">
+                <img src="http://bcdoc.beecloud.cn/bd.png" alt="BD WEB">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="BD_WAP" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/bdwap.png" alt="BD WEB">
+                <img src="http://bcdoc.beecloud.cn/bdwap.png" alt="BD WEB">
             </li>
             <!--<li onclick="clickSwitch(this)">
                 <input type="radio" value="KUAIQIAN_WEB" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/kq.png" alt="KUAIQIAN WEB">
+                <img src="http://bcdoc.beecloud.cn/kq.png" alt="KUAIQIAN WEB">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="KUAIQIAN_WAP" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/kqwap.png" alt="KUAIQIAN WAP">
+                <img src="http://bcdoc.beecloud.cn/kqwap.png" alt="KUAIQIAN WAP">
             </li>-->
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="YEE_WEB" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/yb.png" alt="YEE WEB">
+                <img src="http://bcdoc.beecloud.cn/yb.png" alt="YEE WEB">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="YEE_WAP" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/ybwap.png" alt="YEE WAP">
+                <img src="http://bcdoc.beecloud.cn/ybwap.png" alt="YEE WAP">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="YEE_NOBANKCARD" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/ybcard.png" alt="YEE NOBANKCARD">
+                <img src="http://bcdoc.beecloud.cn/ybcard.png" alt="YEE NOBANKCARD">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="PAYPAL_PAYPAL" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/paypal.png" alt="PAYPAL PAYPAL">
+                <img src="http://bcdoc.beecloud.cn/paypal.png" alt="PAYPAL PAYPAL">
             </li>
             <!--<li onclick="clickSwitch(this)">
                 <input type="radio" value="PAYPAL_CREDITCARD" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/icon_paypal_credit.png" alt="PAYPAL CREDITCARD WEB">
+                <img src="http://bcdoc.beecloud.cn/icon_paypal_credit.png" alt="PAYPAL CREDITCARD WEB">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="PAYPAL_SAVED_CREDITCARD" name="paytype">
-                <img src="http://beeclouddoc.qiniudn.com/icon_paypal_kuaijiezhifu.png" alt="PAYPAL SAVED CREDITCARD">
+                <img src="http://bcdoc.beecloud.cn/icon_paypal_kuaijiezhifu.png" alt="PAYPAL SAVED CREDITCARD">
             </li>-->
 
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_GATEWAY">
-                <img src="http://7xavqo.com1.z0.glb.clouddn.com/icon_gateway.png" alt="BC GATEWAY" >
+                <img src="http://bcdoc.beecloud.cn/icon_gateway.png" alt="BC GATEWAY" >
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_EXPRESS">
-                <img src="http://beeclouddoc.qiniudn.com/icon_BcExpress.png" alt="BC EXPRESS" >
+                <img src="http://bcdoc.beecloud.cn/icon_BcExpress.png" alt="BC EXPRESS" >
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_WX_JSAPI">
-                <img src="http://beeclouddoc.qiniudn.com/icon-bcwx.png" alt="BC WX JSAPI">
+                <img src="http://bcdoc.beecloud.cn/icon-bcwx.png" alt="BC WX JSAPI">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_WX_WAP">
-                <img src="http://beeclouddoc.qiniudn.com/icon-bcwxwap.png" alt="BC WX WAP" >
+                <img src="http://bcdoc.beecloud.cn/icon-bcwxwap.png" alt="BC WX WAP" >
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_NATIVE">
-                <img src="http://beeclouddoc.qiniudn.com/icon-bcwxsm.png" alt="BC NATIVE" >
+                <img src="http://bcdoc.beecloud.cn/icon-bcwxsm.png" alt="BC NATIVE" >
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_WX_SCAN">
-                <img src="http://beeclouddoc.qiniudn.com/icon-bcwxsk.png" alt="BC WX SCAN" >
+                <img src="http://bcdoc.beecloud.cn/icon-bcwxsk.png" alt="BC WX SCAN" >
             </li>
             <!--<li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_ALI_WAP">
-                <img src="http://beeclouddoc.qiniudn.com/icon-bcaliwap700x200.png" alt="BC ALI WAP" >
+                <img src="http://bcdoc.beecloud.cn/icon-bcaliwap700x200.png" alt="BC ALI WAP" >
             </li>-->
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_ALI_QRCODE">
-                <img src="http://beeclouddoc.qiniudn.com/icon-bcalism.png" alt="BC ALI QRCODE" >
+                <img src="http://bcdoc.beecloud.cn/icon-bcalism.png" alt="BC ALI QRCODE" >
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_ALI_SCAN">
-                <img src="http://beeclouddoc.qiniudn.com/icon-bczfbsk.png" alt="BC ALI SCAN" >
+                <img src="http://bcdoc.beecloud.cn/icon-bczfbsk.png" alt="BC ALI SCAN" >
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="paytype" value="BC_ALI_WEB">
@@ -149,7 +149,7 @@
                 <ul class="clear" style="margin-top:20px">
                     <li class="clicked" onclick="clickSwitch(this)">
                         <input type="radio" name="card_charge" value="BC_CARD_CHARGE"  checked="checked">
-                        <img src="http://beeclouddoc.qiniudn.com/icon-bcdk.png" alt="BC CARD CHARGE" >
+                        <img src="http://bcdoc.beecloud.cn/icon-bcdk.png" alt="BC CARD CHARGE" >
                     </li>
                 </ul>
             </div>
@@ -168,7 +168,7 @@
                 <ul class="clear" style="margin-top:20px">
                     <li class="clicked" onclick="clickSwitch(this)">
                         <input type="radio" name="bc_auth" value="1"  checked="checked">
-                        <img src="http://beeclouddoc.qiniudn.com/icon-jianquan.png" alt="AUTH" >
+                        <img src="http://bcdoc.beecloud.cn/icon-jianquan.png" alt="AUTH" >
                     </li>
                 </ul>
             </div>
@@ -190,23 +190,23 @@
     	<ul class="clear">
    		 	<li class="clicked" onclick="clickSwitch(this)">
                 <input type="radio" value="WX_REDPACK" name="transferType"  checked="checked">
-                <img src="http://beeclouddoc.qiniudn.com/wx_redpack.png" alt="微信红包">
+                <img src="http://bcdoc.beecloud.cn/wx_redpack.png" alt="微信红包">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="WX_TRANSFER" name="transferType">
-                <img src="http://beeclouddoc.qiniudn.com/wx_transfer.png" alt="微信单笔打款">
+                <img src="http://bcdoc.beecloud.cn/wx_transfer.png" alt="微信单笔打款">
             </li>
             <!--<li onclick="clickSwitch(this)">
                 <input type="radio" value="ALI_TRANSFER" name="transferType">
-                <img src="http://beeclouddoc.qiniudn.com/ali_transfer.png" alt="支付宝单笔打款">
+                <img src="http://bcdoc.beecloud.cn/ali_transfer.png" alt="支付宝单笔打款">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="ALI_TRANSFERS" name="transferType">
-                <img src="http://beeclouddoc.qiniudn.com/alitransfer.png" alt="支付宝批量打款">
+                <img src="http://bcdoc.beecloud.cn/alitransfer.png" alt="支付宝批量打款">
             </li>-->
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="BC_TRANSFER" name="transferType">
-                <img src="http://beeclouddoc.qiniudn.com/icon-companypay.png" alt="BC打款-银行卡">
+                <img src="http://bcdoc.beecloud.cn/icon-companypay.png" alt="BC打款-银行卡">
             </li>
             <!--<li onclick="clickSwitch(this)">
                 <input type="radio" value="CJ_TRANSFER" name="transferType">
@@ -214,7 +214,7 @@
             </li>-->
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="JD_TRANSFER" name="transferType">
-                <img src="http://7ktp21.com1.z0.glb.clouddn.com/icon%EF%BC%8Djingdongdaifu700x200.png" alt="京东代付">
+                <img src="http://bcdoc.beecloud.cn/icon-jingdongdaifu.png" alt="京东代付">
             </li>
         </ul>
     </div>
@@ -233,35 +233,35 @@
         <ul class="clear" style="margin-top:20px">
             <li class="clicked" onclick="clickSwitch(this)">
                 <input type="radio" value="ALI" name="querytype" checked="checked">
-                <img src="http://beeclouddoc.qiniudn.com/ali.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/ali.png" alt="">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="WX" name="querytype">
-                <img src="http://beeclouddoc.qiniudn.com/wechat.png" alt="WX">
+                <img src="http://bcdoc.beecloud.cn/wechat.png" alt="WX">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="UN" name="querytype">
-                <img src="http://beeclouddoc.qiniudn.com/unionpay.png" alt="UN">
+                <img src="http://bcdoc.beecloud.cn/unionpay.png" alt="UN">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="JD" name="querytype">
-                <img src="http://beeclouddoc.qiniudn.com/jd.png" alt="JD">
+                <img src="http://bcdoc.beecloud.cn/jd.png" alt="JD">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="BD" name="querytype">
-                <img src="http://beeclouddoc.qiniudn.com/bd.png" alt="BAIDU">
+                <img src="http://bcdoc.beecloud.cn/bd.png" alt="BAIDU">
             </li>
             <!--<li onclick="clickSwitch(this)">
                 <input type="radio" value="KUAIQIAN" name="querytype">
-                <img src="http://beeclouddoc.qiniudn.com/kq.png" alt="KUAIQIAN">
+                <img src="http://bcdoc.beecloud.cn/kq.png" alt="KUAIQIAN">
             </li>-->
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="YEE" name="querytype">
-                <img src="http://beeclouddoc.qiniudn.com/yb.png" alt="YEE">
+                <img src="http://bcdoc.beecloud.cn/yb.png" alt="YEE">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="PAYPAL" name="querytype">
-                <img src="http://beeclouddoc.qiniudn.com/paypal.png" alt="PAYPAL">
+                <img src="http://bcdoc.beecloud.cn/paypal.png" alt="PAYPAL">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" name="querytype" value="BC">
@@ -300,27 +300,27 @@
         <ul class="clear" style="margin-top:20px">
             <li class="clicked" onclick="clickSwitch(this)">
                 <input type="radio" value="query_banks" name="subscription">
-                <img src="http://beeclouddoc.qiniudn.com/img-querybank.png">
+                <img src="http://bcdoc.beecloud.cn/img-querybank.png">
             </li>
             <li class="clicked" onclick="clickSwitch(this)">
                 <input type="radio" value="send_code" name="subscription" checked="checked">
-                <img src="http://beeclouddoc.qiniudn.com/img-sendmessage.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/img-sendmessage.png" alt="">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="query_plan_bycondition" name="subscription">
-                <img src="http://beeclouddoc.qiniudn.com/img-queryplan.png">
+                <img src="http://bcdoc.beecloud.cn/img-queryplan.png">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="create_subscription" name="subscription">
-                <img src="http://beeclouddoc.qiniudn.com/icon-subscriptions700x200.png">
+                <img src="http://bcdoc.beecloud.cn/icon-subscriptions700x200.png">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="cancel_subscription" name="subscription">
-                <img src="http://beeclouddoc.qiniudn.com/img-cancelsubscription.png">
+                <img src="http://bcdoc.beecloud.cn/img-cancelsubscription.png">
             </li>
             <li onclick="clickSwitch(this)">
                 <input type="radio" value="query_subscription_bycondition" name="subscription" checked="checked">
-                <img src="http://beeclouddoc.qiniudn.com/img-querysubscriptions.png" alt="">
+                <img src="http://bcdoc.beecloud.cn/img-querysubscriptions.png" alt="">
             </li>
         </ul>
     </div>
