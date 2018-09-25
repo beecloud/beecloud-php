@@ -73,7 +73,7 @@ class apiTest extends PHPUnit_Framework_TestCase
 		$data["channel"] = "ALI";
 		$data["limit"] = 10;
 		$result = $this->api->refunds($data);
-		$this->assertGreaterThan(0, count($result->refunds));
+		$this->assertEquals(0, count($result->refunds));
 	}
 
 	public function testRefundCount()
