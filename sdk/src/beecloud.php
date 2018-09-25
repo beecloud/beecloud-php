@@ -188,7 +188,11 @@ class BCRESTUtil {
             if (ini_get('open_basedir') == '' && !ini_get('safe_mode')) {
                 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
             }
-            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+
+            //设置curl默认访问为IPv4
+            if(defined('CURLOPT_IPRESOLVE') && defined('CURL_IPRESOLVE_V4')){
+                curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            }
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 

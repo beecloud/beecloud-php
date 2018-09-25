@@ -15,7 +15,7 @@ try {
 
     //\beecloud\rest\api::registerApp(APP_ID, APP_SECRET, MASTER_SECRET, TEST_SECRET);
     //\beecloud\rest\api::setSandbox(false);
-}catch(Exception $e){
+} catch (Exception $e) {
     die($e->getMessage());
 }
 
@@ -25,12 +25,12 @@ $data["timestamp"] = time() * 1000;
 $data["total_fee"] = 1;
 $data["bill_no"] = "phpdemo" . $data["timestamp"];
 //title UTF8编码格式，32个字节内，最长支持16个汉字
-$data["title"] = 'PHP '.$_GET['type'].'支付测试';
+$data["title"] = 'PHP ' . $_GET['type'] . '支付测试';
 //渠道类型:ALI_WEB 或 ALI_QRCODE 或 UN_WEB或JD_WAP或JD_WEB, BC_GATEWAY为京东、BC_WX_WAP、BC_ALI_WEB渠道时为必填, BC_ALI_WAP不支持此参数
 $data["return_url"] = "https://beecloud.cn";
 //选填 optional, 附加数据, eg: {"key1”:“value1”,“key2”:“value2”}
 //用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-$data["optional"] = (object)array("key"=>"value");
+$data["optional"] = (object)array("key" => "value");
 //选填 订单失效时间bill_timeout
 //必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒
 //京东(JD*)不支持该参数。
@@ -74,7 +74,7 @@ $data["optional"] = (object)array("key"=>"value");
 //$data['analysis'] = (object)array('key' => 'value', 'product' => array(array('name' => 'productA', 'count' => 1, 'price' => 2), array('name' => 'productB', 'count' => 3, 'price' => 4)));
 
 $type = $_GET['type'];
-switch($type){
+switch ($type) {
     case 'ALI_WEB' :
         $title = "支付宝即时到账";
         $data["channel"] = "ALI_WEB";
@@ -84,6 +84,11 @@ switch($type){
         $data["channel"] = "ALI_WAP";
         //非必填参数,boolean型,是否使用APP支付,true使用,否则不使用
         //$data["use_app"] = false;
+        break;
+    case 'ALI_SCAN' :
+        $data["channel"] = "ALI_SCAN";
+        $title = "支付宝刷卡";
+        $data["auth_code"] = "28675357560xxxxxxxxx";
         break;
     case 'ALI_QRCODE' :
         $title = "支付宝扫码支付";
@@ -141,6 +146,11 @@ switch($type){
         $title = "微信扫码";
         require_once 'wx/wx.native.php';
         exit();
+        break;
+    case 'WX_SCAN' :
+        $data["channel"] = "WX_SCAN";
+        $title = "微信刷卡";
+        $data["auth_code"] = "13022657110xxxxxxxx";
         break;
     case 'WX_JSAPI':
         $data["channel"] = "WX_JSAPI";
@@ -236,11 +246,37 @@ switch($type){
         $data["card_type"] = '1';
         $data["bank"] = "交通银行";
         $title = "BC网关支付";
+
+        /*
+         *
+            //bank(string 类型) for channel BC_GATEWAY
+            //根据参数card_type, pay_type(B2C/B2B，参数可选)确定银行名称，获取银行的方法，即
+            $params = array(
+                'card_type' => $data["card_type"],
+                'pay_type' => 'B2C' //B2C或B2B
+            );
+            $info = $api->get_banks($params, 'BC_GATEWAY');
+            if (isset($info->result_code) && $info->result_code != 0) {
+                print_r($info);
+                exit();
+            }
+            if(!in_array($data["bank"], $info->banks)){
+                exit('参数bank不在限定的范围内, 请重新设置');
+            }
+            $data["pay_type"] = "B2C";
+        */
         break;
     case 'BC_EXPRESS' :
         $data["channel"] = "BC_EXPRESS";
         //银行卡卡号, (选填，注意：可能必填，根据信息提示进行调整)
         //$data["card_no"] = '622662183243xxxx';
+
+        /**
+         * 积分通道：需要额外的参数optional
+         *  user_fee: string 手续费，单位分
+         *  fc_card_no: string 入账卡号
+         */
+        //$data['optional'] = (object)array("user_fee" => "80", "fc_card_no" => "622662183243xxxx");
         break;
     case 'BC_NATIVE' :
         $data["channel"] = "BC_NATIVE";
@@ -248,12 +284,12 @@ switch($type){
         require_once 'wx/wx.native.php';
         exit();
         break;
-	case 'BC_WX_WAP' : //请在手机浏览器内测试
-		$data["channel"] = "BC_WX_WAP";
+    case 'BC_WX_WAP' : //请在手机浏览器内测试
+        $data["channel"] = "BC_WX_WAP";
         //需要参数终端ip，格式如下：
-        //$data['analysis'] = (object)array('ip' => $_SERVER['REMOTE_ADDR']);
+        $data['analysis'] = (object)array('ip' => $_SERVER['REMOTE_ADDR']);
         $title = "BC微信移动网页支付";
-		break;
+        break;
     case 'BC_WX_SCAN' :
         $data["channel"] = "BC_WX_SCAN";
         $title = "BC微信刷卡";
@@ -270,6 +306,10 @@ switch($type){
         $title = "BC支付宝线下扫码";
         require_once 'ali.offline.qrcode/index.php';
         exit();
+        break;
+    case 'BC_ALI_WEB' :
+        $data["channel"] = "BC_ALI_WEB";
+        $title = "BC支付宝网页支付";
         break;
     case 'BC_ALI_SCAN' :
         $data["channel"] = "BC_ALI_SCAN";
@@ -301,34 +341,36 @@ switch($type){
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCloud<?php echo $title;?>支付示例</title>
+    <title>BeeCloud<?php echo $title; ?>支付示例</title>
 </head>
 <body>
 <?php
 try {
-    if(in_array($type, array('PAYPAL_PAYPAL', 'PAYPAL_CREDITCARD', 'PAYPAL_SAVED_CREDITCARD'))){
-        $result =  $international->bill($data);
-    }else if(in_array($type, array('BC_ALI_SCAN', 'BC_WX_SCAN'))){
-        $result =  $api->offline_bill($data);
-    }else{
-        $result =  $api->bill($data);
+    if (in_array($type, array('PAYPAL_PAYPAL', 'PAYPAL_CREDITCARD', 'PAYPAL_SAVED_CREDITCARD'))) {
+        $result = $international->bill($data);
+    } else if (in_array($type, array('ALI_SCAN', 'BC_ALI_SCAN', 'BC_WX_SCAN'))) {
+        $result = $api->offline_bill($data);
+    } else {
+        $result = $api->bill($data);
     }
+
     if ($result->result_code != 0) {
         echo '<pre>';
         print_r($result);
         exit();
     }
-    if(isset($result->url) && $result->url){
+    if (isset($result->url) && $result->url) {
         header("Location:$result->url");
         //echo "<script>location.href='{$result->url}'</script>";
-    }else if(isset($result->html) && $result->html) {
+    } else if (isset($result->html) && $result->html) {
         echo $result->html;
-    }else if(isset($result->code_url) && $result->code_url) { //channel为BC_ALI_WAP
+    } else if (isset($result->code_url) && $result->code_url) { //channel为BC_ALI_WAP
         header("Location:$result->code_url");
-    }else if(isset($result->credit_card_id)){
-        echo '信用卡id(PAYPAL_CREDITCARD): '.$result->credit_card_id;
-    }else if(isset($result->id)){
-        echo $type.'支付成功: '.$result->id;
+        //echo "<script>location.href='{$result->code_url}'</script>";
+    } else if (isset($result->credit_card_id)) {
+        echo '信用卡id(PAYPAL_CREDITCARD): ' . $result->credit_card_id;
+    } else if (isset($result->id)) {
+        echo $type . '支付成功: ' . $result->id;
     }
 } catch (Exception $e) {
     echo $e->getMessage();
